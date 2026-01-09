@@ -21,13 +21,13 @@
     const format = (text, values = {}) => text.replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
 
     // Initialize workflow builder
-    const stepDefinitions = {{ metadata.step_definitions | tojson | safe }};
+    const pluginDefinitions = {{ metadata.workflow_plugins | tojson | safe }};
     function initWorkflowBuilder() {
         if (!window.WorkflowBuilder) return;
         const container = document.getElementById('workflow-builder');
         const textarea = document.getElementById('workflow-content');
         if (!container || !textarea) return;
-        window.WorkflowBuilder.init('workflow-builder', 'workflow-content', stepDefinitions);
+        window.WorkflowBuilder.init('workflow-builder', 'workflow-content', pluginDefinitions);
     }
 
     try {

@@ -1,11 +1,10 @@
 /**
- * AutoMetabuilder - Workflow Builder
+ * AutoMetabuilder - Workflow Builder (Node-based)
  */
 
 const WorkflowBuilder = {
-    workflow: [],
-    stepDefinitions: {},
-    allSuggestions: new Set(),
+    workflow: { nodes: [] },
+    pluginDefinitions: {},
     container: null,
     textarea: null,
 
@@ -18,26 +17,17 @@ const WorkflowBuilder = {
         return text.replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
     },
 
-    init(containerId, textareaId, stepDefinitions) {
+    init(containerId, textareaId, pluginDefinitions) {
         this.container = document.getElementById(containerId);
         this.textarea = document.getElementById(textareaId);
-        this.stepDefinitions = stepDefinitions || {};
+        this.pluginDefinitions = pluginDefinitions || {};
 
-        // Build all suggestions set
-        Object.values(this.stepDefinitions).forEach(def => {
-            Object.values(def.fields || {}).forEach(f => {
-                if (f.suggestions) {
-                    f.suggestions.forEach(s => this.allSuggestions.add(s));
-                }
-            });
-        });
-
-        // Parse initial workflow
         try {
-            this.workflow = JSON.parse(this.textarea.value || '[]');
+            const parsed = JSON.parse(this.textarea.value || '{}');
+            this.workflow = parsed && parsed.nodes ? parsed : { nodes: [] };
         } catch (e) {
             console.error('Failed to parse workflow JSON', e);
-            this.workflow = [];
+            this.workflow = { nodes: [] };
         }
 
         this.render();
@@ -48,207 +38,305 @@ const WorkflowBuilder = {
 
         this.container.innerHTML = '';
 
-        if (this.workflow.length === 0) {
+        if (!this.workflow.nodes.length) {
             this.container.innerHTML = `
                 <div class="text-center text-muted py-4">
                     <i class="bi bi-diagram-3" style="font-size: 2.5rem;"></i>
-                    <p class="mt-2">${this.escapeHtml(this.t('ui.workflow.empty', 'No tasks yet. Click \"Add Task\" to create your first workflow task.'))}</p>
+                    <p class="mt-2">${this.escapeHtml(this.t('ui.workflow.empty', 'No tasks yet. Click "Add Node" to create your first workflow node.'))}</p>
                 </div>
             `;
         }
 
-        this.workflow.forEach((task, taskIdx) => {
-            const taskCard = document.createElement('div');
-            taskCard.className = 'amb-workflow-task mb-4';
-            taskCard.innerHTML = `
-                <div class="amb-workflow-task-header">
-                    <div class="amb-workflow-task-main">
-                        <span class="amb-workflow-badge">${this.escapeHtml(this.format(this.t('ui.workflow.task_label', 'Task {number}'), { number: taskIdx + 1 }))}</span>
-                        <input type="text" class="form-control form-control-sm amb-workflow-input amb-workflow-title"
-                               value="${this.escapeHtml(task.name || this.t('ui.workflow.untitled_task', 'Untitled Task'))}"
-                               onchange="WorkflowBuilder.updateTask(${taskIdx}, 'name', this.value)"
-                               placeholder="${this.escapeHtml(this.t('ui.workflow.task_name_placeholder', 'Task Name'))}">
-                        <select class="form-select form-select-sm amb-workflow-input amb-workflow-type"
-                                onchange="WorkflowBuilder.updateTask(${taskIdx}, 'type', this.value)">
-                            <option value="" ${!task.type ? 'selected' : ''}>${this.escapeHtml(this.t('ui.workflow.type.standard', 'Standard'))}</option>
-                            <option value="loop" ${task.type === 'loop' ? 'selected' : ''}>${this.escapeHtml(this.t('ui.workflow.type.loop', 'Loop'))}</option>
-                        </select>
-                        ${task.type === 'loop' ? `
-                            <div class="amb-workflow-inline">
-                                <span class="amb-workflow-meta">${this.escapeHtml(this.t('ui.workflow.max_label', 'Max'))}</span>
-                                <input type="number" class="form-control form-control-sm amb-workflow-input"
-                                       value="${task.max_iterations || 10}" min="1"
-                                       onchange="WorkflowBuilder.updateTask(${taskIdx}, 'max_iterations', parseInt(this.value))">
-                            </div>
-                        ` : ''}
-                    </div>
-                    <div class="amb-workflow-task-actions">
-                        <button class="btn btn-sm btn-outline-secondary amb-icon-btn" onclick="WorkflowBuilder.moveTask(${taskIdx}, -1)"
-                                ${taskIdx === 0 ? 'disabled' : ''} title="${this.escapeHtml(this.t('ui.workflow.move_up', 'Move up'))}">
-                            <i class="bi bi-chevron-up"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-secondary amb-icon-btn" onclick="WorkflowBuilder.moveTask(${taskIdx}, 1)"
-                                ${taskIdx === this.workflow.length - 1 ? 'disabled' : ''} title="${this.escapeHtml(this.t('ui.workflow.move_down', 'Move down'))}">
-                            <i class="bi bi-chevron-down"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger amb-icon-btn" onclick="WorkflowBuilder.removeTask(${taskIdx})"
-                                title="${this.escapeHtml(this.t('ui.workflow.delete_task', 'Delete task'))}">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="amb-workflow-task-body">
-                    <div class="steps-container" id="steps-${taskIdx}"></div>
-                    <button class="btn btn-sm btn-outline-primary" onclick="WorkflowBuilder.addStep(${taskIdx})">
-                        <i class="bi bi-plus-lg"></i> ${this.escapeHtml(this.t('ui.workflow.add_step', 'Add Step'))}
-                    </button>
-                </div>
-            `;
-            this.container.appendChild(taskCard);
+        this.renderNodes(this.workflow.nodes, this.container, 0);
 
-            const stepsContainer = taskCard.querySelector(`#steps-${taskIdx}`);
-            (task.steps || []).forEach((step, stepIdx) => {
-                const stepDiv = this.createStepElement(task, taskIdx, step, stepIdx);
-                stepsContainer.appendChild(stepDiv);
-            });
-        });
-
-        // Add task button
-        const addTaskBtn = document.createElement('button');
-        addTaskBtn.className = 'btn btn-primary';
-        addTaskBtn.innerHTML = `<i class="bi bi-plus-lg"></i> ${this.escapeHtml(this.t('ui.workflow.add_task', 'Add Task'))}`;
-        addTaskBtn.onclick = () => this.addTask();
-        this.container.appendChild(addTaskBtn);
+        const addNodeBtn = document.createElement('button');
+        addNodeBtn.className = 'btn btn-primary';
+        addNodeBtn.innerHTML = `<i class="bi bi-plus-lg"></i> ${this.escapeHtml(this.t('ui.workflow.add_node', 'Add Node'))}`;
+        addNodeBtn.onclick = () => this.addNode(this.workflow.nodes);
+        this.container.appendChild(addNodeBtn);
 
         this.sync();
     },
 
-    createStepElement(task, taskIdx, step, stepIdx) {
-        const stepDiv = document.createElement('div');
-        stepDiv.className = 'amb-workflow-step';
+    renderNodes(nodes, container, level) {
+        nodes.forEach((node, nodeIdx) => {
+            const nodeCard = document.createElement('div');
+            nodeCard.className = 'amb-workflow-node mb-3';
+            nodeCard.style.marginLeft = level ? `${level * 24}px` : '0';
 
-        const stepDef = this.stepDefinitions[step.type];
-        const stepLabel = stepDef
-            ? this.t(stepDef.label || '', stepDef.label || '')
-            : this.t('ui.workflow.select_action', 'Select action...');
+            const pluginDef = this.pluginDefinitions[node.type] || {};
+            const nodeLabel = this.format(
+                this.t('ui.workflow.node_label', 'Node {number}'),
+                { number: nodeIdx + 1 }
+            );
 
-        let fieldsHtml = '';
-        if (step.type && stepDef) {
-            fieldsHtml = '<div class="row g-2 mt-2">';
-            Object.entries(stepDef.fields || {}).forEach(([field, fieldDef]) => {
-                const val = step[field] !== undefined ? step[field] : fieldDef.default || '';
-                const fieldType = fieldDef.type || 'text';
-                const suggestions = fieldDef.suggestions || Array.from(this.allSuggestions);
-                const options = fieldDef.options || suggestions;
-                const optionLabels = fieldDef.option_labels || [];
-                const selectLabel = fieldDef.placeholder
-                    ? this.t(fieldDef.placeholder, fieldDef.placeholder)
-                    : this.t('ui.common.select_placeholder', 'Select...');
-                const fieldId = `workflow-${taskIdx}-${stepIdx}-${field}`;
-                const labelValue = fieldDef.label ? this.t(fieldDef.label, fieldDef.label) : field;
-                const labelText = this.escapeHtml(labelValue);
-                const placeholder = fieldDef.placeholder
-                    ? this.escapeHtml(this.t(fieldDef.placeholder, fieldDef.placeholder))
-                    : '';
-
-                let inputHtml = '';
-                if (fieldType === 'checkbox') {
-                    inputHtml = `
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input"
-                                   ${step[field] ? 'checked' : ''}
-                                   onchange="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.checked)">
-                            <label class="form-check-label small">${this.escapeHtml(this.t('ui.workflow.field.enable', 'Enable'))}</label>
-                        </div>
-                    `;
-                } else if (fieldType === 'select') {
-                    inputHtml = `
-                        <select class="form-select form-select-sm"
-                                onchange="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)">
-                            <option value="">${this.escapeHtml(selectLabel)}</option>
-                            ${options.map((option, idx) => {
-                                const label = optionLabels[idx]
-                                    ? this.t(optionLabels[idx], optionLabels[idx])
-                                    : option;
-                                return `<option value="${this.escapeHtml(option)}" ${val === option ? 'selected' : ''}>${this.escapeHtml(label)}</option>`;
-                            }).join('')}
+            nodeCard.innerHTML = `
+                <div class="amb-workflow-node-header">
+                    <div class="amb-workflow-node-main">
+                        <span class="amb-workflow-node-badge">${this.escapeHtml(nodeLabel)}</span>
+                        <input type="text" class="form-control form-control-sm amb-workflow-node-id"
+                               value="${this.escapeHtml(node.id || '')}"
+                               placeholder="${this.escapeHtml(this.t('ui.workflow.node_id_label', 'Node ID'))}">
+                        <select class="form-select form-select-sm amb-workflow-node-type">
+                            ${this.renderPluginOptions(node.type)}
                         </select>
-                    `;
-                } else if (fieldType === 'number') {
-                    const min = fieldDef.min !== undefined ? `min="${fieldDef.min}"` : '';
-                    const max = fieldDef.max !== undefined ? `max="${fieldDef.max}"` : '';
-                    const stepAttr = fieldDef.step !== undefined ? `step="${fieldDef.step}"` : '';
-                    inputHtml = `
-                        <input type="number" class="form-control form-control-sm"
-                               value="${this.escapeHtml(val)}" ${min} ${max} ${stepAttr}
-                               placeholder="${placeholder}"
-                               onchange="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', parseFloat(this.value))">
-                    `;
-                } else if (fieldType === 'textarea') {
-                    inputHtml = `
-                        <textarea class="form-control form-control-sm" rows="3"
-                                  placeholder="${placeholder}"
-                                  oninput="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)">${this.escapeHtml(val)}</textarea>
-                    `;
-                } else {
-                    const listId = suggestions.length ? `list="${fieldId}-list"` : '';
-                    const listHtml = suggestions.length
-                        ? `<datalist id="${fieldId}-list">${suggestions.map(s =>
-                            `<option value="${this.escapeHtml(s)}"></option>`
-                        ).join('')}</datalist>`
-                        : '';
-                    inputHtml = `
-                        <input type="text" class="form-control form-control-sm"
-                               value="${this.escapeHtml(val)}" ${listId}
-                               placeholder="${placeholder}"
-                               oninput="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)">
-                        ${listHtml}
-                    `;
-                }
+                    </div>
+                    <div class="amb-workflow-node-actions">
+                        <button class="btn btn-sm btn-outline-secondary amb-icon-btn" data-action="move-up"
+                                ${nodeIdx === 0 ? 'disabled' : ''} title="${this.escapeHtml(this.t('ui.workflow.move_up', 'Move up'))}">
+                            <i class="bi bi-chevron-up"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary amb-icon-btn" data-action="move-down"
+                                ${nodeIdx === nodes.length - 1 ? 'disabled' : ''} title="${this.escapeHtml(this.t('ui.workflow.move_down', 'Move down'))}">
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger amb-icon-btn" data-action="remove"
+                                title="${this.escapeHtml(this.t('ui.workflow.delete_node', 'Delete node'))}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="amb-workflow-node-meta">
+                    <label class="form-label small text-muted mb-1">${this.escapeHtml(this.t('ui.workflow.run_when_label', 'Run when'))}</label>
+                    <input type="text" class="form-control form-control-sm amb-workflow-node-when"
+                           value="${this.escapeHtml(node.when || '')}"
+                           placeholder="${this.escapeHtml(this.t('ui.workflow.run_when_placeholder', '$flag_key'))}">
+                </div>
+                <div class="amb-workflow-node-body">
+                    ${this.renderNodeFields(pluginDef, node)}
+                </div>
+            `;
 
-                fieldsHtml += `
-                    <div class="col-md-6 amb-workflow-field">
-                        <label class="form-label small text-muted mb-1">${labelText}</label>
-                        ${inputHtml}
+            const idInput = nodeCard.querySelector('.amb-workflow-node-id');
+            idInput.addEventListener('input', (event) => {
+                node.id = event.target.value;
+                this.sync();
+            });
+
+            const typeSelect = nodeCard.querySelector('.amb-workflow-node-type');
+            typeSelect.addEventListener('change', (event) => {
+                this.updateNodeType(node, event.target.value);
+                this.render();
+            });
+
+            nodeCard.querySelector('[data-action="move-up"]').addEventListener('click', () => {
+                this.moveNode(nodes, nodeIdx, -1);
+            });
+            nodeCard.querySelector('[data-action="move-down"]').addEventListener('click', () => {
+                this.moveNode(nodes, nodeIdx, 1);
+            });
+            nodeCard.querySelector('[data-action="remove"]').addEventListener('click', () => {
+                this.removeNode(nodes, nodeIdx);
+            });
+
+            const whenInput = nodeCard.querySelector('.amb-workflow-node-when');
+            whenInput.addEventListener('input', (event) => {
+                node.when = event.target.value;
+                if (!node.when) {
+                    delete node.when;
+                }
+                this.sync();
+            });
+
+            nodeCard.querySelectorAll('[data-field-name]').forEach(fieldEl => {
+                const fieldName = fieldEl.dataset.fieldName;
+                const fieldType = fieldEl.dataset.fieldType || 'text';
+                const fieldGroup = fieldEl.dataset.fieldGroup || 'inputs';
+                const target = fieldGroup === 'outputs' ? 'outputs' : 'inputs';
+
+                const updateValue = () => {
+                    let newValue = fieldEl.value;
+                    if (fieldType === 'checkbox') {
+                        newValue = fieldEl.checked;
+                    } else if (fieldType === 'number') {
+                        newValue = fieldEl.value === '' ? '' : Number(fieldEl.value);
+                    }
+
+                    if (!node[target]) node[target] = {};
+                    node[target][fieldName] = newValue;
+                    if (newValue === '' || newValue === null) {
+                        delete node[target][fieldName];
+                    }
+                    this.sync();
+                };
+
+                if (fieldType === 'checkbox') {
+                    fieldEl.addEventListener('change', updateValue);
+                } else {
+                    fieldEl.addEventListener('input', updateValue);
+                }
+            });
+
+            if (node.type === 'control.loop') {
+                const bodyContainer = document.createElement('div');
+                bodyContainer.className = 'amb-workflow-node-nested';
+                bodyContainer.innerHTML = `
+                    <div class="amb-workflow-node-nested-header">
+                        <strong>${this.escapeHtml(this.t('ui.workflow.loop_body_label', 'Loop Body'))}</strong>
                     </div>
                 `;
-            });
-            fieldsHtml += '</div>';
-        }
 
-        stepDiv.innerHTML = `
-            <div class="amb-workflow-step-header">
-                <div class="amb-workflow-step-main">
-                    <span class="amb-workflow-step-badge">${stepIdx + 1}</span>
-                    <select class="form-select form-select-sm amb-workflow-step-select"
-                            onchange="WorkflowBuilder.updateStepType(${taskIdx}, ${stepIdx}, this.value)">
-                        <option value="">${this.escapeHtml(this.t('ui.workflow.step_type_placeholder', 'Select action type...'))}</option>
-                        ${Object.entries(this.stepDefinitions).map(([type, def]) => {
-                            const label = this.t(def.label || '', def.label || '');
-                            return `<option value="${type}" ${step.type === type ? 'selected' : ''}>${this.escapeHtml(label)}</option>`;
+                const bodyNodes = Array.isArray(node.body) ? node.body : [];
+                node.body = bodyNodes;
+                this.renderNodes(bodyNodes, bodyContainer, level + 1);
+
+                const addNestedBtn = document.createElement('button');
+                addNestedBtn.className = 'btn btn-sm btn-outline-primary';
+                addNestedBtn.innerHTML = `<i class="bi bi-plus-lg"></i> ${this.escapeHtml(this.t('ui.workflow.add_loop_node', 'Add Node to Loop'))}`;
+                addNestedBtn.onclick = () => this.addNode(bodyNodes);
+                bodyContainer.appendChild(addNestedBtn);
+
+                nodeCard.appendChild(bodyContainer);
+            }
+
+            container.appendChild(nodeCard);
+        });
+    },
+
+    renderPluginOptions(selectedType) {
+        const entries = Object.entries(this.pluginDefinitions);
+        return entries.map(([type, def]) => {
+            const label = this.t(def.label || '', def.label || type);
+            return `<option value="${this.escapeHtml(type)}" ${type === selectedType ? 'selected' : ''}>${this.escapeHtml(label)}</option>`;
+        }).join('');
+    },
+
+    renderNodeFields(pluginDef, node) {
+        const inputs = pluginDef.inputs || {};
+        const outputs = pluginDef.outputs || {};
+        const inputFields = this.renderFieldGroup(inputs, node.inputs || {}, 'inputs');
+        const outputFields = this.renderFieldGroup(outputs, node.outputs || {}, 'outputs');
+
+        return `
+            <div class="amb-workflow-node-section">
+                <h6>${this.escapeHtml(this.t('ui.workflow.inputs_label', 'Inputs'))}</h6>
+                ${inputFields || `<p class="text-muted small mb-0">${this.escapeHtml(this.t('ui.workflow.no_inputs', 'No inputs'))}</p>`}
+            </div>
+            <div class="amb-workflow-node-section">
+                <h6>${this.escapeHtml(this.t('ui.workflow.outputs_label', 'Outputs'))}</h6>
+                ${outputFields || `<p class="text-muted small mb-0">${this.escapeHtml(this.t('ui.workflow.no_outputs', 'No outputs'))}</p>`}
+            </div>
+        `;
+    },
+
+    renderFieldGroup(definitions, values, group) {
+        const fields = Object.entries(definitions || {});
+        if (!fields.length) return '';
+
+        return fields.map(([name, def]) => {
+            const value = values[name] !== undefined ? values[name] : def.default ?? '';
+            const labelText = this.t(def.label || '', def.label || name);
+            const type = def.type || 'text';
+            const optionLabels = def.option_labels || [];
+            const inputId = `node-${name}-${Math.random().toString(36).slice(2)}`;
+
+            let inputHtml = '';
+            if (type === 'checkbox') {
+                inputHtml = `
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="${inputId}"
+                               data-field-name="${this.escapeHtml(name)}" data-field-type="${type}" data-field-group="${group}"
+                               ${value ? 'checked' : ''}>
+                    </div>
+                `;
+            } else if (type === 'select') {
+                inputHtml = `
+                    <select class="form-select form-select-sm" id="${inputId}"
+                            data-field-name="${this.escapeHtml(name)}" data-field-type="${type}" data-field-group="${group}">
+                        ${def.options.map((option, idx) => {
+                            const label = optionLabels[idx]
+                                ? this.t(optionLabels[idx], optionLabels[idx])
+                                : option;
+                            return `<option value="${this.escapeHtml(option)}" ${value === option ? 'selected' : ''}>${this.escapeHtml(label)}</option>`;
                         }).join('')}
                     </select>
-                    ${step.type ? `<span class="amb-workflow-step-hint"><i class="bi bi-arrow-right"></i></span>` : ''}
-                </div>
-                <div class="amb-workflow-step-actions">
-                    <button class="btn btn-sm btn-outline-secondary amb-icon-btn" onclick="WorkflowBuilder.moveStep(${taskIdx}, ${stepIdx}, -1)"
-                            ${stepIdx === 0 ? 'disabled' : ''} title="${this.escapeHtml(this.t('ui.workflow.move_up', 'Move up'))}">
-                        <i class="bi bi-chevron-up"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-secondary amb-icon-btn" onclick="WorkflowBuilder.moveStep(${taskIdx}, ${stepIdx}, 1)"
-                            ${stepIdx === (task.steps || []).length - 1 ? 'disabled' : ''} title="${this.escapeHtml(this.t('ui.workflow.move_down', 'Move down'))}">
-                        <i class="bi bi-chevron-down"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger amb-icon-btn" onclick="WorkflowBuilder.removeStep(${taskIdx}, ${stepIdx})"
-                            title="${this.escapeHtml(this.t('ui.workflow.remove_step', 'Remove step'))}">
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
-            </div>
-            ${fieldsHtml}
-        `;
+                `;
+            } else if (type === 'textarea') {
+                inputHtml = `
+                    <textarea class="form-control form-control-sm" rows="3" id="${inputId}"
+                              data-field-name="${this.escapeHtml(name)}" data-field-type="${type}" data-field-group="${group}">${this.escapeHtml(value)}</textarea>
+                `;
+            } else if (type === 'number') {
+                inputHtml = `
+                    <input type="number" class="form-control form-control-sm" id="${inputId}"
+                           data-field-name="${this.escapeHtml(name)}" data-field-type="${type}" data-field-group="${group}"
+                           value="${this.escapeHtml(value)}">
+                `;
+            } else {
+                inputHtml = `
+                    <input type="text" class="form-control form-control-sm" id="${inputId}"
+                           data-field-name="${this.escapeHtml(name)}" data-field-type="${type}" data-field-group="${group}"
+                           value="${this.escapeHtml(value)}">
+                `;
+            }
 
-        return stepDiv;
+            return `
+                <div class="amb-workflow-field">
+                    <label class="form-label small text-muted mb-1" for="${inputId}">${this.escapeHtml(labelText)}</label>
+                    ${inputHtml}
+                </div>
+            `;
+        }).join('');
+    },
+
+    updateNodeType(node, newType) {
+        node.type = newType;
+        const def = this.pluginDefinitions[newType] || {};
+        node.inputs = this.buildDefaultFields(def.inputs);
+        node.outputs = this.buildDefaultFields(def.outputs);
+
+        if (newType === 'control.loop') {
+            node.body = Array.isArray(node.body) ? node.body : [];
+        } else {
+            delete node.body;
+        }
+    },
+
+    buildDefaultFields(definitions) {
+        const result = {};
+        Object.entries(definitions || {}).forEach(([name, def]) => {
+            if (def.default !== undefined && def.default !== '') {
+                result[name] = def.default;
+            }
+        });
+        return result;
+    },
+
+    addNode(targetArray) {
+        const types = Object.keys(this.pluginDefinitions);
+        const defaultType = types[0] || '';
+        const node = {
+            id: this.generateNodeId(defaultType, targetArray),
+            type: defaultType,
+            inputs: this.buildDefaultFields(this.pluginDefinitions[defaultType]?.inputs),
+            outputs: this.buildDefaultFields(this.pluginDefinitions[defaultType]?.outputs)
+        };
+        targetArray.push(node);
+        this.render();
+    },
+
+    moveNode(nodes, idx, dir) {
+        const target = idx + dir;
+        if (target < 0 || target >= nodes.length) return;
+        [nodes[idx], nodes[target]] = [nodes[target], nodes[idx]];
+        this.render();
+    },
+
+    removeNode(nodes, idx) {
+        nodes.splice(idx, 1);
+        this.render();
+    },
+
+    generateNodeId(type, nodes) {
+        const base = type ? type.split('.').pop() : 'node';
+        const existing = new Set((nodes || []).map(node => node.id));
+        let counter = nodes.length + 1;
+        let candidate = `${base}_${counter}`;
+        while (existing.has(candidate)) {
+            counter += 1;
+            candidate = `${base}_${counter}`;
+        }
+        return candidate;
     },
 
     sync() {
@@ -264,80 +352,13 @@ const WorkflowBuilder = {
         if (!this.textarea.classList.contains('d-none')) {
             this.textarea.oninput = () => {
                 try {
-                    this.workflow = JSON.parse(this.textarea.value);
+                    const parsed = JSON.parse(this.textarea.value || '{}');
+                    this.workflow = parsed && parsed.nodes ? parsed : { nodes: [] };
                     this.render();
                 } catch (e) {
-                    // Invalid JSON, ignore
+                    // Ignore invalid JSON while editing
                 }
             };
-        }
-    },
-
-    updateTask(idx, field, value) {
-        this.workflow[idx][field] = value;
-        if (field === 'type' && value !== 'loop') {
-            delete this.workflow[idx].max_iterations;
-        } else if (field === 'type' && value === 'loop' && !this.workflow[idx].max_iterations) {
-            this.workflow[idx].max_iterations = 10;
-        }
-        this.render();
-    },
-
-    addTask() {
-        this.workflow.push({ name: this.t('ui.workflow.new_task', 'New Task'), steps: [] });
-        this.render();
-    },
-
-    removeTask(idx) {
-        if (confirm(this.t('ui.workflow.delete_task_confirm', 'Remove this task and all its steps?'))) {
-            this.workflow.splice(idx, 1);
-            this.render();
-        }
-    },
-
-    moveTask(idx, dir) {
-        const target = idx + dir;
-        if (target >= 0 && target < this.workflow.length) {
-            [this.workflow[idx], this.workflow[target]] = [this.workflow[target], this.workflow[idx]];
-            this.render();
-        }
-    },
-
-    updateStepType(taskIdx, stepIdx, type) {
-        const newStep = { type: type };
-        if (this.stepDefinitions[type]) {
-            Object.entries(this.stepDefinitions[type].fields || {}).forEach(([field, fieldDef]) => {
-                newStep[field] = fieldDef.default;
-            });
-        }
-        this.workflow[taskIdx].steps[stepIdx] = newStep;
-        this.render();
-    },
-
-    updateStepField(taskIdx, stepIdx, field, value) {
-        this.workflow[taskIdx].steps[stepIdx][field] = value;
-        this.sync();
-    },
-
-    addStep(taskIdx) {
-        if (!this.workflow[taskIdx].steps) {
-            this.workflow[taskIdx].steps = [];
-        }
-        this.workflow[taskIdx].steps.push({ type: '' });
-        this.render();
-    },
-
-    removeStep(taskIdx, stepIdx) {
-        this.workflow[taskIdx].steps.splice(stepIdx, 1);
-        this.render();
-    },
-
-    moveStep(taskIdx, stepIdx, dir) {
-        const target = stepIdx + dir;
-        const steps = this.workflow[taskIdx].steps;
-        if (target >= 0 && target < steps.length) {
-            [steps[stepIdx], steps[target]] = [steps[target], steps[stepIdx]];
-            this.render();
         }
     },
 
@@ -349,5 +370,4 @@ const WorkflowBuilder = {
     }
 };
 
-// Export globally
 window.WorkflowBuilder = WorkflowBuilder;
