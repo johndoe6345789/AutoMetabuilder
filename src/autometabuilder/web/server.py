@@ -133,6 +133,14 @@ async def update_settings(request: Request, username: str = Depends(get_current_
         
     return RedirectResponse(url="/", status_code=303)
 
+@app.get("/api/status")
+async def get_status(username: str = Depends(get_current_user)):
+    return {"is_running": bot_process is not None}
+
+@app.get("/api/logs")
+async def get_logs(username: str = Depends(get_current_user)):
+    return {"logs": get_recent_logs()}
+
 @app.post("/translations")
 async def create_translation(lang: str = Form(...), username: str = Depends(get_current_user)):
     pkg_dir = os.path.dirname(os.path.dirname(__file__))
