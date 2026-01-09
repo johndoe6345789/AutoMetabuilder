@@ -16,7 +16,7 @@
 - [x] **Automated Testing**: Integration with test runners to verify changes before PR.
 - [x] **Linting Integration**: Automatically run and fix linting issues.
 - [x] **Multi-Model Support**: Easily switch between different LLM providers.
-- [ ] **CI/CD Integration**: Github Actions to run AutoMetabuilder on schedule or trigger.
+- [x] **CI/CD Integration**: Github Actions to run AutoMetabuilder on schedule or trigger.
 
 ## Phase 4: Optimization & Scalability
 - [x] **Dockerization**: Provide a Dockerfile and docker-compose for easy environment setup. Added `run_docker_task` tool.

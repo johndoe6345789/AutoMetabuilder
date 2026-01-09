@@ -1,6 +1,6 @@
 import os
 import unittest
-from src.autometabuilder.roadmap_utils import is_mvp_reached, update_roadmap
+from autometabuilder.roadmap_utils import is_mvp_reached, update_roadmap
 
 class TestRoadmap(unittest.TestCase):
     def setUp(self):
