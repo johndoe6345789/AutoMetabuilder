@@ -86,7 +86,7 @@ def get_prompt_content():
         return f.read()
 
 @app.get("/", response_class=HTMLResponse)
-async def read_item(request: Request):
+async def read_item(request: Request, username: str = Depends(get_current_user)):
     logs = get_recent_logs()
     env_vars = get_env_vars()
     translations = get_translations()
@@ -98,25 +98,26 @@ async def read_item(request: Request):
         "env_vars": env_vars,
         "translations": translations,
         "prompt_content": prompt_content,
-        "is_running": is_running
+        "is_running": is_running,
+        "username": username
     })
 
 @app.post("/run")
-async def run_bot(background_tasks: BackgroundTasks):
+async def run_bot(background_tasks: BackgroundTasks, username: str = Depends(get_current_user)):
     global bot_process
     if bot_process is None:
         background_tasks.add_task(run_bot_task)
     return RedirectResponse(url="/", status_code=303)
 
 @app.post("/prompt")
-async def update_prompt(content: str = Form(...)):
+async def update_prompt(content: str = Form(...), username: str = Depends(get_current_user)):
     prompt_path = os.environ.get("PROMPT_PATH", "prompt.yml")
     with open(prompt_path, "w", encoding="utf-8") as f:
         f.write(content)
     return RedirectResponse(url="/", status_code=303)
 
 @app.post("/settings")
-async def update_settings(request: Request):
+async def update_settings(request: Request, username: str = Depends(get_current_user)):
     form_data = await request.form()
     env_path = ".env"
     for key, value in form_data.items():
@@ -133,7 +134,7 @@ async def update_settings(request: Request):
     return RedirectResponse(url="/", status_code=303)
 
 @app.post("/translations")
-async def create_translation(lang: str = Form(...)):
+async def create_translation(lang: str = Form(...), username: str = Depends(get_current_user)):
     pkg_dir = os.path.dirname(os.path.dirname(__file__))
     en_path = os.path.join(pkg_dir, "messages_en.json")
     new_path = os.path.join(pkg_dir, f"messages_{lang}.json")
