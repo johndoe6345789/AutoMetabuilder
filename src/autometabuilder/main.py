@@ -9,6 +9,7 @@ import yaml
 import logging
 import importlib
 import inspect
+import re
 from tenacity import retry, stop_after_attempt, wait_exponential
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -286,6 +287,40 @@ class WorkflowEngine:
             else:
                 self._execute_phase(phase)
 
+    def _call_tool(self, tool_name, **kwargs):
+        tool = self.context["tool_map"].get(tool_name)
+        if not tool:
+            msg = self.context["msgs"].get(
+                "error_tool_not_found",
+                "Tool {name} not found or unavailable."
+            ).format(name=tool_name)
+            logger.error(msg)
+            return msg
+
+        filtered_kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        try:
+            return tool(**filtered_kwargs)
+        except Exception as e:
+            error_msg = f"Error executing {tool_name}: {e}"
+            logger.error(error_msg)
+            return error_msg
+
+    def _ensure_list(self, value):
+        if value is None:
+            return []
+        if isinstance(value, list):
+            return value
+        if isinstance(value, (tuple, set)):
+            return list(value)
+        if isinstance(value, str):
+            return [line for line in value.splitlines() if line.strip()]
+        return [value]
+
+    def _normalize_separator(self, text):
+        if text is None:
+            return ""
+        return text.replace("\\n", "\n").replace("\\t", "\t")
+
     def _execute_phase(self, phase):
         """Execute a phase which contains steps."""
         logger.info(f"--- Executing phase: {phase.get('name', 'unnamed')} ---")
@@ -327,11 +362,18 @@ class WorkflowEngine:
                     self.state[output_key] = sdlc_context
                 return sdlc_context
 
+            elif step_type == "seed_messages":
+                prompt = self.context["prompt"]
+                messages = list(prompt["messages"])
+                if output_key:
+                    self.state[output_key] = messages
+                return messages
+
             elif step_type == "prepare_messages":
                 prompt = self.context["prompt"]
                 msgs = self.context["msgs"]
                 sdlc_context_val = self.state.get(step.get("input_context"))
-                messages = list(prompt["messages"]) # Copy to avoid mutating original prompt
+                messages = list(prompt["messages"])
                 if sdlc_context_val:
                     messages.append(
                         {
@@ -344,7 +386,27 @@ class WorkflowEngine:
                     self.state[output_key] = messages
                 return messages
 
-            elif step_type == "llm_gen":
+            elif step_type in ("append_context_message",):
+                msgs = self.context["msgs"]
+                sdlc_context_val = self.state.get(step.get("input_context"))
+                target_messages = self.state.get(step.get("target_messages"))
+                if sdlc_context_val and target_messages is not None:
+                    target_messages.append(
+                        {
+                            "role": "system",
+                            "content": f"{msgs['sdlc_context_label']}{sdlc_context_val}",
+                        }
+                    )
+                return target_messages
+
+            elif step_type in ("append_user_instruction",):
+                msgs = self.context["msgs"]
+                target_messages = self.state.get(step.get("target_messages"))
+                if target_messages is not None:
+                    target_messages.append({"role": "user", "content": msgs["user_next_step"]})
+                return target_messages
+
+            elif step_type in ("llm_gen", "ai_request"):
                 messages = self.state.get(step.get("input_messages"))
                 response = get_completion(
                     self.context["client"],
@@ -358,12 +420,12 @@ class WorkflowEngine:
                     if resp_msg.content
                     else self.context["msgs"]["info_tool_call_requested"]
                 )
-                messages.append(resp_msg)  # Append AI response to messages
+                messages.append(resp_msg)
                 if output_key:
                     self.state[output_key] = resp_msg
                 return resp_msg
 
-            elif step_type == "process_response":
+            elif step_type in ("process_response", "run_tool_calls"):
                 resp_msg = self.state.get(step.get("input_response"))
                 tool_results = handle_tool_calls(
                     resp_msg,
@@ -375,23 +437,144 @@ class WorkflowEngine:
                 )
                 if output_key:
                     self.state[output_key] = tool_results
-                
+
                 if step.get("stop_if_no_tools") and not resp_msg.tool_calls:
                     notify_all(f"AutoMetabuilder task complete: {resp_msg.content[:100]}...")
-                    return True # Signal to stop loop
+                    return True
                 return False
 
-            elif step_type == "update_messages":
+            elif step_type in ("update_messages", "append_tool_results"):
                 tool_results = self.state.get(step.get("input_results"))
                 target_messages = self.state.get(step.get("target_messages"))
                 if tool_results and target_messages is not None:
                     target_messages.extend(tool_results)
-                
-                # Check for MVP if yolo
+
                 if self.context["args"].yolo and is_mvp_reached():
                     logger.info("MVP reached. Stopping YOLO loop.")
                     notify_all("AutoMetabuilder YOLO loop stopped: MVP reached.")
                     return True
+
+            elif step_type == "list_files":
+                result = self._call_tool("list_files", directory=step.get("path", "."))
+                if output_key:
+                    self.state[output_key] = result
+                return result
+
+            elif step_type == "read_file":
+                result = self._call_tool("read_file", path=step.get("path"))
+                if output_key:
+                    self.state[output_key] = result
+                return result
+
+            elif step_type == "run_tests":
+                result = self._call_tool("run_tests", path=step.get("path", "tests"))
+                if output_key:
+                    self.state[output_key] = result
+                return result
+
+            elif step_type == "run_lint":
+                result = self._call_tool("run_lint", path=step.get("path", "src"))
+                if output_key:
+                    self.state[output_key] = result
+                return result
+
+            elif step_type == "create_branch":
+                return self._call_tool(
+                    "create_branch",
+                    branch_name=step.get("branch_name"),
+                    base_branch=step.get("base_branch", "main")
+                )
+
+            elif step_type == "create_pull_request":
+                return self._call_tool(
+                    "create_pull_request",
+                    title=step.get("title"),
+                    body=step.get("body"),
+                    head_branch=step.get("head_branch"),
+                    base_branch=step.get("base_branch", "main")
+                )
+
+            elif step_type == "update_roadmap":
+                content = step.get("content") or self.state.get(step.get("input_key"))
+                result = self._call_tool("update_roadmap", content=content)
+                if output_key:
+                    self.state[output_key] = result
+                return result
+
+            elif step_type == "filter_list":
+                items = self._ensure_list(self.state.get(step.get("input_key")))
+                mode = step.get("mode", "contains")
+                pattern = step.get("pattern", "")
+                filtered = []
+                for item in items:
+                    candidate = str(item)
+                    matched = False
+                    if mode == "contains":
+                        matched = pattern in candidate
+                    elif mode == "regex":
+                        matched = bool(re.search(pattern, candidate))
+                    elif mode == "equals":
+                        matched = candidate == pattern
+                    elif mode == "not_equals":
+                        matched = candidate != pattern
+                    elif mode == "starts_with":
+                        matched = candidate.startswith(pattern)
+                    elif mode == "ends_with":
+                        matched = candidate.endswith(pattern)
+                    if matched:
+                        filtered.append(item)
+                if output_key:
+                    self.state[output_key] = filtered
+                return filtered
+
+            elif step_type == "map_list":
+                items = self._ensure_list(self.state.get(step.get("input_key")))
+                template = step.get("template", "{item}")
+                mapped = []
+                for item in items:
+                    try:
+                        mapped.append(template.format(item=item))
+                    except Exception:
+                        mapped.append(str(item))
+                if output_key:
+                    self.state[output_key] = mapped
+                return mapped
+
+            elif step_type == "reduce_list":
+                items = self._ensure_list(self.state.get(step.get("input_key")))
+                separator = self._normalize_separator(step.get("separator", ""))
+                reduced = separator.join([str(item) for item in items])
+                if output_key:
+                    self.state[output_key] = reduced
+                return reduced
+
+            elif step_type == "branch":
+                value = self.state.get(step.get("input_key"))
+                mode = step.get("mode", "is_truthy")
+                compare = step.get("compare", "")
+                decision = False
+
+                if mode == "is_empty":
+                    decision = not self._ensure_list(value)
+                elif mode == "is_truthy":
+                    decision = bool(value)
+                elif mode == "equals":
+                    decision = str(value) == compare
+                elif mode == "not_equals":
+                    decision = str(value) != compare
+                elif mode == "contains":
+                    decision = compare in str(value)
+                elif mode == "regex":
+                    decision = bool(re.search(compare, str(value)))
+
+                if output_key:
+                    self.state[output_key] = decision
+
+                branch_steps = step.get("then_steps") if decision else step.get("else_steps")
+                if isinstance(branch_steps, list):
+                    for branch_step in branch_steps:
+                        self._execute_step(branch_step)
+                return decision
 
             else:
                 logger.error(f"Unknown step type: {step_type}")

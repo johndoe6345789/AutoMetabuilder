@@ -128,36 +128,88 @@ const WorkflowBuilder = {
         stepDiv.className = 'amb-workflow-step';
 
         const stepDef = this.stepDefinitions[step.type];
-        const stepLabel = stepDef ? stepDef.label : this.t('ui.workflow.select_action', 'Select action...');
+        const stepLabel = stepDef
+            ? this.t(stepDef.label || '', stepDef.label || '')
+            : this.t('ui.workflow.select_action', 'Select action...');
 
         let fieldsHtml = '';
         if (step.type && stepDef) {
             fieldsHtml = '<div class="row g-2 mt-2">';
             Object.entries(stepDef.fields || {}).forEach(([field, fieldDef]) => {
                 const val = step[field] !== undefined ? step[field] : fieldDef.default || '';
-                const isCheckbox = fieldDef.type === 'checkbox';
+                const fieldType = fieldDef.type || 'text';
                 const suggestions = fieldDef.suggestions || Array.from(this.allSuggestions);
-                const selectLabel = fieldDef.default || this.t('ui.common.select_placeholder', 'Select...');
+                const options = fieldDef.options || suggestions;
+                const optionLabels = fieldDef.option_labels || [];
+                const selectLabel = fieldDef.placeholder
+                    ? this.t(fieldDef.placeholder, fieldDef.placeholder)
+                    : this.t('ui.common.select_placeholder', 'Select...');
+                const fieldId = `workflow-${taskIdx}-${stepIdx}-${field}`;
+                const labelValue = fieldDef.label ? this.t(fieldDef.label, fieldDef.label) : field;
+                const labelText = this.escapeHtml(labelValue);
+                const placeholder = fieldDef.placeholder
+                    ? this.escapeHtml(this.t(fieldDef.placeholder, fieldDef.placeholder))
+                    : '';
+
+                let inputHtml = '';
+                if (fieldType === 'checkbox') {
+                    inputHtml = `
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input"
+                                   ${step[field] ? 'checked' : ''}
+                                   onchange="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.checked)">
+                            <label class="form-check-label small">${this.escapeHtml(this.t('ui.workflow.field.enable', 'Enable'))}</label>
+                        </div>
+                    `;
+                } else if (fieldType === 'select') {
+                    inputHtml = `
+                        <select class="form-select form-select-sm"
+                                onchange="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)">
+                            <option value="">${this.escapeHtml(selectLabel)}</option>
+                            ${options.map((option, idx) => {
+                                const label = optionLabels[idx]
+                                    ? this.t(optionLabels[idx], optionLabels[idx])
+                                    : option;
+                                return `<option value="${this.escapeHtml(option)}" ${val === option ? 'selected' : ''}>${this.escapeHtml(label)}</option>`;
+                            }).join('')}
+                        </select>
+                    `;
+                } else if (fieldType === 'number') {
+                    const min = fieldDef.min !== undefined ? `min="${fieldDef.min}"` : '';
+                    const max = fieldDef.max !== undefined ? `max="${fieldDef.max}"` : '';
+                    const stepAttr = fieldDef.step !== undefined ? `step="${fieldDef.step}"` : '';
+                    inputHtml = `
+                        <input type="number" class="form-control form-control-sm"
+                               value="${this.escapeHtml(val)}" ${min} ${max} ${stepAttr}
+                               placeholder="${placeholder}"
+                               onchange="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', parseFloat(this.value))">
+                    `;
+                } else if (fieldType === 'textarea') {
+                    inputHtml = `
+                        <textarea class="form-control form-control-sm" rows="3"
+                                  placeholder="${placeholder}"
+                                  oninput="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)">${this.escapeHtml(val)}</textarea>
+                    `;
+                } else {
+                    const listId = suggestions.length ? `list="${fieldId}-list"` : '';
+                    const listHtml = suggestions.length
+                        ? `<datalist id="${fieldId}-list">${suggestions.map(s =>
+                            `<option value="${this.escapeHtml(s)}"></option>`
+                        ).join('')}</datalist>`
+                        : '';
+                    inputHtml = `
+                        <input type="text" class="form-control form-control-sm"
+                               value="${this.escapeHtml(val)}" ${listId}
+                               placeholder="${placeholder}"
+                               oninput="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)">
+                        ${listHtml}
+                    `;
+                }
 
                 fieldsHtml += `
                     <div class="col-md-6 amb-workflow-field">
-                        <label class="form-label small text-muted mb-1">${this.escapeHtml(fieldDef.label)}</label>
-                        ${isCheckbox ? `
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input"
-                                       ${step[field] ? 'checked' : ''}
-                                       onchange="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.checked)">
-                                <label class="form-check-label small">${this.escapeHtml(this.t('ui.workflow.field.enable', 'Enable'))}</label>
-                            </div>
-                        ` : `
-                            <select class="form-select form-select-sm"
-                                    onchange="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)">
-                                <option value="">${this.escapeHtml(selectLabel)}</option>
-                                ${suggestions.map(s =>
-                                    `<option value="${this.escapeHtml(s)}" ${val === s ? 'selected' : ''}>${this.escapeHtml(s)}</option>`
-                                ).join('')}
-                            </select>
-                        `}
+                        <label class="form-label small text-muted mb-1">${labelText}</label>
+                        ${inputHtml}
                     </div>
                 `;
             });
@@ -171,9 +223,10 @@ const WorkflowBuilder = {
                     <select class="form-select form-select-sm amb-workflow-step-select"
                             onchange="WorkflowBuilder.updateStepType(${taskIdx}, ${stepIdx}, this.value)">
                         <option value="">${this.escapeHtml(this.t('ui.workflow.step_type_placeholder', 'Select action type...'))}</option>
-                        ${Object.entries(this.stepDefinitions).map(([type, def]) =>
-                            `<option value="${type}" ${step.type === type ? 'selected' : ''}>${this.escapeHtml(def.label)}</option>`
-                        ).join('')}
+                        ${Object.entries(this.stepDefinitions).map(([type, def]) => {
+                            const label = this.t(def.label || '', def.label || '');
+                            return `<option value="${type}" ${step.type === type ? 'selected' : ''}>${this.escapeHtml(label)}</option>`;
+                        }).join('')}
                     </select>
                     ${step.type ? `<span class="amb-workflow-step-hint"><i class="bi bi-arrow-right"></i></span>` : ''}
                 </div>

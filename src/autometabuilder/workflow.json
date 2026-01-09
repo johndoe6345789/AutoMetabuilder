@@ -7,9 +7,17 @@
         "output_key": "sdlc_context"
       },
       {
-        "type": "prepare_messages",
-        "input_context": "sdlc_context",
+        "type": "seed_messages",
         "output_key": "messages"
+      },
+      {
+        "type": "append_context_message",
+        "input_context": "sdlc_context",
+        "target_messages": "messages"
+      },
+      {
+        "type": "append_user_instruction",
+        "target_messages": "messages"
       }
     ]
   },
@@ -19,18 +27,18 @@
     "max_iterations": 10,
     "steps": [
       {
-        "type": "llm_gen",
+        "type": "ai_request",
         "input_messages": "messages",
         "output_key": "llm_response"
       },
       {
-        "type": "process_response",
+        "type": "run_tool_calls",
         "input_response": "llm_response",
         "output_key": "tool_results",
         "stop_if_no_tools": true
       },
       {
-        "type": "update_messages",
+        "type": "append_tool_results",
         "input_results": "tool_results",
         "target_messages": "messages"
       }

@@ -12,61 +12,97 @@
   "version": "1.0.0",
   "settings_descriptions": {
     "GITHUB_TOKEN": {
-      "label": "GitHub Token",
-      "description": "Personal access token for GitHub API. Required for repository operations like creating branches and pull requests.",
+      "label": "meta.settings.github_token.label",
+      "description": "meta.settings.github_token.description",
       "type": "password",
       "required": true
     },
     "GITHUB_REPOSITORY": {
-      "label": "GitHub Repository",
-      "description": "The repository to work with in format 'owner/repo' (e.g., 'myuser/myproject').",
+      "label": "meta.settings.github_repository.label",
+      "description": "meta.settings.github_repository.description",
       "type": "text",
-      "placeholder": "owner/repo"
+      "placeholder": "meta.settings.github_repository.placeholder"
     },
     "OPENAI_API_KEY": {
-      "label": "OpenAI API Key",
-      "description": "API key for OpenAI services. Used for AI-powered code generation and analysis.",
+      "label": "meta.settings.openai_api_key.label",
+      "description": "meta.settings.openai_api_key.description",
       "type": "password",
       "required": true
     },
     "LITELLM_API_KEY": {
-      "label": "LiteLLM API Key",
-      "description": "Alternative API key if using LiteLLM proxy for multiple LLM providers.",
+      "label": "meta.settings.litellm_api_key.label",
+      "description": "meta.settings.litellm_api_key.description",
       "type": "password"
     },
     "LOG_LEVEL": {
-      "label": "Log Level",
-      "description": "Controls how much detail is written to logs. DEBUG shows everything, ERROR shows only errors.",
+      "label": "meta.settings.log_level.label",
+      "description": "meta.settings.log_level.description",
       "type": "select",
-      "options": ["DEBUG", "INFO", "WARNING", "ERROR"]
+      "options": [
+        "DEBUG",
+        "INFO",
+        "WARNING",
+        "ERROR"
+      ]
     },
     "APP_LANG": {
-      "label": "Application Language",
-      "description": "Language for bot messages and UI text.",
+      "label": "meta.settings.app_lang.label",
+      "description": "meta.settings.app_lang.description",
       "type": "select",
-      "options": ["en", "es", "fr", "nl", "pirate"]
+      "options": [
+        "en",
+        "es",
+        "fr",
+        "nl",
+        "pirate"
+      ]
     },
     "PROMPT_PATH": {
-      "label": "Prompt File Path",
-      "description": "Path to the YAML file containing the system prompt configuration.",
+      "label": "meta.settings.prompt_path.label",
+      "description": "meta.settings.prompt_path.description",
       "type": "text",
       "default": "prompt.yml"
     },
     "WEB_USER": {
-      "label": "Web UI Username",
-      "description": "Username for accessing the web dashboard. Leave empty to disable authentication.",
+      "label": "meta.settings.web_user.label",
+      "description": "meta.settings.web_user.description",
       "type": "text"
     },
     "WEB_PASSWORD": {
-      "label": "Web UI Password",
-      "description": "Password for accessing the web dashboard. Leave empty to disable authentication.",
+      "label": "meta.settings.web_password.label",
+      "description": "meta.settings.web_password.description",
       "type": "password"
     }
   },
   "suggestions": {
-    "languages": ["en", "es", "fr", "nl", "de", "it", "ja", "zh", "pirate"],
-    "env_keys": ["GITHUB_TOKEN", "GITHUB_REPOSITORY", "OPENAI_API_KEY", "LITELLM_API_KEY", "LOG_LEVEL", "APP_LANG", "PROMPT_PATH", "WEB_USER", "WEB_PASSWORD"],
-    "env_values": ["INFO", "DEBUG", "WARNING", "ERROR"],
+    "languages": [
+      "en",
+      "es",
+      "fr",
+      "nl",
+      "de",
+      "it",
+      "ja",
+      "zh",
+      "pirate"
+    ],
+    "env_keys": [
+      "GITHUB_TOKEN",
+      "GITHUB_REPOSITORY",
+      "OPENAI_API_KEY",
+      "LITELLM_API_KEY",
+      "LOG_LEVEL",
+      "APP_LANG",
+      "PROMPT_PATH",
+      "WEB_USER",
+      "WEB_PASSWORD"
+    ],
+    "env_values": [
+      "INFO",
+      "DEBUG",
+      "WARNING",
+      "ERROR"
+    ],
     "task_names": [
       "Initialize Project",
       "Analyze Requirements",
@@ -78,10 +114,10 @@
   },
   "step_definitions": {
     "load_context": {
-      "label": "Load Project Context",
+      "label": "meta.steps.load_context.label",
       "fields": {
         "output_key": {
-          "label": "Save Context As",
+          "label": "meta.steps.load_context.fields.output_key.label",
           "type": "text",
           "default": "sdlc_context",
           "suggestions": [
@@ -91,10 +127,10 @@
       }
     },
     "prepare_messages": {
-      "label": "Prepare LLM Prompt",
+      "label": "meta.steps.prepare_messages.label",
       "fields": {
         "input_context": {
-          "label": "Input Context Key",
+          "label": "meta.steps.prepare_messages.fields.input_context.label",
           "type": "text",
           "default": "sdlc_context",
           "suggestions": [
@@ -104,7 +140,7 @@
           ]
         },
         "output_key": {
-          "label": "Save Messages As",
+          "label": "meta.steps.prepare_messages.fields.output_key.label",
           "type": "text",
           "default": "messages",
           "suggestions": [
@@ -115,10 +151,10 @@
       }
     },
     "llm_gen": {
-      "label": "Generate AI Response",
+      "label": "meta.steps.llm_gen.label",
       "fields": {
         "input_messages": {
-          "label": "Input Messages Key",
+          "label": "meta.steps.llm_gen.fields.input_messages.label",
           "type": "text",
           "default": "messages",
           "suggestions": [
@@ -127,7 +163,7 @@
           ]
         },
         "output_key": {
-          "label": "Save Response As",
+          "label": "meta.steps.llm_gen.fields.output_key.label",
           "type": "text",
           "default": "llm_response",
           "suggestions": [
@@ -138,10 +174,10 @@
       }
     },
     "process_response": {
-      "label": "Execute Tools / Process Response",
+      "label": "meta.steps.process_response.label",
       "fields": {
         "input_response": {
-          "label": "Input Response Key",
+          "label": "meta.steps.process_response.fields.input_response.label",
           "type": "text",
           "default": "llm_response",
           "suggestions": [
@@ -150,7 +186,7 @@
           ]
         },
         "output_key": {
-          "label": "Save Tool Results As",
+          "label": "meta.steps.process_response.fields.output_key.label",
           "type": "text",
           "default": "tool_results",
           "suggestions": [
@@ -159,17 +195,17 @@
           ]
         },
         "stop_if_no_tools": {
-          "label": "Stop if no tool calls",
+          "label": "meta.steps.process_response.fields.stop_if_no_tools.label",
           "type": "checkbox",
           "default": false
         }
       }
     },
     "update_messages": {
-      "label": "Update Message History",
+      "label": "meta.steps.update_messages.label",
       "fields": {
         "input_results": {
-          "label": "Input Tool Results Key",
+          "label": "meta.steps.update_messages.fields.input_results.label",
           "type": "text",
           "default": "tool_results",
           "suggestions": [
@@ -178,12 +214,438 @@
           ]
         },
         "target_messages": {
-          "label": "Target Messages Key",
+          "label": "meta.steps.update_messages.fields.target_messages.label",
           "type": "text",
           "default": "messages",
           "suggestions": [
             "messages",
             "chat_history"
+          ]
+        }
+      }
+    },
+    "seed_messages": {
+      "label": "meta.steps.seed_messages.label",
+      "fields": {
+        "output_key": {
+          "label": "meta.steps.seed_messages.fields.output_key.label",
+          "type": "text",
+          "default": "messages",
+          "suggestions": [
+            "messages",
+            "prompt_history"
+          ]
+        }
+      }
+    },
+    "append_context_message": {
+      "label": "meta.steps.append_context_message.label",
+      "fields": {
+        "input_context": {
+          "label": "meta.steps.append_context_message.fields.input_context.label",
+          "type": "text",
+          "default": "sdlc_context",
+          "suggestions": [
+            "sdlc_context",
+            "project_info",
+            "full_context"
+          ]
+        },
+        "target_messages": {
+          "label": "meta.steps.append_context_message.fields.target_messages.label",
+          "type": "text",
+          "default": "messages",
+          "suggestions": [
+            "messages",
+            "chat_history"
+          ]
+        }
+      }
+    },
+    "append_user_instruction": {
+      "label": "meta.steps.append_user_instruction.label",
+      "fields": {
+        "target_messages": {
+          "label": "meta.steps.append_user_instruction.fields.target_messages.label",
+          "type": "text",
+          "default": "messages",
+          "suggestions": [
+            "messages",
+            "chat_history"
+          ]
+        }
+      }
+    },
+    "ai_request": {
+      "label": "meta.steps.ai_request.label",
+      "fields": {
+        "input_messages": {
+          "label": "meta.steps.ai_request.fields.input_messages.label",
+          "type": "text",
+          "default": "messages",
+          "suggestions": [
+            "messages",
+            "chat_history"
+          ]
+        },
+        "output_key": {
+          "label": "meta.steps.ai_request.fields.output_key.label",
+          "type": "text",
+          "default": "llm_response",
+          "suggestions": [
+            "llm_response",
+            "ai_output"
+          ]
+        }
+      }
+    },
+    "run_tool_calls": {
+      "label": "meta.steps.run_tool_calls.label",
+      "fields": {
+        "input_response": {
+          "label": "meta.steps.run_tool_calls.fields.input_response.label",
+          "type": "text",
+          "default": "llm_response",
+          "suggestions": [
+            "llm_response",
+            "ai_output"
+          ]
+        },
+        "output_key": {
+          "label": "meta.steps.run_tool_calls.fields.output_key.label",
+          "type": "text",
+          "default": "tool_results",
+          "suggestions": [
+            "tool_results",
+            "execution_output"
+          ]
+        },
+        "stop_if_no_tools": {
+          "label": "meta.steps.run_tool_calls.fields.stop_if_no_tools.label",
+          "type": "checkbox",
+          "default": false
+        }
+      }
+    },
+    "append_tool_results": {
+      "label": "meta.steps.append_tool_results.label",
+      "fields": {
+        "input_results": {
+          "label": "meta.steps.append_tool_results.fields.input_results.label",
+          "type": "text",
+          "default": "tool_results",
+          "suggestions": [
+            "tool_results",
+            "execution_output"
+          ]
+        },
+        "target_messages": {
+          "label": "meta.steps.append_tool_results.fields.target_messages.label",
+          "type": "text",
+          "default": "messages",
+          "suggestions": [
+            "messages",
+            "chat_history"
+          ]
+        }
+      }
+    },
+    "list_files": {
+      "label": "meta.steps.list_files.label",
+      "fields": {
+        "path": {
+          "label": "meta.steps.list_files.fields.path.label",
+          "type": "text",
+          "default": ".",
+          "suggestions": [
+            ".",
+            "src",
+            "tests"
+          ]
+        },
+        "output_key": {
+          "label": "meta.steps.list_files.fields.output_key.label",
+          "type": "text",
+          "default": "file_list",
+          "suggestions": [
+            "file_list",
+            "repo_files"
+          ]
+        }
+      }
+    },
+    "read_file": {
+      "label": "meta.steps.read_file.label",
+      "fields": {
+        "path": {
+          "label": "meta.steps.read_file.fields.path.label",
+          "type": "text",
+          "default": "README.md",
+          "suggestions": [
+            "README.md",
+            "ROADMAP.md",
+            "prompt.yml"
+          ]
+        },
+        "output_key": {
+          "label": "meta.steps.read_file.fields.output_key.label",
+          "type": "text",
+          "default": "file_content",
+          "suggestions": [
+            "file_content",
+            "readme_content"
+          ]
+        }
+      }
+    },
+    "run_tests": {
+      "label": "meta.steps.run_tests.label",
+      "fields": {
+        "path": {
+          "label": "meta.steps.run_tests.fields.path.label",
+          "type": "text",
+          "default": "tests",
+          "suggestions": [
+            "tests",
+            "tests/ui"
+          ]
+        },
+        "output_key": {
+          "label": "meta.steps.run_tests.fields.output_key.label",
+          "type": "text",
+          "default": "test_results",
+          "suggestions": [
+            "test_results"
+          ]
+        }
+      }
+    },
+    "run_lint": {
+      "label": "meta.steps.run_lint.label",
+      "fields": {
+        "path": {
+          "label": "meta.steps.run_lint.fields.path.label",
+          "type": "text",
+          "default": "src",
+          "suggestions": [
+            "src"
+          ]
+        },
+        "output_key": {
+          "label": "meta.steps.run_lint.fields.output_key.label",
+          "type": "text",
+          "default": "lint_results",
+          "suggestions": [
+            "lint_results"
+          ]
+        }
+      }
+    },
+    "create_branch": {
+      "label": "meta.steps.create_branch.label",
+      "fields": {
+        "branch_name": {
+          "label": "meta.steps.create_branch.fields.branch_name.label",
+          "type": "text",
+          "default": "feature/auto-change",
+          "suggestions": [
+            "feature/auto-change"
+          ]
+        },
+        "base_branch": {
+          "label": "meta.steps.create_branch.fields.base_branch.label",
+          "type": "text",
+          "default": "main",
+          "suggestions": [
+            "main",
+            "master"
+          ]
+        }
+      }
+    },
+    "create_pull_request": {
+      "label": "meta.steps.create_pull_request.label",
+      "fields": {
+        "title": {
+          "label": "meta.steps.create_pull_request.fields.title.label",
+          "type": "text",
+          "default": "Automated update",
+          "suggestions": [
+            "Automated update"
+          ]
+        },
+        "body": {
+          "label": "meta.steps.create_pull_request.fields.body.label",
+          "type": "textarea",
+          "default": "Summary of changes",
+          "suggestions": [
+            "Summary of changes"
+          ]
+        },
+        "head_branch": {
+          "label": "meta.steps.create_pull_request.fields.head_branch.label",
+          "type": "text",
+          "default": "feature/auto-change",
+          "suggestions": [
+            "feature/auto-change"
+          ]
+        },
+        "base_branch": {
+          "label": "meta.steps.create_pull_request.fields.base_branch.label",
+          "type": "text",
+          "default": "main",
+          "suggestions": [
+            "main",
+            "master"
+          ]
+        }
+      }
+    },
+    "filter_list": {
+      "label": "meta.steps.filter_list.label",
+      "fields": {
+        "input_key": {
+          "label": "meta.steps.filter_list.fields.input_key.label",
+          "type": "text",
+          "default": "file_list",
+          "suggestions": [
+            "file_list",
+            "repo_files"
+          ]
+        },
+        "mode": {
+          "label": "meta.steps.filter_list.fields.mode.label",
+          "type": "select",
+          "default": "contains",
+          "options": [
+            "contains",
+            "regex",
+            "equals",
+            "not_equals",
+            "starts_with",
+            "ends_with"
+          ],
+          "option_labels": [
+            "meta.steps.filter_list.fields.mode.options.contains",
+            "meta.steps.filter_list.fields.mode.options.regex",
+            "meta.steps.filter_list.fields.mode.options.equals",
+            "meta.steps.filter_list.fields.mode.options.not_equals",
+            "meta.steps.filter_list.fields.mode.options.starts_with",
+            "meta.steps.filter_list.fields.mode.options.ends_with"
+          ]
+        },
+        "pattern": {
+          "label": "meta.steps.filter_list.fields.pattern.label",
+          "type": "text",
+          "default": ".py"
+        },
+        "output_key": {
+          "label": "meta.steps.filter_list.fields.output_key.label",
+          "type": "text",
+          "default": "filtered_list",
+          "suggestions": [
+            "filtered_list"
+          ]
+        }
+      }
+    },
+    "map_list": {
+      "label": "meta.steps.map_list.label",
+      "fields": {
+        "input_key": {
+          "label": "meta.steps.map_list.fields.input_key.label",
+          "type": "text",
+          "default": "filtered_list",
+          "suggestions": [
+            "filtered_list",
+            "file_list"
+          ]
+        },
+        "template": {
+          "label": "meta.steps.map_list.fields.template.label",
+          "type": "text",
+          "default": "File: {item}"
+        },
+        "output_key": {
+          "label": "meta.steps.map_list.fields.output_key.label",
+          "type": "text",
+          "default": "mapped_list",
+          "suggestions": [
+            "mapped_list"
+          ]
+        }
+      }
+    },
+    "reduce_list": {
+      "label": "meta.steps.reduce_list.label",
+      "fields": {
+        "input_key": {
+          "label": "meta.steps.reduce_list.fields.input_key.label",
+          "type": "text",
+          "default": "mapped_list",
+          "suggestions": [
+            "mapped_list"
+          ]
+        },
+        "separator": {
+          "label": "meta.steps.reduce_list.fields.separator.label",
+          "type": "text",
+          "default": "\n"
+        },
+        "output_key": {
+          "label": "meta.steps.reduce_list.fields.output_key.label",
+          "type": "text",
+          "default": "reduced_output",
+          "suggestions": [
+            "reduced_output"
+          ]
+        }
+      }
+    },
+    "branch": {
+      "label": "meta.steps.branch.label",
+      "fields": {
+        "input_key": {
+          "label": "meta.steps.branch.fields.input_key.label",
+          "type": "text",
+          "default": "reduced_output",
+          "suggestions": [
+            "reduced_output",
+            "file_list"
+          ]
+        },
+        "mode": {
+          "label": "meta.steps.branch.fields.mode.label",
+          "type": "select",
+          "default": "is_empty",
+          "options": [
+            "is_empty",
+            "is_truthy",
+            "equals",
+            "not_equals",
+            "contains",
+            "regex"
+          ],
+          "option_labels": [
+            "meta.steps.branch.fields.mode.options.is_empty",
+            "meta.steps.branch.fields.mode.options.is_truthy",
+            "meta.steps.branch.fields.mode.options.equals",
+            "meta.steps.branch.fields.mode.options.not_equals",
+            "meta.steps.branch.fields.mode.options.contains",
+            "meta.steps.branch.fields.mode.options.regex"
+          ]
+        },
+        "compare": {
+          "label": "meta.steps.branch.fields.compare.label",
+          "type": "text",
+          "default": ""
+        },
+        "output_key": {
+          "label": "meta.steps.branch.fields.output_key.label",
+          "type": "text",
+          "default": "branch_decision",
+          "suggestions": [
+            "branch_decision"
           ]
         }
       }
