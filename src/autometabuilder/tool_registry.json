@@ -1,0 +1,13 @@
+[
+  {"name": "create_branch", "provider": "github", "method": "create_branch"},
+  {"name": "create_pull_request", "provider": "github", "method": "create_pull_request"},
+  {"name": "get_pull_request_comments", "provider": "github", "method": "get_pull_request_comments"},
+  {"name": "update_roadmap", "provider": "module", "callable": "autometabuilder.roadmap_utils.update_roadmap"},
+  {"name": "list_files", "provider": "module", "callable": "autometabuilder.tools.list_files.list_files"},
+  {"name": "run_tests", "provider": "module", "callable": "autometabuilder.tools.run_tests.run_tests"},
+  {"name": "run_lint", "provider": "module", "callable": "autometabuilder.tools.run_lint.run_lint"},
+  {"name": "run_docker_task", "provider": "module", "callable": "autometabuilder.tools.run_docker_task.run_docker_task"},
+  {"name": "read_file", "provider": "module", "callable": "autometabuilder.tools.read_file.read_file"},
+  {"name": "write_file", "provider": "module", "callable": "autometabuilder.tools.write_file.write_file"},
+  {"name": "edit_file", "provider": "module", "callable": "autometabuilder.tools.edit_file.edit_file"}
+]

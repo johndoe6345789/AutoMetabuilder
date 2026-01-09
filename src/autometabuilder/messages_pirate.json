@@ -385,5 +385,9 @@
   "meta.workflow_packages.testing_triangle.label": "Testin' Triangle",
   "meta.workflow_packages.testing_triangle.description": "Run lint, unit, then UI tests with conditional gating.",
   "meta.workflow_packages.repo_scan_context.label": "Repo Scan Context",
-  "meta.workflow_packages.repo_scan_context.description": "Map-reduce repo files into context before the AI request."
+  "meta.workflow_packages.repo_scan_context.description": "Map-reduce repo files into context before the AI request.",
+  "meta.workflow_packages.contextual_iterative_loop.label": "Contextual Iterative Loop",
+  "meta.workflow_packages.contextual_iterative_loop.description": "Scan files, then loop AI/tool steps till no tool calls remain.",
+  "meta.workflow_packages.game_tick_loop.label": "Game Tick Loop",
+  "meta.workflow_packages.game_tick_loop.description": "Seed a tick script and loop AI/tool steps fer a few cycles."
 }

@@ -259,38 +259,15 @@ def load_workflow_packages():
     return packages
 
 def get_navigation_items():
-    return [
-        {
-            "section": "dashboard",
-            "icon": "speedometer2",
-            "label_key": "ui.nav.dashboard",
-            "default_label": "Dashboard"
-        },
-        {
-            "section": "workflow",
-            "icon": "diagram-3",
-            "label_key": "ui.nav.workflow",
-            "default_label": "Workflow"
-        },
-        {
-            "section": "prompt",
-            "icon": "file-text",
-            "label_key": "ui.nav.prompt",
-            "default_label": "Prompt"
-        },
-        {
-            "section": "settings",
-            "icon": "gear",
-            "label_key": "ui.nav.settings",
-            "default_label": "Settings"
-        },
-        {
-            "section": "translations",
-            "icon": "translate",
-            "label_key": "ui.nav.translations",
-            "default_label": "Translations"
-        }
-    ]
+    items_path = os.path.join(os.path.dirname(__file__), "navigation_items.json")
+    if not os.path.exists(items_path):
+        return []
+    try:
+        with open(items_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except json.JSONDecodeError:
+        return []
+    return data if isinstance(data, list) else []
 
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request, username: str = Depends(get_current_user)):

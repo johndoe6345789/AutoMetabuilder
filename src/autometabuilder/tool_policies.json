@@ -1,0 +1,9 @@
+{
+  "modifying_tools": [
+    "create_branch",
+    "create_pull_request",
+    "update_roadmap",
+    "write_file",
+    "edit_file"
+  ]
+}

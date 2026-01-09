@@ -385,5 +385,9 @@
   "meta.workflow_packages.testing_triangle.label": "Testdriehoek",
   "meta.workflow_packages.testing_triangle.description": "Voer lint, unit- en UI-tests uit met voorwaardelijke gating.",
   "meta.workflow_packages.repo_scan_context.label": "Repo-scancontext",
-  "meta.workflow_packages.repo_scan_context.description": "Reduceer repo-bestanden naar context vóór de AI-aanvraag."
+  "meta.workflow_packages.repo_scan_context.description": "Reduceer repo-bestanden naar context vóór de AI-aanvraag.",
+  "meta.workflow_packages.contextual_iterative_loop.label": "Contextuele iteratieve lus",
+  "meta.workflow_packages.contextual_iterative_loop.description": "Scan bestanden en herhaal AI/tool-stappen tot er geen tool-calls zijn.",
+  "meta.workflow_packages.game_tick_loop.label": "Game-ticklus",
+  "meta.workflow_packages.game_tick_loop.description": "Zet een tick-script klaar en herhaal AI/tool-stappen enkele cycli."
 }

@@ -385,5 +385,9 @@
   "meta.workflow_packages.testing_triangle.label": "Triángulo de pruebas",
   "meta.workflow_packages.testing_triangle.description": "Ejecuta lint, pruebas unitarias y UI con control condicional.",
   "meta.workflow_packages.repo_scan_context.label": "Contexto del escaneo del repositorio",
-  "meta.workflow_packages.repo_scan_context.description": "Reduce el repositorio a contexto antes de la solicitud de IA."
+  "meta.workflow_packages.repo_scan_context.description": "Reduce el repositorio a contexto antes de la solicitud de IA.",
+  "meta.workflow_packages.contextual_iterative_loop.label": "Bucle iterativo con contexto",
+  "meta.workflow_packages.contextual_iterative_loop.description": "Escanea archivos y luego itera IA/herramientas hasta no tener llamadas.",
+  "meta.workflow_packages.game_tick_loop.label": "Bucle de ticks del juego",
+  "meta.workflow_packages.game_tick_loop.description": "Siembra un guion de ticks y repite IA/herramientas por algunos ciclos."
 }

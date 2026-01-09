@@ -1,0 +1,20 @@
+{
+  "core.load_context": "autometabuilder.workflow.plugins.core_load_context.run",
+  "core.seed_messages": "autometabuilder.workflow.plugins.core_seed_messages.run",
+  "core.append_context_message": "autometabuilder.workflow.plugins.core_append_context_message.run",
+  "core.append_user_instruction": "autometabuilder.workflow.plugins.core_append_user_instruction.run",
+  "core.ai_request": "autometabuilder.workflow.plugins.core_ai_request.run",
+  "core.run_tool_calls": "autometabuilder.workflow.plugins.core_run_tool_calls.run",
+  "core.append_tool_results": "autometabuilder.workflow.plugins.core_append_tool_results.run",
+  "tools.list_files": "autometabuilder.workflow.plugins.tools_list_files.run",
+  "tools.read_file": "autometabuilder.workflow.plugins.tools_read_file.run",
+  "tools.run_tests": "autometabuilder.workflow.plugins.tools_run_tests.run",
+  "tools.run_lint": "autometabuilder.workflow.plugins.tools_run_lint.run",
+  "tools.create_branch": "autometabuilder.workflow.plugins.tools_create_branch.run",
+  "tools.create_pull_request": "autometabuilder.workflow.plugins.tools_create_pull_request.run",
+  "utils.filter_list": "autometabuilder.workflow.plugins.utils_filter_list.run",
+  "utils.map_list": "autometabuilder.workflow.plugins.utils_map_list.run",
+  "utils.reduce_list": "autometabuilder.workflow.plugins.utils_reduce_list.run",
+  "utils.branch_condition": "autometabuilder.workflow.plugins.utils_branch_condition.run",
+  "utils.not": "autometabuilder.workflow.plugins.utils_not.run"
+}
