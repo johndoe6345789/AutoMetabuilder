@@ -17,6 +17,7 @@ from .github_integration import GitHubIntegration, get_repo_name_from_env
 from .docker_utils import run_command_in_docker
 from .web.server import start_web_ui
 from .integrations.notifications import notify_all
+from .roadmap_utils import update_roadmap, is_mvp_reached
 
 load_dotenv()
 
@@ -77,11 +78,6 @@ def get_sdlc_context(gh: GitHubIntegration, msgs: dict) -> str:
     return sdlc_context
 
 
-def update_roadmap(content: str):
-    """Update ROADMAP.md with new content."""
-    with open("ROADMAP.md", "w", encoding="utf-8") as f:
-        f.write(content)
-    logger.info("ROADMAP.md updated successfully.")
 
 
 def list_files(directory: str = "."):
@@ -349,34 +345,55 @@ def main():
     messages.append({"role": "user", "content": msgs["user_next_step"]})
 
     model_name = os.environ.get("LLM_MODEL", prompt.get("model", DEFAULT_MODEL))
-    response = get_completion(client, model_name, messages, tools)
 
-    resp_msg = response.choices[0].message
-    logger.info(
-        resp_msg.content
-        if resp_msg.content
-        else msgs["info_tool_call_requested"]
-    )
-
-    # Handle tool calls
-    tool_results = handle_tool_calls(resp_msg, tool_map, gh, msgs, dry_run=args.dry_run, yolo=args.yolo)
-
-    if args.once and tool_results:
-        logger.info(msgs.get("info_second_pass", "Performing second pass with tool results..."))
+    # Multi-iteration loop
+    iteration = 0
+    max_iterations = 10
+    
+    while iteration < max_iterations:
+        iteration += 1
+        logger.info(f"--- Iteration {iteration} ---")
+        
+        response = get_completion(client, model_name, messages, tools)
+        resp_msg = response.choices[0].message
+        
+        logger.info(
+            resp_msg.content
+            if resp_msg.content
+            else msgs["info_tool_call_requested"]
+        )
+        
         messages.append(resp_msg)
+        
+        if not resp_msg.tool_calls:
+            # If no more tools requested, we are done
+            notify_all(f"AutoMetabuilder task complete: {resp_msg.content[:100]}...")
+            break
+            
+        # Handle tool calls
+        tool_results = handle_tool_calls(resp_msg, tool_map, gh, msgs, dry_run=args.dry_run, yolo=args.yolo)
         messages.extend(tool_results)
 
-        response = get_completion(client, model_name, messages, tools)
-        final_msg = response.choices[0].message
-        logger.info(final_msg.content if final_msg.content else msgs["info_tool_call_requested"])
-    
-        # Notify about task completion
-        notify_all(f"AutoMetabuilder task complete: {final_msg.content[:100]}...")
-
-        # In a multi-iteration loop, we would call handle_tool_calls again here.
-        # For --once, we just do one more pass.
-        if final_msg.tool_calls:
-            handle_tool_calls(final_msg, tool_map, gh, msgs, dry_run=args.dry_run, yolo=args.yolo)
+        if args.yolo and is_mvp_reached():
+            logger.info("MVP reached. Stopping YOLO loop.")
+            notify_all("AutoMetabuilder YOLO loop stopped: MVP reached.")
+            break
+        
+        if args.once:
+            # If --once is set, we do one more pass to show the final result
+            logger.info(msgs.get("info_second_pass", "Performing second pass with tool results..."))
+            response = get_completion(client, model_name, messages, tools)
+            final_msg = response.choices[0].message
+            logger.info(final_msg.content if final_msg.content else msgs["info_tool_call_requested"])
+            notify_all(f"AutoMetabuilder task complete: {final_msg.content[:100]}...")
+            
+            # For --once, we still handle tool calls if any in the second pass, but then stop.
+            if final_msg.tool_calls:
+                handle_tool_calls(final_msg, tool_map, gh, msgs, dry_run=args.dry_run, yolo=args.yolo)
+            break
+    else:
+        logger.warning(f"Reached maximum iterations ({max_iterations}). Stopping.")
+        notify_all(f"AutoMetabuilder stopped: Reached {max_iterations} iterations.")
 
 
 if __name__ == "__main__":

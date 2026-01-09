@@ -12,7 +12,7 @@
 - [x] **Declarative Task Processing**: Move more logic into JSON/YAML specifications.
 - [x] **Feedback Loop**: Support for the AI to read comments on PRs it created.
 
-## Phase 3: Advanced Automation
+## Phase 3: Advanced Automation (MVP)
 - [x] **Automated Testing**: Integration with test runners to verify changes before PR.
 - [x] **Linting Integration**: Automatically run and fix linting issues.
 - [x] **Multi-Model Support**: Easily switch between different LLM providers.

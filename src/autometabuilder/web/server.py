@@ -8,6 +8,7 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from dotenv import load_dotenv, set_key
 import subprocess
 import sys
+from ..roadmap_utils import is_mvp_reached
 
 app = FastAPI()
 security = HTTPBasic()
@@ -92,6 +93,7 @@ async def read_item(request: Request, username: str = Depends(get_current_user))
     translations = get_translations()
     prompt_content = get_prompt_content()
     is_running = bot_process is not None
+    mvp_status = is_mvp_reached()
     return templates.TemplateResponse("index.html", {
         "request": request, 
         "logs": logs, 
@@ -99,6 +101,7 @@ async def read_item(request: Request, username: str = Depends(get_current_user))
         "translations": translations,
         "prompt_content": prompt_content,
         "is_running": is_running,
+        "mvp_reached": mvp_status,
         "username": username
     })
 
@@ -135,7 +138,10 @@ async def update_settings(request: Request, username: str = Depends(get_current_
 
 @app.get("/api/status")
 async def get_status(username: str = Depends(get_current_user)):
-    return {"is_running": bot_process is not None}
+    return {
+        "is_running": bot_process is not None,
+        "mvp_reached": is_mvp_reached()
+    }
 
 @app.get("/api/logs")
 async def get_logs(username: str = Depends(get_current_user)):
