@@ -127,16 +127,6 @@
             const container = document.getElementById('workflow-builder');
             container.innerHTML = '';
 
-            // Create datalist for suggestions
-            const datalist = document.createElement('datalist');
-            datalist.id = 'workflow-suggestions';
-            allSuggestions.forEach(s => {
-                const opt = document.createElement('option');
-                opt.value = s;
-                datalist.appendChild(opt);
-            });
-            container.appendChild(datalist);
-
             workflow.forEach((task, taskIdx) => {
                 const taskCard = document.createElement('div');
                 taskCard.className = 'card mb-4 border-primary';
@@ -187,7 +177,12 @@
                                     <label class="small fw-bold">${fieldDef.label}</label>
                                     ${isCheckbox 
                                         ? `<div class="form-check mt-1"><input type="checkbox" class="form-check-input" ${step[field] ? 'checked' : ''} onchange="updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.checked)"></div>`
-                                        : `<input type="text" class="form-control form-control-sm" value="${val}" list="workflow-suggestions" onchange="updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)" placeholder="${fieldDef.default || ''}">`
+                                        : `
+                                            <input type="text" class="form-control form-control-sm" value="${val}" list="suggestions-${taskIdx}-${stepIdx}-${field}" onchange="updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)" placeholder="${fieldDef.default || ''}">
+                                            <datalist id="suggestions-${taskIdx}-${stepIdx}-${field}">
+                                                ${(fieldDef.suggestions || Array.from(allSuggestions)).map(s => `<option value="${s}">`).join('')}
+                                            </datalist>
+                                          `
                                     }
                                 </div>
                             `;

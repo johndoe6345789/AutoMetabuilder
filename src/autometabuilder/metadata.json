@@ -32,7 +32,9 @@
           "type": "text",
           "default": "sdlc_context",
           "suggestions": [
-            "sdlc_context"
+            "sdlc_context",
+            "project_info",
+            "full_context"
           ]
         },
         "output_key": {
@@ -40,7 +42,8 @@
           "type": "text",
           "default": "messages",
           "suggestions": [
-            "messages"
+            "messages",
+            "prompt_history"
           ]
         }
       }
@@ -53,7 +56,8 @@
           "type": "text",
           "default": "messages",
           "suggestions": [
-            "messages"
+            "messages",
+            "chat_history"
           ]
         },
         "output_key": {
@@ -61,7 +65,8 @@
           "type": "text",
           "default": "llm_response",
           "suggestions": [
-            "llm_response"
+            "llm_response",
+            "ai_output"
           ]
         }
       }
@@ -74,7 +79,8 @@
           "type": "text",
           "default": "llm_response",
           "suggestions": [
-            "llm_response"
+            "llm_response",
+            "ai_output"
           ]
         },
         "output_key": {
@@ -82,7 +88,8 @@
           "type": "text",
           "default": "tool_results",
           "suggestions": [
-            "tool_results"
+            "tool_results",
+            "execution_output"
           ]
         },
         "stop_if_no_tools": {
@@ -100,7 +107,8 @@
           "type": "text",
           "default": "tool_results",
           "suggestions": [
-            "tool_results"
+            "tool_results",
+            "execution_output"
           ]
         },
         "target_messages": {
@@ -108,7 +116,8 @@
           "type": "text",
           "default": "messages",
           "suggestions": [
-            "messages"
+            "messages",
+            "chat_history"
           ]
         }
       }
