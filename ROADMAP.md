@@ -31,6 +31,6 @@
 - [x] **Slack/Discord Integration**: Command and notify the bot from chat platforms.
 
 ## Phase 6: Advanced Web UI & Remote Control
-- [ ] **Remote Command Execution**: Trigger bot runs from the Web UI.
-- [ ] **User Authentication**: Secure the Web UI with login.
-- [ ] **Visual Task Progress**: Real-time progress bars for long-running tasks.
+- [x] **Remote Command Execution**: Trigger bot runs from the Web UI.
+- [x] **User Authentication**: Secure the Web UI with login.
+- [x] **Visual Task Progress**: Real-time progress bars for long-running tasks.
