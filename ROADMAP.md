@@ -43,7 +43,8 @@
 - [x] **AJAX Navigation Data**: Render sidebar links from API payload with a client-side fallback.
 - [ ] **n8n-Style Visual Workflow Canvas (Breakdown)**:
 - [ ] **Canvas Layout Engine**: DAG layout, node positioning, zoom/pan, and fit-to-view.
-- [ ] **Node Palette + Search**: Categorized plugin library with search, tags, and drag-to-canvas.
+- [x] **Node Palette + Search**: Categorized plugin library with search and click-to-add.
+- [ ] **Palette Tags + Drag-to-Canvas**: Add tags, drag handles, and drag/drop placement.
 - [ ] **Atomic Node Cards**: Compact node tiles with status badge, type icon, and inline rename.
 - [ ] **Ports + Connectors**: Visual input/output ports with link creation + validation.
 - [ ] **Edge Routing**: Orthogonal edge routing with arrowheads, hover/selection state.

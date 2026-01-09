@@ -9,15 +9,6 @@
         filter: ''
     };
 
-    const groupOrder = ['core', 'tools', 'utils', 'control', 'other'];
-    const groupLabelKeys = {
-        core: 'ui.workflow.palette.group.core',
-        tools: 'ui.workflow.palette.group.tools',
-        utils: 'ui.workflow.palette.group.utils',
-        control: 'ui.workflow.palette.group.control',
-        other: 'ui.workflow.palette.group.other'
-    };
-
     const getGroupKey = (type) => (type || '').split('.')[0] || 'other';
 
     const buildEntries = (definitions, t) => Object.entries(definitions || {}).map(([key, def]) => {
@@ -42,14 +33,23 @@
         }
 
         const grouped = entries.reduce((acc, entry) => {
-            const group = groupOrder.includes(entry.group) ? entry.group : 'other';
+            const group = entry.group || 'other';
             acc[group] = acc[group] || [];
             acc[group].push(entry);
             return acc;
         }, {});
 
-        const groupsHtml = groupOrder.filter(group => grouped[group]?.length).map(group => {
-            const groupLabel = t?.(groupLabelKeys[group], group) || group;
+        const groupNames = Object.keys(grouped).sort((a, b) => {
+            const aOther = a === 'other';
+            const bOther = b === 'other';
+            if (aOther && !bOther) return 1;
+            if (!aOther && bOther) return -1;
+            return a.localeCompare(b);
+        });
+
+        const groupsHtml = groupNames.map(group => {
+            const groupLabelKey = `ui.workflow.palette.group.${group}`;
+            const groupLabel = t?.(groupLabelKey, group) || group;
             const items = grouped[group].map(entry => {
                 const safeLabel = escapeHtml ? escapeHtml(entry.label) : entry.label;
                 const safeKey = escapeHtml ? escapeHtml(entry.key) : entry.key;

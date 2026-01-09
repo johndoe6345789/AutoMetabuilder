@@ -1,6 +1,7 @@
-import unittest
-from autometabuilder.main import load_prompt_yaml
 import os
+import unittest
+
+from autometabuilder.prompt_loader import load_prompt_yaml
 
 class TestMain(unittest.TestCase):
     def test_load_prompt_yaml(self):

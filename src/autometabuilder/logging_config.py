@@ -8,6 +8,8 @@ TRACE_LEVEL = 5
 def configure_logging() -> None:
     """Configure logging with TRACE support."""
     logging.addLevelName(TRACE_LEVEL, "TRACE")
+    if not hasattr(logging, "TRACE"):
+        setattr(logging, "TRACE", TRACE_LEVEL)
 
     def trace(self, message, *args, **kwargs):
         if self.isEnabledFor(TRACE_LEVEL):
