@@ -155,6 +155,27 @@ const ChoicesManager = {
 };
 
 /* ==========================================================================
+   Workflow Toggle
+   ========================================================================== */
+const WorkflowToggle = {
+    init() {
+        document.querySelectorAll('[data-workflow-toggle]').forEach(button => {
+            button.addEventListener('click', () => {
+                const builder = window.WorkflowBuilder;
+                if (builder && builder.textarea && typeof builder.toggleRaw === 'function') {
+                    builder.toggleRaw();
+                    return;
+                }
+                const textarea = document.getElementById('workflow-content');
+                if (textarea) {
+                    textarea.classList.toggle('d-none');
+                }
+            });
+        });
+    }
+};
+
+/* ==========================================================================
    Form Validator
    ========================================================================== */
 const FormValidator = {
@@ -292,6 +313,7 @@ const App = {
         ThemeManager.init();
         NavigationManager.init();
         ChoicesManager.init();
+        WorkflowToggle.init();
         FormValidator.init();
         StatusPoller.init();
     }
@@ -305,6 +327,7 @@ window.App = App;
 window.ThemeManager = ThemeManager;
 window.NavigationManager = NavigationManager;
 window.ChoicesManager = ChoicesManager;
+window.WorkflowToggle = WorkflowToggle;
 window.FormValidator = FormValidator;
 window.StatusPoller = StatusPoller;
 window.Toast = Toast;

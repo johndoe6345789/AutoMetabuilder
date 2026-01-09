@@ -1,0 +1,516 @@
+{# Page section components composed from atoms, molecules, and organisms. #}
+{% from "components/atoms.html" import section_header, helper_text, pill %}
+{% from "components/molecules.html" import card, empty_state %}
+{% from "components/organisms.html" import callout %}
+
+{% macro choice_card(id, value, icon_name, title, description, checked=False, extra_html='') -%}
+<label class="amb-choice-card" for="{{ id }}">
+    <input type="radio" name="mode" id="{{ id }}" value="{{ value }}" {% if checked %}checked{% endif %}>
+    <div class="amb-choice-content">
+        <div class="amb-choice-title">
+            <i class="bi bi-{{ icon_name }}"></i> {{ title }}
+        </div>
+        <p class="amb-choice-text">{{ description }}</p>
+        {% if extra_html %}{{ extra_html | safe }}{% endif %}
+    </div>
+</label>
+{%- endmacro %}
+
+{% macro prompt_chip(target_id, snippet, label) -%}
+<button type="button" class="amb-chip" data-prompt-target="{{ target_id }}"
+        data-prompt-snippet="{{ snippet }}">{{ label }}</button>
+{%- endmacro %}
+
+{% macro prompt_step(step_number, title, description, textarea_id, name, placeholder, value, rows=5, chips=[]) -%}
+<div class="amb-prompt-step">
+    <div class="amb-prompt-step-title">
+        <span class="amb-step-badge">{{ step_number }}</span> {{ title }}
+    </div>
+    {{ helper_text(description) }}
+    <textarea name="{{ name }}" class="form-control" rows="{{ rows }}" id="{{ textarea_id }}"
+              placeholder="{{ placeholder }}">{{ value }}</textarea>
+    {% if chips %}
+    <div class="amb-chip-row">
+        {% for chip in chips %}
+        {{ prompt_chip(chip.target, chip.snippet, chip.label) }}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{%- endmacro %}
+
+{% macro dashboard_section() -%}
+<section id="dashboard" class="amb-section active">
+    {{ section_header(t('ui.dashboard.title', 'Dashboard'), t('ui.dashboard.subtitle', 'Control the bot and monitor system activity')) }}
+
+    <div class="row">
+        <div class="col-lg-5 col-md-6">
+            <div class="amb-card">
+                <div class="amb-card-header">
+                    <h5><i class="bi bi-robot"></i> {{ t('ui.dashboard.bot_control', 'Bot Control') }}</h5>
+                </div>
+                <div class="amb-card-body">
+                    <form action="/run" method="post" id="run-form">
+                        <div class="amb-form-group">
+                            <label class="amb-form-label">{{ t('ui.dashboard.run_strategy', 'Run Strategy') }}</label>
+                            <div class="amb-choice-grid">
+                                {% set iterations_extra %}
+                                <div class="amb-choice-inline" id="iterations-group" style="display: none;">
+                                    <span class="amb-choice-meta">{{ t('ui.dashboard.run.repeat.label', 'Iterations') }}</span>
+                                    <input type="number" name="iterations" class="form-control form-control-sm"
+                                           value="5" min="1" max="100">
+                                </div>
+                                {% endset %}
+
+                                {{ choice_card('mode-once', 'once', '1-circle', t('ui.dashboard.run.single.title', 'Single Iteration'), t('ui.dashboard.run.single.desc', 'One full pass through the workflow.'), True) }}
+                                {{ choice_card('mode-iterations', 'iterations', 'arrow-repeat', t('ui.dashboard.run.repeat.title', 'Repeat'), t('ui.dashboard.run.repeat.desc', 'Run a fixed number of cycles.'), False, iterations_extra) }}
+                                {{ choice_card('mode-yolo', 'yolo', 'infinity', t('ui.dashboard.run.yolo.title', 'YOLO'), t('ui.dashboard.run.yolo.desc', 'Keep iterating until you stop it.')) }}
+                            </div>
+                        </div>
+
+                        <div class="amb-form-group">
+                            <label class="amb-form-label">{{ t('ui.dashboard.automation', 'Automation') }}</label>
+                            <div class="amb-toggle-stack">
+                                <div class="form-check form-switch amb-toggle">
+                                    <input class="form-check-input" type="checkbox" name="yolo" id="yolo-check" value="true" checked>
+                                    <label class="form-check-label" for="yolo-check">
+                                        <strong>{{ t('ui.dashboard.auto_approve.title', 'Auto-approve tools') }}</strong>
+                                        <small class="text-muted d-block">{{ t('ui.dashboard.auto_approve.desc', 'Skip confirmations so the bot can run faster.') }}</small>
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch amb-toggle">
+                                    <input class="form-check-input" type="checkbox" name="stop_at_mvp" id="mvp-check" value="true">
+                                    <label class="form-check-label" for="mvp-check">
+                                        <strong>{{ t('ui.dashboard.stop_mvp.title', 'Stop at MVP') }}</strong>
+                                        <small class="text-muted d-block">{{ t('ui.dashboard.stop_mvp.desc', 'Pause automatically when the MVP milestone is reached.') }}</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="run-btn" type="submit" class="btn btn-danger w-100" {% if is_running %}disabled{% endif %}>
+                            <i class="bi bi-play-fill"></i> {{ t('ui.dashboard.start_bot', 'Start Bot') }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="amb-card">
+                <div class="amb-card-header">
+                    <h5><i class="bi bi-activity"></i> {{ t('ui.dashboard.status.title', 'Status') }}</h5>
+                </div>
+                <div class="amb-card-body">
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span>{{ t('ui.dashboard.status.bot_label', 'Bot Status') }}</span>
+                            <div id="status-indicator" class="amb-status {% if is_running %}amb-status-running{% else %}amb-status-idle{% endif %}">
+                                <span class="amb-status-dot"></span>
+                                {% if is_running %}{{ t('ui.dashboard.status.running', 'Running') }}{% else %}{{ t('ui.dashboard.status.idle', 'Idle') }}{% endif %}
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span>{{ t('ui.dashboard.status.mvp_label', 'MVP Milestone') }}</span>
+                            <span id="mvp-badge" class="badge {% if mvp_reached %}bg-success{% else %}bg-secondary{% endif %}">
+                                {% if mvp_reached %}
+                                <i class="bi bi-check-circle-fill"></i> {{ t('ui.dashboard.status.mvp_reached', 'Reached') }}
+                                {% else %}
+                                <i class="bi bi-hourglass-split"></i> {{ t('ui.dashboard.status.mvp_progress', 'In Progress') }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div id="status-progress" class="progress" style="display: {% if is_running %}block{% else %}none{% endif %};">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7 col-md-6">
+            <div class="amb-card" style="height: calc(100% - 1.5rem);">
+                <div class="amb-card-header">
+                    <h5><i class="bi bi-terminal"></i> {{ t('ui.dashboard.logs.title', 'Recent Logs') }}</h5>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="StatusPoller.refreshLogs()" title="{{ t('ui.actions.refresh', 'Refresh') }}">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </div>
+                <div class="amb-card-body p-0">
+                    <pre id="logs" class="amb-logs m-0" style="height: 450px;">{{ logs }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%- endmacro %}
+
+{% macro workflow_section() -%}
+<section id="workflow" class="amb-section">
+    {{ section_header(t('ui.workflow.title', 'Workflow Builder'), t('ui.workflow.subtitle', "Design the bot's task execution pipeline")) }}
+
+    <div class="amb-card">
+        <div class="amb-card-header">
+            <h5><i class="bi bi-diagram-3"></i> {{ t('ui.workflow.card.title', 'Tasks & Steps') }}</h5>
+            <div>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-workflow-toggle>
+                    <i class="bi bi-code-slash"></i> {{ t('ui.workflow.toggle_json', 'Toggle JSON') }}
+                </button>
+            </div>
+        </div>
+        <div class="amb-card-body">
+            <div id="workflow-builder" class="mb-3">
+                <button type="button" class="btn btn-primary" data-workflow-fallback>
+                    <i class="bi bi-plus-lg"></i> {{ t('ui.workflow.add_task', 'Add Task') }}
+                </button>
+            </div>
+            <form action="/workflow" method="post" id="workflow-form">
+                <textarea id="workflow-content" name="content" class="form-control amb-code-editor d-none" rows="15">{{ workflow_content }}</textarea>
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-save"></i> {{ t('ui.workflow.save', 'Save Workflow') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{%- endmacro %}
+
+{% macro prompt_section() -%}
+<section id="prompt" class="amb-section">
+    {{ section_header(t('ui.prompt.title', 'Prompt Builder'), t('ui.prompt.subtitle', 'Shape how the assistant thinks, speaks, and decides')) }}
+
+    <div class="row">
+        <div class="col-lg-8">
+            {% call card(t('ui.prompt.card.title', 'Prompt Builder'), "chat-square-text") %}
+            <form action="/prompt" method="post" id="prompt-form">
+                <input type="hidden" name="prompt_mode" id="prompt-mode" value="builder">
+                <div id="prompt-builder">
+                    {% set system_chips = [
+                        {'target': 'system-prompt', 'snippet': t('ui.prompt.chip.senior.snippet', 'You are a senior software engineer focused on correctness and clarity.'), 'label': t('ui.prompt.chip.senior.label', 'Senior engineer')},
+                        {'target': 'system-prompt', 'snippet': t('ui.prompt.chip.ask.snippet', 'Ask clarifying questions before making risky changes.'), 'label': t('ui.prompt.chip.ask.label', 'Ask questions')},
+                        {'target': 'system-prompt', 'snippet': t('ui.prompt.chip.minimal.snippet', 'Prefer minimal diffs and explain trade-offs.'), 'label': t('ui.prompt.chip.minimal.label', 'Minimal diffs')}
+                    ] %}
+                    {{ prompt_step(1,
+                        t('ui.prompt.step1.title', 'Define the assistant'),
+                        t('ui.prompt.step1.desc', 'Describe who the assistant is and how it should behave.'),
+                        'system-prompt',
+                        'system_content',
+                        t('ui.prompt.step1.placeholder', 'You are a senior software engineer who prefers small, safe changes.'),
+                        (prompt_content | extract_system_content),
+                        6,
+                        system_chips
+                    ) }}
+
+                    {% set user_chips = [
+                        {'target': 'user-prompt', 'snippet': t('ui.prompt.chip.ux.snippet', 'Focus on UX polish, and avoid major refactors.'), 'label': t('ui.prompt.chip.ux.label', 'UX polish')},
+                        {'target': 'user-prompt', 'snippet': t('ui.prompt.chip.tests.snippet', 'Add tests when possible, but avoid heavy scaffolding.'), 'label': t('ui.prompt.chip.tests.label', 'Add tests')},
+                        {'target': 'user-prompt', 'snippet': t('ui.prompt.chip.summarize.snippet', 'Summarize changes and suggest next steps.'), 'label': t('ui.prompt.chip.summarize.label', 'Summarize')}
+                    ] %}
+                    {{ prompt_step(2,
+                        t('ui.prompt.step2.title', 'Give the mission'),
+                        t('ui.prompt.step2.desc', 'Explain what the bot should accomplish right now.'),
+                        'user-prompt',
+                        'user_content',
+                        t('ui.prompt.step2.placeholder', 'Review the repo, improve the UI, and summarize what changed.'),
+                        (prompt_content | extract_user_content),
+                        5,
+                        user_chips
+                    ) }}
+
+                    <div class="amb-form-group">
+                        <label class="amb-form-label">{{ t('ui.prompt.model.label', 'Choose a model') }}</label>
+                        {{ helper_text(t('ui.prompt.model.desc', 'Pick the balance of quality and speed that fits the task.')) }}
+                        <select name="model" class="form-select" data-choices>
+                            <option value="openai/gpt-4o" {% if 'gpt-4o' in prompt_content %}selected{% endif %}>GPT-4o ({{ t('ui.prompt.model.recommended', 'Recommended') }})</option>
+                            <option value="openai/gpt-4o-mini" {% if 'gpt-4o-mini' in prompt_content %}selected{% endif %}>GPT-4o Mini ({{ t('ui.prompt.model.faster', 'Faster') }})</option>
+                            <option value="openai/gpt-4-turbo" {% if 'gpt-4-turbo' in prompt_content %}selected{% endif %}>GPT-4 Turbo</option>
+                            <option value="anthropic/claude-3-5-sonnet" {% if 'claude' in prompt_content %}selected{% endif %}>Claude 3.5 Sonnet</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="prompt-raw" class="d-none">
+                    <label class="amb-form-label">{{ t('ui.prompt.raw.label', 'Advanced YAML') }}</label>
+                    {{ helper_text(t('ui.prompt.raw.desc', 'Edit the full YAML only if you need fine control.')) }}
+                    <textarea name="content" class="amb-code-editor" id="prompt-yaml" rows="18">{{ prompt_content }}</textarea>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="submit" class="btn btn-success" onclick="buildPromptYaml()">
+                        <i class="bi bi-save"></i> {{ t('ui.prompt.save', 'Save Prompt') }}
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="toggleRawPrompt()">
+                        <i class="bi bi-code-slash"></i> {{ t('ui.prompt.advanced_yaml', 'Advanced YAML') }}
+                    </button>
+                </div>
+            </form>
+            {% endcall %}
+        </div>
+
+        <div class="col-lg-4">
+            {% call card(t('ui.prompt.guidance.title', 'Guidance'), "lightbulb") %}
+            <div class="amb-guidance">
+                <div class="mb-3">
+                    <strong>{{ t('ui.prompt.guidance.keep_human.title', 'Keep it human') }}</strong>
+                    <p class="small text-muted mb-0">{{ t('ui.prompt.guidance.keep_human.desc', 'Write instructions the way you would brief a teammate.') }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong>{{ t('ui.prompt.guidance.be_specific.title', 'Be specific') }}</strong>
+                    <p class="small text-muted mb-0">{{ t('ui.prompt.guidance.be_specific.desc', 'Mention constraints like time, scope, or testing expectations.') }}</p>
+                </div>
+                <div>
+                    <strong>{{ t('ui.prompt.guidance.raw.title', 'Use advanced YAML sparingly') }}</strong>
+                    <p class="small text-muted mb-0">{{ t('ui.prompt.guidance.raw.desc', 'Only switch to raw YAML if you need full control.') }}</p>
+                </div>
+            </div>
+            {% endcall %}
+        </div>
+    </div>
+</section>
+{%- endmacro %}
+
+{% macro settings_section() -%}
+<section id="settings" class="amb-section">
+    {{ section_header(t('ui.settings.title', 'Settings'), t('ui.settings.subtitle', 'Configure services, security, and environment preferences')) }}
+
+    {{ callout(t('ui.settings.callout.title', 'Human-friendly settings'), t('ui.settings.callout.body', 'Each field explains what it does. Add descriptions in metadata.json to keep custom settings readable for everyone.'), "info", "info-circle") }}
+
+    <form action="/settings" method="post" id="settings-form">
+        <div class="row">
+            {% set settings_desc = metadata.get('settings_descriptions', {}) %}
+
+            <div class="col-lg-6">
+                <div class="amb-card">
+                    <div class="amb-card-header">
+                        <h5><i class="bi bi-key"></i> {{ t('ui.settings.api_keys', 'API Keys') }}</h5>
+                    </div>
+                    <div class="amb-card-body">
+                        {% for key in ['GITHUB_TOKEN', 'OPENAI_API_KEY', 'LITELLM_API_KEY'] %}
+                        {% set desc = settings_desc.get(key, {}) %}
+                        <div class="amb-form-group">
+                            <label class="amb-form-label">
+                                {{ desc.get('label', key) }}
+                                {% if desc.get('required') %}<span class="amb-required">*</span>{% endif %}
+                            </label>
+                            <p class="text-muted small mb-2">{{ desc.get('description', '') }}</p>
+                            <input type="{{ desc.get('type', 'text') }}"
+                                   name="env_{{ key }}"
+                                   class="form-control"
+                                   value="{{ env_vars.get(key, '') }}"
+                                   placeholder="{{ desc.get('placeholder', '') }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="amb-card">
+                    <div class="amb-card-header">
+                        <h5><i class="bi bi-gear"></i> {{ t('ui.settings.configuration', 'Configuration') }}</h5>
+                    </div>
+                    <div class="amb-card-body">
+                        {% for key in ['GITHUB_REPOSITORY', 'LOG_LEVEL', 'APP_LANG', 'PROMPT_PATH'] %}
+                        {% set desc = settings_desc.get(key, {}) %}
+                        <div class="amb-form-group">
+                            <label class="amb-form-label">{{ desc.get('label', key) }}</label>
+                            <p class="text-muted small mb-2">{{ desc.get('description', '') }}</p>
+                            {% if desc.get('type') == 'select' %}
+                            <select name="env_{{ key }}" class="form-select" data-choices>
+                                <option value="">{{ t('ui.common.select_placeholder', 'Select...') }}</option>
+                                {% for opt in desc.get('options', []) %}
+                                <option value="{{ opt }}" {% if env_vars.get(key) == opt %}selected{% endif %}>{{ opt }}</option>
+                                {% endfor %}
+                            </select>
+                            {% else %}
+                            <input type="{{ desc.get('type', 'text') }}"
+                                   name="env_{{ key }}"
+                                   class="form-control"
+                                   value="{{ env_vars.get(key, desc.get('default', '')) }}"
+                                   placeholder="{{ desc.get('placeholder', '') }}">
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="amb-card">
+                    <div class="amb-card-header">
+                        <h5><i class="bi bi-shield-lock"></i> {{ t('ui.settings.web_access', 'Web UI Access') }}</h5>
+                    </div>
+                    <div class="amb-card-body">
+                        {% for key in ['WEB_USER', 'WEB_PASSWORD'] %}
+                        {% set desc = settings_desc.get(key, {}) %}
+                        <div class="amb-form-group">
+                            <label class="amb-form-label">{{ desc.get('label', key) }}</label>
+                            <p class="text-muted small mb-2">{{ desc.get('description', '') }}</p>
+                            <input type="{{ desc.get('type', 'text') }}"
+                                   name="env_{{ key }}"
+                                   class="form-control"
+                                   value="{{ env_vars.get(key, '') }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="amb-card">
+            <div class="amb-card-header">
+                <h5><i class="bi bi-sliders"></i> {{ t('ui.settings.other', 'Other Settings') }}</h5>
+            </div>
+            <div class="amb-card-body">
+                <div class="row">
+                    {% set known_keys = ['GITHUB_TOKEN', 'OPENAI_API_KEY', 'LITELLM_API_KEY', 'GITHUB_REPOSITORY', 'LOG_LEVEL', 'APP_LANG', 'PROMPT_PATH', 'WEB_USER', 'WEB_PASSWORD'] %}
+                    {% for key, value in env_vars.items() %}
+                    {% if key not in known_keys %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="amb-form-group">
+                            {% set desc = settings_desc.get(key, {}) %}
+                            <label class="amb-form-label">{{ desc.get('label', key) }}</label>
+                            <p class="text-muted small mb-2">
+                                {{ desc.get('description', t('ui.settings.custom_default_desc', 'Custom environment setting. Add a description in metadata.json to show it here.')) }}
+                            </p>
+                            <input type="text" name="env_{{ key }}" class="form-control" value="{{ value }}"
+                                   placeholder="{{ desc.get('placeholder', '') }}">
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="amb-form-group">
+                            <label class="amb-form-label">{{ t('ui.settings.add.title', 'Add New Setting') }}</label>
+                            <p class="text-muted small mb-2">{{ t('ui.settings.add.desc', 'Use uppercase keys with underscores, like API_TIMEOUT.') }}</p>
+                            <div class="input-group">
+                                <input type="text" name="new_env_key" class="form-control" placeholder="{{ t('ui.settings.add.placeholder_key', 'KEY') }}">
+                                <input type="text" name="new_env_value" class="form-control" placeholder="{{ t('ui.settings.add.placeholder_value', 'Value') }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="amb-card-footer">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-save"></i> {{ t('ui.settings.save_all', 'Save All Settings') }}
+                </button>
+            </div>
+        </div>
+    </form>
+</section>
+{%- endmacro %}
+
+{% macro translations_section() -%}
+<section id="translations" class="amb-section">
+    {{ section_header(t('ui.translations.title', 'Translations'), t('ui.translations.subtitle', 'Create, edit, and maintain language files for bot messages')) }}
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="amb-card">
+                <div class="amb-card-header">
+                    <h5><i class="bi bi-globe"></i> {{ t('ui.translations.languages', 'Languages') }}</h5>
+                </div>
+                <div class="amb-card-body p-0">
+                    <div class="list-group list-group-flush" id="translation-list">
+                        {% for lang, file in translations.items() %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center translation-item" data-lang="{{ lang }}">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-file-text"></i>
+                                <div>
+                                    <strong>{{ lang.upper() }}</strong>
+                                    <small class="text-muted d-block">{{ file }}</small>
+                                </div>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-primary" onclick="TranslationEditor.load('{{ lang }}')" title="{{ t('ui.actions.edit', 'Edit') }}">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                {% if lang != 'en' %}
+                                <button type="button" class="btn btn-outline-danger" onclick="TranslationEditor.delete('{{ lang }}')" title="{{ t('ui.actions.delete', 'Delete') }}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="amb-card-footer">
+                    <form action="/translations" method="post" class="d-flex gap-2">
+                        <select name="lang" class="form-select form-select-sm" data-choices data-placeholder="{{ t('ui.translations.add_language_placeholder', 'Add language...') }}" required>
+                            <option value="">{{ t('ui.translations.select_language_placeholder', 'Select language...') }}</option>
+                            {% for lang in metadata.suggestions.languages %}
+                            {% if lang not in translations %}
+                            <option value="{{ lang }}">{{ lang }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-lg"></i> {{ t('ui.actions.add', 'Add') }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="amb-card">
+                <div class="amb-card-header">
+                    <h5><i class="bi bi-pencil-square"></i> <span id="editor-title">{{ t('ui.translations.editor.title', 'Translation Editor') }}</span></h5>
+                    <div id="editor-actions" class="amb-translation-actions" style="display: none;">
+                        <span id="missing-count" class="amb-pill amb-pill-warning">{{ t('ui.translations.missing_count', '{count} missing') | replace('{count}', '0') }}</span>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="TranslationEditor.fillMissing()">
+                            <i class="bi bi-magic"></i> {{ t('ui.translations.actions.fill_missing', 'Fill Missing') }}
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="TranslationEditor.reset()">
+                            <i class="bi bi-arrow-counterclockwise"></i> {{ t('ui.actions.reset', 'Reset') }}
+                        </button>
+                        <button type="button" class="btn btn-sm btn-success" onclick="TranslationEditor.save()">
+                            <i class="bi bi-save"></i> {{ t('ui.actions.save', 'Save') }}
+                        </button>
+                    </div>
+                </div>
+                <div class="amb-card-body">
+                    <div id="translation-editor-placeholder">
+                        {{ empty_state("translate", t('ui.translations.empty.title', 'Pick a language'), t('ui.translations.empty.body', 'Select a language from the list to start editing translations.')) }}
+                    </div>
+                    <div id="translation-editor" style="display: none;">
+                        <div class="amb-translation-toolbar">
+                            <div class="amb-translation-search">
+                                <input type="search" class="form-control form-control-sm" id="translation-search"
+                                       placeholder="{{ t('ui.translations.search.placeholder', 'Search keys or text...') }}" oninput="TranslationEditor.filter(this.value)">
+                            </div>
+                            <div class="form-check form-switch amb-translation-toggle">
+                                <input class="form-check-input" type="checkbox" id="translation-missing-toggle" checked
+                                       onchange="TranslationEditor.toggleMissing(this.checked)">
+                                <label class="form-check-label small" for="translation-missing-toggle">{{ t('ui.translations.toggle_missing', 'Show missing keys') }}</label>
+                            </div>
+                        </div>
+
+                        <div class="amb-translation-add">
+                            <input type="text" class="form-control form-control-sm" id="new-translation-key" placeholder="{{ t('ui.translations.add.key_placeholder', 'new.key') }}">
+                            <input type="text" class="form-control form-control-sm" id="new-translation-value" placeholder="{{ t('ui.translations.add.value_placeholder', 'Translation text') }}">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="TranslationEditor.prefillNewValue()">
+                                {{ t('ui.translations.add.use_english', 'Use English') }}
+                            </button>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="TranslationEditor.addEntry()">
+                                <i class="bi bi-plus-lg"></i> {{ t('ui.translations.add.add_key', 'Add Key') }}
+                            </button>
+                        </div>
+
+                        <table class="table table-sm" id="translation-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%;">{{ t('ui.translations.table.key', 'Key') }}</th>
+                                    <th>{{ t('ui.translations.table.translation', 'Translation') }}</th>
+                                    <th style="width: 70px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%- endmacro %}

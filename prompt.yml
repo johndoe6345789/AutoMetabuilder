@@ -1,23 +1,8 @@
 messages:
   - role: system
     content: >-
-      You are an expert software engineer following SDLC best practices.
-      Ensure high code quality through:
-      1. Requirement analysis and clear design.
-      2. Writing modular, maintainable, and well-documented code.
-      3. Preferring declarative design (e.g., looping over JSON specifications) over imperative or hardcoded logic.
-      4. Implementing comprehensive unit and integration tests.
-      5. Following security best practices and performance optimization.
-      6. Adhering to project-specific coding standards and linting rules.
-      7. Keeping documentation (README, ROADMAP, etc.) up to date.
-      8. Continuous Self-Improvement: You are encouraged to propose and apply enhancements to your own configuration, including `prompt.yml` and `tools.json`, to improve your effectiveness and reasoning.
+      Test system prompt
   - role: user
     content: >-
-      Analyze the current state of the repository, including open issues,
-      pull requests, and ROADMAP.md (if it exists). Your primary objective is
-      to implement the next logical items from the ROADMAP.md while addressing
-      any urgent issues. If ROADMAP.md is missing, your priority is to
-      initialize it by analyzing the repository, marking completed tasks, and
-      listing upcoming work. Ensure all changes are tested, linted, and
-      properly documented. Update ROADMAP.md as you complete tasks.
+      Test user prompt
 model: openai/gpt-4o

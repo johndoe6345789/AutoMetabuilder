@@ -67,6 +67,26 @@ def extract_user_content(yaml_content):
 templates.env.filters['extract_system_content'] = extract_system_content
 templates.env.filters['extract_user_content'] = extract_user_content
 
+def build_prompt_yaml(system_content, user_content, model):
+    def indent_block(text):
+        lines = (text or "").splitlines()
+        if not lines:
+            return ""
+        return "\n      ".join(line.rstrip() for line in lines)
+
+    model_value = model or "openai/gpt-4o"
+    system_block = indent_block(system_content)
+    user_block = indent_block(user_content)
+    return f"""messages:
+  - role: system
+    content: >-
+      {system_block}
+  - role: user
+    content: >-
+      {user_block}
+model: {model_value}
+"""
+
 # Setup static files
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 if os.path.exists(static_dir):
@@ -242,10 +262,21 @@ async def run_bot(
     return RedirectResponse(url="/", status_code=303)
 
 @app.post("/prompt")
-async def update_prompt(content: str = Form(...), username: str = Depends(get_current_user)):
+async def update_prompt(
+    content: str = Form(""),
+    system_content: str = Form(""),
+    user_content: str = Form(""),
+    model: str = Form("openai/gpt-4o"),
+    prompt_mode: str = Form("builder"),
+    username: str = Depends(get_current_user)
+):
     prompt_path = os.environ.get("PROMPT_PATH", "prompt.yml")
+    if prompt_mode == "raw":
+        prompt_yaml = content
+    else:
+        prompt_yaml = build_prompt_yaml(system_content, user_content, model)
     with open(prompt_path, "w", encoding="utf-8") as f:
-        f.write(content)
+        f.write(prompt_yaml)
     return RedirectResponse(url="/", status_code=303)
 
 @app.post("/workflow")

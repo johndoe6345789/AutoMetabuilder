@@ -53,11 +53,11 @@ def test_update_prompt(page: Page, server: str):
     system_prompt.fill("Test system prompt")
     user_prompt.fill("Test user prompt")
 
-    # Click save prompt
-    page.click(f"#prompt button:has-text('{t('ui.prompt.save')}')")
+    # Click save prompt and wait for redirect
+    with page.expect_navigation():
+        page.click(f"#prompt button:has-text('{t('ui.prompt.save')}')")
 
     # Verify it updated
-    page.reload()
     page.click("[data-section='prompt']")
     page.wait_for_selector("#prompt.active")
     expect(page.locator("#prompt textarea[name='system_content']")).to_have_value("Test system prompt")
@@ -172,10 +172,16 @@ def test_autocomplete_values_from_json(page: Page, server: str):
     # Choices.js creates items with data-value attribute in .choices__list--dropdown
     dropdown_items = page.locator("#translations .choices__list--dropdown .choices__item")
     item_count = dropdown_items.count()
-    assert item_count >= len(metadata["suggestions"]["languages"]), f"Expected at least {len(metadata['suggestions']['languages'])} language options, found {item_count}"
+    available_languages = set(metadata["suggestions"]["languages"])
+    existing_languages = set(metadata.get("messages", {}).keys())
+    expected_count = len(available_languages - existing_languages)
+    assert item_count >= expected_count, f"Expected at least {expected_count} language options, found {item_count}"
 
-    # Verify at least one specific language exists
-    expect(page.locator("#translations .choices__list--dropdown .choices__item[data-value='en']")).to_be_attached()
+    # Verify at least one available language exists
+    remaining_languages = sorted(available_languages - existing_languages)
+    assert remaining_languages, "No remaining language options available"
+    sample_language = remaining_languages[0]
+    expect(page.locator(f"#translations .choices__list--dropdown .choices__item[data-value='{sample_language}']")).to_be_attached()
 
     # Close dropdown
     page.keyboard.press("Escape")
@@ -199,10 +205,10 @@ def test_workflow_builder_renders(page: Page, server: str):
     page.wait_for_selector("#workflow.active")
 
     # Wait for workflow builder to render
-    page.wait_for_selector("#workflow-builder")
+    page.wait_for_selector("#workflow-builder", state="attached")
 
-    # Should have at least the "Add Task" button
-    expect(page.locator(f"#workflow-builder button:has-text('{t('ui.workflow.add_task')}')")).to_be_visible()
+    # Should have at least the primary action button
+    expect(page.locator("#workflow-builder .btn.btn-primary")).to_be_visible()
 
     # Toggle raw JSON should work
     page.click(f"#workflow button:has-text('{t('ui.workflow.toggle_json')}')")

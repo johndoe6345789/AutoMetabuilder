@@ -8,6 +8,13 @@ from autometabuilder.web.server import app
 
 multiprocessing.set_start_method("spawn", force=True)
 
+@pytest.fixture(scope="session")
+def browser_type_launch_args():
+    return {
+        "chromium_sandbox": False,
+        "args": ["--disable-setuid-sandbox"],
+    }
+
 def run_server(port):
     os.environ["MOCK_WEB_UI"] = "true"
     os.environ["WEB_USER"] = "testuser"
