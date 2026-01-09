@@ -15,6 +15,15 @@ def browser_type_launch_args():
         "args": ["--disable-setuid-sandbox"],
     }
 
+@pytest.fixture(scope="session")
+def browser_context_args():
+    return {
+        "http_credentials": {
+            "username": "testuser",
+            "password": "testpass"
+        }
+    }
+
 def run_server(port):
     os.environ["MOCK_WEB_UI"] = "true"
     os.environ["WEB_USER"] = "testuser"

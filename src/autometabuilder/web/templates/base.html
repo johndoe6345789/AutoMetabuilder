@@ -21,14 +21,7 @@
 </head>
 <body class="amb-layout">
     {% from "components/organisms/sidebar.html" import sidebar %}
-    {% set nav_items = [
-        {'section': 'dashboard', 'icon': 'speedometer2', 'label': t('ui.nav.dashboard', 'Dashboard'), 'active': True},
-        {'section': 'workflow', 'icon': 'diagram-3', 'label': t('ui.nav.workflow', 'Workflow'), 'active': False},
-        {'section': 'prompt', 'icon': 'file-text', 'label': t('ui.nav.prompt', 'Prompt'), 'active': False},
-        {'section': 'settings', 'icon': 'gear', 'label': t('ui.nav.settings', 'Settings'), 'active': False},
-        {'section': 'translations', 'icon': 'translate', 'label': t('ui.nav.translations', 'Translations'), 'active': False}
-    ] %}
-    {{ sidebar(nav_items, t('ui.app.name', 'AutoMetabuilder'), username, t('ui.theme_toggle', 'Toggle theme')) }}
+    {{ sidebar([], t('ui.app.name', 'AutoMetabuilder'), username, t('ui.theme_toggle', 'Toggle theme')) }}
 
     <!-- Main Content -->
     <main class="amb-main">

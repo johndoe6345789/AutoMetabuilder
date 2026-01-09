@@ -5,9 +5,19 @@
     const translations = window.AMB_I18N || {};
     const t = (key, fallback = '') => translations[key] || fallback || key;
     const format = (text, values = {}) => text.replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
+    const authHeaders = (() => {
+        const username = window.location.username || '';
+        const password = window.location.password || '';
+        if (!username && !password) return {};
+        const token = btoa(`${decodeURIComponent(username)}:${decodeURIComponent(password)}`);
+        return { Authorization: `Basic ${token}` };
+    })();
 
     const fetchWorkflowPlugins = async () => {
-        const response = await fetch('/api/workflow/plugins', { credentials: 'include' });
+        const response = await fetch('/api/workflow/plugins', {
+            credentials: 'include',
+            headers: authHeaders
+        });
         if (!response.ok) {
             throw new Error(`Plugin fetch failed: ${response.status}`);
         }
@@ -15,11 +25,67 @@
     };
 
     const fetchWorkflowPackages = async () => {
-        const response = await fetch('/api/workflow/packages', { credentials: 'include' });
+        const response = await fetch('/api/workflow/packages', {
+            credentials: 'include',
+            headers: authHeaders
+        });
         if (!response.ok) {
             throw new Error(`Package fetch failed: ${response.status}`);
         }
         return response.json();
+    };
+
+    const fetchNavigation = async () => {
+        const response = await fetch('/api/navigation', {
+            credentials: 'include',
+            headers: authHeaders
+        });
+        if (!response.ok) {
+            throw new Error(`Navigation fetch failed: ${response.status}`);
+        }
+        return response.json();
+    };
+
+    const NavigationLoader = {
+        items: [],
+        container: null,
+
+        async init() {
+            this.container = document.getElementById('amb-nav');
+            if (!this.container) return;
+            try {
+                const data = await fetchNavigation();
+                this.items = data.items || [];
+                this.render();
+                if (window.NavigationManager && typeof window.NavigationManager.refresh === 'function') {
+                    window.NavigationManager.refresh();
+                }
+            } catch (error) {
+                console.error('Navigation fetch failed', error);
+            }
+        },
+
+        render() {
+            if (!this.container) return;
+            this.container.innerHTML = '';
+            this.items.forEach(item => {
+                const link = document.createElement('a');
+                link.className = 'amb-nav-link';
+                link.href = `#${item.section}`;
+                link.dataset.section = item.section;
+
+                const icon = document.createElement('i');
+                icon.className = `bi bi-${item.icon || 'circle'}`;
+
+                const label = document.createTextNode(
+                    ` ${t(item.label_key || '', item.default_label || item.label_key || item.section)}`
+                );
+
+                link.appendChild(icon);
+                link.appendChild(label);
+                this.container.appendChild(link);
+            });
+        }
     };
 
     const WorkflowTemplates = {
@@ -102,7 +168,10 @@
             if (!confirm(confirmText)) return;
 
             try {
-                const response = await fetch(`/api/workflow/packages/${selected.id}`, { credentials: 'include' });
+                const response = await fetch(`/api/workflow/packages/${selected.id}`, {
+                    credentials: 'include',
+                    headers: authHeaders
+                });
                 if (!response.ok) {
                     throw new Error(`Template fetch failed: ${response.status}`);
                 }
@@ -474,6 +543,7 @@ model: ${model}
         } catch (error) {
             console.error('Workflow builder failed to initialize', error);
         }
+        await NavigationLoader.init();
         await WorkflowTemplates.init();
         wireRunModeToggles();
         wirePromptChips();

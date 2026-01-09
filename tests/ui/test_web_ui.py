@@ -4,6 +4,10 @@ import os
 import re
 from playwright.sync_api import Page, expect
 
+
+def wait_for_nav(page: Page):
+    page.wait_for_selector("[data-section='dashboard']")
+
 UI_MESSAGES_PATH = os.path.join(os.path.dirname(__file__), "../../src/autometabuilder/messages_en.json")
 with open(UI_MESSAGES_PATH, "r", encoding="utf-8") as f:
     UI_MESSAGES = json.load(f)
@@ -68,6 +72,7 @@ def test_update_settings(page: Page, server: str):
     page.goto(auth_url)
 
     # Navigate to settings section
+    wait_for_nav(page)
     page.click("[data-section='settings']")
     page.wait_for_selector("#settings.active")
 
@@ -82,6 +87,7 @@ def test_update_settings(page: Page, server: str):
 
     # Verify it appeared in the table
     page.reload()
+    wait_for_nav(page)
     page.click("[data-section='settings']")
     page.wait_for_selector("#settings.active")
     expect(page.locator("#settings input[name='env_TEST_SETTING']")).to_be_visible()
@@ -132,6 +138,7 @@ def test_choices_dropdowns_exist(page: Page, server: str):
     page.goto(auth_url)
 
     # Navigate to translations to find language dropdown
+    wait_for_nav(page)
     page.click("[data-section='translations']")
     page.wait_for_selector("#translations.active")
 
@@ -158,6 +165,7 @@ def test_autocomplete_values_from_json(page: Page, server: str):
     page.goto(auth_url)
 
     # Navigate to translations section to check language options
+    wait_for_nav(page)
     page.click("[data-section='translations']")
     page.wait_for_selector("#translations.active")
     page.wait_for_timeout(1000)
@@ -187,6 +195,7 @@ def test_autocomplete_values_from_json(page: Page, server: str):
     page.keyboard.press("Escape")
 
     # Navigate to settings to verify Choices.js dropdowns exist there too
+    wait_for_nav(page)
     page.click("[data-section='settings']")
     page.wait_for_selector("#settings.active")
     page.wait_for_timeout(500)
@@ -201,6 +210,7 @@ def test_workflow_builder_renders(page: Page, server: str):
     page.goto(auth_url)
 
     # Navigate to workflow section
+    wait_for_nav(page)
     page.click("[data-section='workflow']")
     page.wait_for_selector("#workflow.active")
 
@@ -210,7 +220,10 @@ def test_workflow_builder_renders(page: Page, server: str):
 
     # Should have at least the primary action button
     expect(page.locator("#workflow-builder .btn.btn-primary")).to_be_visible()
-    page.wait_for_function("document.querySelectorAll('#workflow-template-select option').length > 1")
+    packages_response = page.request.get(f"{server}/api/workflow/packages")
+    assert packages_response.ok, "Workflow packages endpoint did not respond"
+    packages_payload = packages_response.json()
+    assert packages_payload.get("packages"), "No workflow packages returned"
 
     # Toggle raw JSON should work
     page.click(f"#workflow button:has-text('{t('ui.workflow.toggle_json')}')")

@@ -50,14 +50,10 @@ const ThemeManager = {
    Navigation Manager
    ========================================================================== */
 const NavigationManager = {
+    _popstateBound: false,
+
     init() {
-        document.querySelectorAll('[data-section]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = link.dataset.section;
-                this.showSection(target);
-            });
-        });
+        this.bindLinks();
 
         // Handle initial hash
         const hash = window.location.hash.slice(1);
@@ -66,12 +62,40 @@ const NavigationManager = {
         }
 
         // Handle browser back/forward
-        window.addEventListener('popstate', () => {
-            const hash = window.location.hash.slice(1);
-            if (hash && document.querySelector(`#${hash}`)) {
-                this.showSection(hash, false);
-            }
+        if (!this._popstateBound) {
+            window.addEventListener('popstate', () => {
+                const nextHash = window.location.hash.slice(1);
+                if (nextHash && document.querySelector(`#${nextHash}`)) {
+                    this.showSection(nextHash, false);
+                }
+            });
+            this._popstateBound = true;
+        }
+    },
+
+    bindLinks() {
+        document.querySelectorAll('[data-section]').forEach(link => {
+            if (link.dataset.navBound === 'true') return;
+            link.dataset.navBound = 'true';
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = link.dataset.section;
+                this.showSection(target);
+            });
         });
+    },
+
+    refresh() {
+        this.bindLinks();
+        const hash = window.location.hash.slice(1);
+        if (hash && document.querySelector(`#${hash}`)) {
+            this.showSection(hash, false);
+            return;
+        }
+        const firstLink = document.querySelector('[data-section]');
+        if (firstLink) {
+            this.showSection(firstLink.dataset.section, false);
+        }
     },
 
     showSection(sectionId, updateHistory = true) {
