@@ -381,5 +381,9 @@
   "meta.workflow_packages.single_pass.label": "Passe unique",
   "meta.workflow_packages.single_pass.description": "Exécute une requête IA et une séquence d'outils une seule fois, sans boucle.",
   "meta.workflow_packages.plan_execute_summarize.label": "Planifier, exécuter, résumer",
-  "meta.workflow_packages.plan_execute_summarize.description": "Planifiez avec le modèle, exécutez les outils, puis demandez un récapitulatif final."
+  "meta.workflow_packages.plan_execute_summarize.description": "Planifiez avec le modèle, exécutez les outils, puis demandez un récapitulatif final.",
+  "meta.workflow_packages.testing_triangle.label": "Triangle de tests",
+  "meta.workflow_packages.testing_triangle.description": "Exécute lint, tests unitaires puis UI avec contrôle conditionnel.",
+  "meta.workflow_packages.repo_scan_context.label": "Contexte d'exploration du dépôt",
+  "meta.workflow_packages.repo_scan_context.description": "Réduit les fichiers du dépôt en contexte avant la requête IA."
 }

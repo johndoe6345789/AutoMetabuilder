@@ -385,5 +385,9 @@
   "meta.workflow_packages.single_pass.label": "Single Pass",
   "meta.workflow_packages.single_pass.description": "Run one AI request and tool execution sequence without looping.",
   "meta.workflow_packages.plan_execute_summarize.label": "Plan, Execute, Summarize",
-  "meta.workflow_packages.plan_execute_summarize.description": "Plan with the model, run tools, then ask for a final recap."
+  "meta.workflow_packages.plan_execute_summarize.description": "Plan with the model, run tools, then ask for a final recap.",
+  "meta.workflow_packages.testing_triangle.label": "Testing Triangle",
+  "meta.workflow_packages.testing_triangle.description": "Run lint, unit, then UI tests with conditional gating.",
+  "meta.workflow_packages.repo_scan_context.label": "Repo Scan Context",
+  "meta.workflow_packages.repo_scan_context.description": "Map-reduce repo files into context before the AI request."
 }

@@ -1,0 +1,88 @@
+{
+  "id": "testing_triangle",
+  "label": "meta.workflow_packages.testing_triangle.label",
+  "description": "meta.workflow_packages.testing_triangle.description",
+  "tags": ["testing", "lint", "e2e"],
+  "workflow": {
+    "nodes": [
+      {
+        "id": "lint",
+        "type": "tools.run_lint",
+        "inputs": {
+          "path": "src"
+        },
+        "outputs": {
+          "results": "lint_results"
+        }
+      },
+      {
+        "id": "lint_failed",
+        "type": "utils.branch_condition",
+        "inputs": {
+          "value": "$lint_results",
+          "mode": "regex",
+          "compare": "(FAILED|ERROR)"
+        },
+        "outputs": {
+          "result": "lint_failed"
+        }
+      },
+      {
+        "id": "lint_ok",
+        "type": "utils.not",
+        "inputs": {
+          "value": "$lint_failed"
+        },
+        "outputs": {
+          "result": "lint_ok"
+        }
+      },
+      {
+        "id": "unit_tests",
+        "type": "tools.run_tests",
+        "when": "$lint_ok",
+        "inputs": {
+          "path": "tests"
+        },
+        "outputs": {
+          "results": "unit_results"
+        }
+      },
+      {
+        "id": "unit_failed",
+        "type": "utils.branch_condition",
+        "when": "$lint_ok",
+        "inputs": {
+          "value": "$unit_results",
+          "mode": "regex",
+          "compare": "(FAILED|ERROR)"
+        },
+        "outputs": {
+          "result": "unit_failed"
+        }
+      },
+      {
+        "id": "unit_ok",
+        "type": "utils.not",
+        "when": "$lint_ok",
+        "inputs": {
+          "value": "$unit_failed"
+        },
+        "outputs": {
+          "result": "unit_ok"
+        }
+      },
+      {
+        "id": "ui_tests",
+        "type": "tools.run_tests",
+        "when": "$unit_ok",
+        "inputs": {
+          "path": "tests/ui"
+        },
+        "outputs": {
+          "results": "ui_results"
+        }
+      }
+    ]
+  }
+}

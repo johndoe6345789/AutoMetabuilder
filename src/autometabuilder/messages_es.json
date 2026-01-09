@@ -381,5 +381,9 @@
   "meta.workflow_packages.single_pass.label": "Una sola pasada",
   "meta.workflow_packages.single_pass.description": "Ejecuta una solicitud de IA y la secuencia de herramientas una vez, sin bucle.",
   "meta.workflow_packages.plan_execute_summarize.label": "Planear, ejecutar, resumir",
-  "meta.workflow_packages.plan_execute_summarize.description": "Planifica con el modelo, ejecuta herramientas y luego pide un resumen final."
+  "meta.workflow_packages.plan_execute_summarize.description": "Planifica con el modelo, ejecuta herramientas y luego pide un resumen final.",
+  "meta.workflow_packages.testing_triangle.label": "Triángulo de pruebas",
+  "meta.workflow_packages.testing_triangle.description": "Ejecuta lint, pruebas unitarias y UI con control condicional.",
+  "meta.workflow_packages.repo_scan_context.label": "Contexto del escaneo del repositorio",
+  "meta.workflow_packages.repo_scan_context.description": "Reduce el repositorio a contexto antes de la solicitud de IA."
 }

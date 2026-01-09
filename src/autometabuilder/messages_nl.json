@@ -381,5 +381,9 @@
   "meta.workflow_packages.single_pass.label": "Enkele run",
   "meta.workflow_packages.single_pass.description": "Voer een AI-aanvraag en toolreeks een keer uit, zonder lus.",
   "meta.workflow_packages.plan_execute_summarize.label": "Plan, voer uit, vat samen",
-  "meta.workflow_packages.plan_execute_summarize.description": "Plan met het model, voer tools uit en vraag daarna om een eindoverzicht."
+  "meta.workflow_packages.plan_execute_summarize.description": "Plan met het model, voer tools uit en vraag daarna om een eindoverzicht.",
+  "meta.workflow_packages.testing_triangle.label": "Testdriehoek",
+  "meta.workflow_packages.testing_triangle.description": "Voer lint, unit- en UI-tests uit met voorwaardelijke gating.",
+  "meta.workflow_packages.repo_scan_context.label": "Repo-scancontext",
+  "meta.workflow_packages.repo_scan_context.description": "Reduceer repo-bestanden naar context vóór de AI-aanvraag."
 }
