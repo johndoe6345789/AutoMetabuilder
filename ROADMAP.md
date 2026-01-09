@@ -41,4 +41,20 @@
 - [x] **Workflow Template Picker**: AJAX-loaded catalog with localized labels/descriptions.
 - [x] **Atomic Jinja Components**: Split dashboard/prompt/settings/translations/sidebar into single-macro files.
 - [x] **AJAX Navigation Data**: Render sidebar links from API payload with a client-side fallback.
-- [ ] **n8n-Style Visual Workflow Canvas**: Graph layout, connectors, and micro-action tiles for every node type.
+- [ ] **n8n-Style Visual Workflow Canvas (Breakdown)**:
+- [ ] **Canvas Layout Engine**: DAG layout, node positioning, zoom/pan, and fit-to-view.
+- [ ] **Node Palette + Search**: Categorized plugin library with search, tags, and drag-to-canvas.
+- [ ] **Atomic Node Cards**: Compact node tiles with status badge, type icon, and inline rename.
+- [ ] **Ports + Connectors**: Visual input/output ports with link creation + validation.
+- [ ] **Edge Routing**: Orthogonal edge routing with arrowheads, hover/selection state.
+- [ ] **Mini Map**: Overview map for large workflows with viewport control.
+- [ ] **Selection + Multi-Edit**: Multi-select nodes, bulk delete, and bulk edit fields.
+- [ ] **Inspector Panel**: Right-side inspector to edit node inputs/outputs/conditions.
+- [ ] **Inline Validation**: Missing input warnings, type mismatch hints, and disabled run cues.
+- [ ] **Execution Preview**: Simulate data flow highlights and show store bindings.
+- [ ] **Auto-Save Drafts**: Local draft save/restore with change markers.
+- [ ] **Template Import/Export**: Export current workflow and import to apply or merge.
+- [ ] **Keyboard Shortcuts**: Add node, delete, duplicate, undo/redo, and search.
+- [ ] **Undo/Redo Stack**: Reversible edits for canvas and inspector changes.
+- [ ] **Context Menu**: Right-click actions for node, edge, and canvas.
+- [ ] **Performance Tuning**: Virtualized node rendering for large graphs.
