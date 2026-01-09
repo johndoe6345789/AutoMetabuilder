@@ -206,9 +206,11 @@ def test_workflow_builder_renders(page: Page, server: str):
 
     # Wait for workflow builder to render
     page.wait_for_selector("#workflow-builder", state="attached")
+    page.wait_for_selector("#workflow-template-select", state="attached")
 
     # Should have at least the primary action button
     expect(page.locator("#workflow-builder .btn.btn-primary")).to_be_visible()
+    page.wait_for_function("document.querySelectorAll('#workflow-template-select option').length > 1")
 
     # Toggle raw JSON should work
     page.click(f"#workflow button:has-text('{t('ui.workflow.toggle_json')}')")

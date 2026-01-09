@@ -216,6 +216,35 @@ def get_workflow_content():
     with open(workflow_path, "r", encoding="utf-8") as f:
         return f.read()
 
+def get_workflow_packages_dir():
+    pkg_dir = os.path.dirname(os.path.dirname(__file__))
+    metadata = get_metadata()
+    packages_dir = metadata.get("workflow_packages_path", "workflow_packages")
+    return os.path.join(pkg_dir, packages_dir)
+
+def load_workflow_packages():
+    packages_dir = get_workflow_packages_dir()
+    if not os.path.isdir(packages_dir):
+        return []
+    packages = []
+    for filename in sorted(os.listdir(packages_dir)):
+        if not filename.endswith(".json"):
+            continue
+        path = os.path.join(packages_dir, filename)
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(data, dict):
+            continue
+        package_id = data.get("id") or os.path.splitext(filename)[0]
+        data["id"] = package_id
+        if "workflow" not in data:
+            data["workflow"] = {"nodes": []}
+        packages.append(data)
+    return packages
+
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request, username: str = Depends(get_current_user)):
     logs = get_recent_logs()
@@ -317,6 +346,27 @@ async def get_status(username: str = Depends(get_current_user)):
 async def get_workflow_plugins(username: str = Depends(get_current_user)):
     metadata = get_metadata()
     return metadata.get("workflow_plugins", {})
+
+@app.get("/api/workflow/packages", response_class=JSONResponse)
+async def list_workflow_packages(username: str = Depends(get_current_user)):
+    packages = load_workflow_packages()
+    summarized = []
+    for package in packages:
+        summarized.append({
+            "id": package.get("id"),
+            "label": package.get("label", ""),
+            "description": package.get("description", ""),
+            "tags": package.get("tags", [])
+        })
+    return {"packages": summarized}
+
+@app.get("/api/workflow/packages/{package_id}", response_class=JSONResponse)
+async def get_workflow_package(package_id: str, username: str = Depends(get_current_user)):
+    packages = load_workflow_packages()
+    for package in packages:
+        if package.get("id") == package_id:
+            return package
+    raise HTTPException(status_code=404, detail="Workflow package not found")
 
 @app.get("/api/logs")
 async def get_logs(username: str = Depends(get_current_user)):

@@ -1,0 +1,31 @@
+{# Settings API keys card macro. #}
+{% macro settings_api_keys() -%}
+{% set settings_desc = metadata.get('settings_descriptions', {}) %}
+<div class="amb-card">
+    <div class="amb-card-header">
+        <h5><i class="bi bi-key"></i> {{ t('ui.settings.api_keys', 'API Keys') }}</h5>
+    </div>
+    <div class="amb-card-body">
+        {% for key in ['GITHUB_TOKEN', 'OPENAI_API_KEY', 'LITELLM_API_KEY'] %}
+        {% set desc = settings_desc.get(key, {}) %}
+        {% set desc_label = desc.get('label', key) %}
+        {% set desc_text = desc.get('description', '') %}
+        {% set desc_placeholder = desc.get('placeholder', '') %}
+        <div class="amb-form-group">
+            <label class="amb-form-label">
+                {{ t(desc_label, desc_label) }}
+                {% if desc.get('required') %}<span class="amb-required">*</span>{% endif %}
+            </label>
+            {% if desc_text %}
+            <p class="text-muted small mb-2">{{ t(desc_text, desc_text) }}</p>
+            {% endif %}
+            <input type="{{ desc.get('type', 'text') }}"
+                   name="env_{{ key }}"
+                   class="form-control"
+                   value="{{ env_vars.get(key, '') }}"
+                   placeholder="{{ t(desc_placeholder, desc_placeholder) }}">
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{%- endmacro %}

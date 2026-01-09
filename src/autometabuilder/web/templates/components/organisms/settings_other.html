@@ -1,0 +1,44 @@
+{# Settings other settings card macro. #}
+{% macro settings_other() -%}
+{% set settings_desc = metadata.get('settings_descriptions', {}) %}
+{% set known_keys = ['GITHUB_TOKEN', 'OPENAI_API_KEY', 'LITELLM_API_KEY', 'GITHUB_REPOSITORY', 'LOG_LEVEL', 'APP_LANG', 'PROMPT_PATH', 'WEB_USER', 'WEB_PASSWORD'] %}
+<div class="amb-card">
+    <div class="amb-card-header">
+        <h5><i class="bi bi-sliders"></i> {{ t('ui.settings.other', 'Other Settings') }}</h5>
+    </div>
+    <div class="amb-card-body">
+        <div class="row">
+            {% for key, value in env_vars.items() %}
+            {% if key not in known_keys %}
+            <div class="col-md-6 col-lg-4">
+                <div class="amb-form-group">
+                    {% set desc = settings_desc.get(key, {}) %}
+                    {% set desc_label = desc.get('label', key) %}
+                    {% set desc_text = desc.get('description', t('ui.settings.custom_default_desc', 'Custom environment setting. Add a description in metadata.json to show it here.')) %}
+                    <label class="amb-form-label">{{ t(desc_label, desc_label) }}</label>
+                    <p class="text-muted small mb-2">{{ t(desc_text, desc_text) }}</p>
+                    <input type="text" name="env_{{ key }}" class="form-control" value="{{ value }}"
+                           placeholder="{{ t(desc.get('placeholder', ''), desc.get('placeholder', '')) }}">
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            <div class="col-md-6 col-lg-4">
+                <div class="amb-form-group">
+                    <label class="amb-form-label">{{ t('ui.settings.add.title', 'Add New Setting') }}</label>
+                    <p class="text-muted small mb-2">{{ t('ui.settings.add.desc', 'Use uppercase keys with underscores, like API_TIMEOUT.') }}</p>
+                    <div class="input-group">
+                        <input type="text" name="new_env_key" class="form-control" placeholder="{{ t('ui.settings.add.placeholder_key', 'KEY') }}">
+                        <input type="text" name="new_env_value" class="form-control" placeholder="{{ t('ui.settings.add.placeholder_value', 'Value') }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="amb-card-footer">
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-save"></i> {{ t('ui.settings.save_all', 'Save All Settings') }}
+        </button>
+    </div>
+</div>
+{%- endmacro %}

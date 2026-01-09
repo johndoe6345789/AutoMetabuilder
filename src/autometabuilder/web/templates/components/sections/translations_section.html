@@ -1,6 +1,7 @@
 {# Translations section macro. #}
 {% from "components/atoms/section_header.html" import section_header %}
-{% from "components/molecules/empty_state.html" import empty_state %}
+{% from "components/organisms/translations_languages.html" import translations_languages with context %}
+{% from "components/organisms/translations_editor.html" import translations_editor with context %}
 
 {% macro translations_section() -%}
 <section id="translations" class="amb-section">
@@ -8,111 +9,11 @@
 
     <div class="row">
         <div class="col-lg-4">
-            <div class="amb-card">
-                <div class="amb-card-header">
-                    <h5><i class="bi bi-globe"></i> {{ t('ui.translations.languages', 'Languages') }}</h5>
-                </div>
-                <div class="amb-card-body p-0">
-                    <div class="list-group list-group-flush" id="translation-list">
-                        {% for lang, file in translations.items() %}
-                        <div class="list-group-item d-flex justify-content-between align-items-center translation-item" data-lang="{{ lang }}">
-                            <div class="d-flex align-items-center gap-2">
-                                <i class="bi bi-file-text"></i>
-                                <div>
-                                    <strong>{{ lang.upper() }}</strong>
-                                    <small class="text-muted d-block">{{ file }}</small>
-                                </div>
-                            </div>
-                            <div class="btn-group btn-group-sm">
-                                <button type="button" class="btn btn-outline-primary" onclick="TranslationEditor.load('{{ lang }}')" title="{{ t('ui.actions.edit', 'Edit') }}">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                {% if lang != 'en' %}
-                                <button type="button" class="btn btn-outline-danger" onclick="TranslationEditor.delete('{{ lang }}')" title="{{ t('ui.actions.delete', 'Delete') }}">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                                {% endif %}
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="amb-card-footer">
-                    <form action="/translations" method="post" class="d-flex gap-2">
-                        <select name="lang" class="form-select form-select-sm" data-choices data-placeholder="{{ t('ui.translations.add_language_placeholder', 'Add language...') }}" required>
-                            <option value="">{{ t('ui.translations.select_language_placeholder', 'Select language...') }}</option>
-                            {% for lang in metadata.suggestions.languages %}
-                            {% if lang not in translations %}
-                            <option value="{{ lang }}">{{ lang }}</option>
-                            {% endif %}
-                            {% endfor %}
-                        </select>
-                        <button type="submit" class="btn btn-primary btn-sm">
-                            <i class="bi bi-plus-lg"></i> {{ t('ui.actions.add', 'Add') }}
-                        </button>
-                    </form>
-                </div>
-            </div>
+            {{ translations_languages() }}
         </div>
 
         <div class="col-lg-8">
-            <div class="amb-card">
-                <div class="amb-card-header">
-                    <h5><i class="bi bi-pencil-square"></i> <span id="editor-title">{{ t('ui.translations.editor.title', 'Translation Editor') }}</span></h5>
-                    <div id="editor-actions" class="amb-translation-actions" style="display: none;">
-                        <span id="missing-count" class="amb-pill amb-pill-warning">{{ t('ui.translations.missing_count', '{count} missing') | replace('{count}', '0') }}</span>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="TranslationEditor.fillMissing()">
-                            <i class="bi bi-magic"></i> {{ t('ui.translations.actions.fill_missing', 'Fill Missing') }}
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="TranslationEditor.reset()">
-                            <i class="bi bi-arrow-counterclockwise"></i> {{ t('ui.actions.reset', 'Reset') }}
-                        </button>
-                        <button type="button" class="btn btn-sm btn-success" onclick="TranslationEditor.save()">
-                            <i class="bi bi-save"></i> {{ t('ui.actions.save', 'Save') }}
-                        </button>
-                    </div>
-                </div>
-                <div class="amb-card-body">
-                    <div id="translation-editor-placeholder">
-                        {{ empty_state("translate", t('ui.translations.empty.title', 'Pick a language'), t('ui.translations.empty.body', 'Select a language from the list to start editing translations.')) }}
-                    </div>
-                    <div id="translation-editor" style="display: none;">
-                        <div class="amb-translation-toolbar">
-                            <div class="amb-translation-search">
-                                <input type="search" class="form-control form-control-sm" id="translation-search"
-                                       placeholder="{{ t('ui.translations.search.placeholder', 'Search keys or text...') }}" oninput="TranslationEditor.filter(this.value)">
-                            </div>
-                            <div class="form-check form-switch amb-translation-toggle">
-                                <input class="form-check-input" type="checkbox" id="translation-missing-toggle" checked
-                                       onchange="TranslationEditor.toggleMissing(this.checked)">
-                                <label class="form-check-label small" for="translation-missing-toggle">{{ t('ui.translations.toggle_missing', 'Show missing keys') }}</label>
-                            </div>
-                        </div>
-
-                        <div class="amb-translation-add">
-                            <input type="text" class="form-control form-control-sm" id="new-translation-key" placeholder="{{ t('ui.translations.add.key_placeholder', 'new.key') }}">
-                            <input type="text" class="form-control form-control-sm" id="new-translation-value" placeholder="{{ t('ui.translations.add.value_placeholder', 'Translation text') }}">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="TranslationEditor.prefillNewValue()">
-                                {{ t('ui.translations.add.use_english', 'Use English') }}
-                            </button>
-                            <button type="button" class="btn btn-sm btn-primary" onclick="TranslationEditor.addEntry()">
-                                <i class="bi bi-plus-lg"></i> {{ t('ui.translations.add.add_key', 'Add Key') }}
-                            </button>
-                        </div>
-
-                        <table class="table table-sm" id="translation-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 30%;">{{ t('ui.translations.table.key', 'Key') }}</th>
-                                    <th>{{ t('ui.translations.table.translation', 'Translation') }}</th>
-                                    <th style="width: 70px;"></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            {{ translations_editor() }}
         </div>
     </div>
 </section>

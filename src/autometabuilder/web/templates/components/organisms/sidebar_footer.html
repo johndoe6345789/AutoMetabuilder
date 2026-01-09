@@ -1,0 +1,12 @@
+{# Sidebar footer macro. #}
+{% macro sidebar_footer(username, toggle_title) -%}
+<div class="amb-sidebar-footer">
+    <div class="amb-user">
+        <i class="bi bi-person-circle"></i>
+        <span>{{ username }}</span>
+    </div>
+    <button class="amb-theme-toggle" data-theme-toggle title="{{ toggle_title }}">
+        <i class="bi bi-sun-fill"></i>
+    </button>
+</div>
+{%- endmacro %}

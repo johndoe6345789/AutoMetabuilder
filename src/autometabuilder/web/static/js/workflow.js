@@ -362,6 +362,15 @@ const WorkflowBuilder = {
         }
     },
 
+    loadWorkflow(workflow) {
+        if (!workflow || !Array.isArray(workflow.nodes)) {
+            this.workflow = { nodes: [] };
+        } else {
+            this.workflow = workflow;
+        }
+        this.render();
+    },
+
     escapeHtml(text) {
         if (text === null || text === undefined) return '';
         const div = document.createElement('div');

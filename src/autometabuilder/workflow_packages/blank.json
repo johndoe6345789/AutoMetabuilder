@@ -1,0 +1,11 @@
+{
+  "id": "blank",
+  "label": "meta.workflow_packages.blank.label",
+  "description": "meta.workflow_packages.blank.description",
+  "tags": [
+    "starter"
+  ],
+  "workflow": {
+    "nodes": []
+  }
+}

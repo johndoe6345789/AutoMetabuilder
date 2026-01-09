@@ -1,0 +1,93 @@
+{
+  "id": "iterative_loop",
+  "label": "meta.workflow_packages.iterative_loop.label",
+  "description": "meta.workflow_packages.iterative_loop.description",
+  "tags": [
+    "loop",
+    "tools"
+  ],
+  "workflow": {
+    "nodes": [
+      {
+        "id": "load_context",
+        "type": "core.load_context",
+        "outputs": {
+          "context": "sdlc_context"
+        }
+      },
+      {
+        "id": "seed_messages",
+        "type": "core.seed_messages",
+        "outputs": {
+          "messages": "messages"
+        }
+      },
+      {
+        "id": "append_context",
+        "type": "core.append_context_message",
+        "inputs": {
+          "messages": "$messages",
+          "context": "$sdlc_context"
+        },
+        "outputs": {
+          "messages": "messages"
+        }
+      },
+      {
+        "id": "append_user_instruction",
+        "type": "core.append_user_instruction",
+        "inputs": {
+          "messages": "$messages"
+        },
+        "outputs": {
+          "messages": "messages"
+        }
+      },
+      {
+        "id": "main_loop",
+        "type": "control.loop",
+        "inputs": {
+          "max_iterations": 10,
+          "stop_when": "$no_tool_calls",
+          "stop_on": "true"
+        },
+        "body": [
+          {
+            "id": "ai_request",
+            "type": "core.ai_request",
+            "inputs": {
+              "messages": "$messages"
+            },
+            "outputs": {
+              "response": "llm_response",
+              "has_tool_calls": "has_tool_calls",
+              "tool_calls_count": "tool_calls_count"
+            }
+          },
+          {
+            "id": "run_tool_calls",
+            "type": "core.run_tool_calls",
+            "inputs": {
+              "response": "$llm_response"
+            },
+            "outputs": {
+              "tool_results": "tool_results",
+              "no_tool_calls": "no_tool_calls"
+            }
+          },
+          {
+            "id": "append_tool_results",
+            "type": "core.append_tool_results",
+            "inputs": {
+              "messages": "$messages",
+              "tool_results": "$tool_results"
+            },
+            "outputs": {
+              "messages": "messages"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

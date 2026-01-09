@@ -1,0 +1,6 @@
+{# Sidebar navigation link macro. #}
+{% macro nav_link(section, icon_name, label, is_active=False) -%}
+<a href="#{{ section }}" class="amb-nav-link{% if is_active %} active{% endif %}" data-section="{{ section }}">
+    <i class="bi bi-{{ icon_name }}"></i> {{ label }}
+</a>
+{%- endmacro %}

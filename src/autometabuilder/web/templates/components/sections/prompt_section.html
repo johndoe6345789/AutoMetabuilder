@@ -1,8 +1,7 @@
 {# Prompt section macro. #}
 {% from "components/atoms/section_header.html" import section_header %}
-{% from "components/atoms/helper_text.html" import helper_text %}
-{% from "components/molecules/card.html" import card %}
-{% from "components/sections/prompt_step.html" import prompt_step %}
+{% from "components/organisms/prompt_builder.html" import prompt_builder with context %}
+{% from "components/organisms/prompt_guidance.html" import prompt_guidance with context %}
 
 {% macro prompt_section() -%}
 <section id="prompt" class="amb-section">
@@ -10,89 +9,11 @@
 
     <div class="row">
         <div class="col-lg-8">
-            {% call card(t('ui.prompt.card.title', 'Prompt Builder'), "chat-square-text") %}
-            <form action="/prompt" method="post" id="prompt-form">
-                <input type="hidden" name="prompt_mode" id="prompt-mode" value="builder">
-                <div id="prompt-builder">
-                    {% set system_chips = [
-                        {'target': 'system-prompt', 'snippet': t('ui.prompt.chip.senior.snippet', 'You are a senior software engineer focused on correctness and clarity.'), 'label': t('ui.prompt.chip.senior.label', 'Senior engineer')},
-                        {'target': 'system-prompt', 'snippet': t('ui.prompt.chip.ask.snippet', 'Ask clarifying questions before making risky changes.'), 'label': t('ui.prompt.chip.ask.label', 'Ask questions')},
-                        {'target': 'system-prompt', 'snippet': t('ui.prompt.chip.minimal.snippet', 'Prefer minimal diffs and explain trade-offs.'), 'label': t('ui.prompt.chip.minimal.label', 'Minimal diffs')}
-                    ] %}
-                    {{ prompt_step(1,
-                        t('ui.prompt.step1.title', 'Define the assistant'),
-                        t('ui.prompt.step1.desc', 'Describe who the assistant is and how it should behave.'),
-                        'system-prompt',
-                        'system_content',
-                        t('ui.prompt.step1.placeholder', 'You are a senior software engineer who prefers small, safe changes.'),
-                        (prompt_content | extract_system_content),
-                        6,
-                        system_chips
-                    ) }}
-
-                    {% set user_chips = [
-                        {'target': 'user-prompt', 'snippet': t('ui.prompt.chip.ux.snippet', 'Focus on UX polish, and avoid major refactors.'), 'label': t('ui.prompt.chip.ux.label', 'UX polish')},
-                        {'target': 'user-prompt', 'snippet': t('ui.prompt.chip.tests.snippet', 'Add tests when possible, but avoid heavy scaffolding.'), 'label': t('ui.prompt.chip.tests.label', 'Add tests')},
-                        {'target': 'user-prompt', 'snippet': t('ui.prompt.chip.summarize.snippet', 'Summarize changes and suggest next steps.'), 'label': t('ui.prompt.chip.summarize.label', 'Summarize')}
-                    ] %}
-                    {{ prompt_step(2,
-                        t('ui.prompt.step2.title', 'Give the mission'),
-                        t('ui.prompt.step2.desc', 'Explain what the bot should accomplish right now.'),
-                        'user-prompt',
-                        'user_content',
-                        t('ui.prompt.step2.placeholder', 'Review the repo, improve the UI, and summarize what changed.'),
-                        (prompt_content | extract_user_content),
-                        5,
-                        user_chips
-                    ) }}
-
-                    <div class="amb-form-group">
-                        <label class="amb-form-label">{{ t('ui.prompt.model.label', 'Choose a model') }}</label>
-                        {{ helper_text(t('ui.prompt.model.desc', 'Pick the balance of quality and speed that fits the task.')) }}
-                        <select name="model" class="form-select" data-choices>
-                            <option value="openai/gpt-4o" {% if 'gpt-4o' in prompt_content %}selected{% endif %}>GPT-4o ({{ t('ui.prompt.model.recommended', 'Recommended') }})</option>
-                            <option value="openai/gpt-4o-mini" {% if 'gpt-4o-mini' in prompt_content %}selected{% endif %}>GPT-4o Mini ({{ t('ui.prompt.model.faster', 'Faster') }})</option>
-                            <option value="openai/gpt-4-turbo" {% if 'gpt-4-turbo' in prompt_content %}selected{% endif %}>GPT-4 Turbo</option>
-                            <option value="anthropic/claude-3-5-sonnet" {% if 'claude' in prompt_content %}selected{% endif %}>Claude 3.5 Sonnet</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="prompt-raw" class="d-none">
-                    <label class="amb-form-label">{{ t('ui.prompt.raw.label', 'Advanced YAML') }}</label>
-                    {{ helper_text(t('ui.prompt.raw.desc', 'Edit the full YAML only if you need fine control.')) }}
-                    <textarea name="content" class="amb-code-editor" id="prompt-yaml" rows="18">{{ prompt_content }}</textarea>
-                </div>
-
-                <div class="d-flex flex-wrap gap-2">
-                    <button type="submit" class="btn btn-success" onclick="buildPromptYaml()">
-                        <i class="bi bi-save"></i> {{ t('ui.prompt.save', 'Save Prompt') }}
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="toggleRawPrompt()">
-                        <i class="bi bi-code-slash"></i> {{ t('ui.prompt.advanced_yaml', 'Advanced YAML') }}
-                    </button>
-                </div>
-            </form>
-            {% endcall %}
+            {{ prompt_builder() }}
         </div>
 
         <div class="col-lg-4">
-            {% call card(t('ui.prompt.guidance.title', 'Guidance'), "lightbulb") %}
-            <div class="amb-guidance">
-                <div class="mb-3">
-                    <strong>{{ t('ui.prompt.guidance.keep_human.title', 'Keep it human') }}</strong>
-                    <p class="small text-muted mb-0">{{ t('ui.prompt.guidance.keep_human.desc', 'Write instructions the way you would brief a teammate.') }}</p>
-                </div>
-                <div class="mb-3">
-                    <strong>{{ t('ui.prompt.guidance.be_specific.title', 'Be specific') }}</strong>
-                    <p class="small text-muted mb-0">{{ t('ui.prompt.guidance.be_specific.desc', 'Mention constraints like time, scope, or testing expectations.') }}</p>
-                </div>
-                <div>
-                    <strong>{{ t('ui.prompt.guidance.raw.title', 'Use advanced YAML sparingly') }}</strong>
-                    <p class="small text-muted mb-0">{{ t('ui.prompt.guidance.raw.desc', 'Only switch to raw YAML if you need full control.') }}</p>
-                </div>
-            </div>
-            {% endcall %}
+            {{ prompt_guidance() }}
         </div>
     </div>
 </section>

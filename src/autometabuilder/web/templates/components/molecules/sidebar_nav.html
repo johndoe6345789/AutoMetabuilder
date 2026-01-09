@@ -1,0 +1,10 @@
+{# Sidebar navigation list macro. #}
+{% from "components/atoms/nav_link.html" import nav_link %}
+
+{% macro sidebar_nav(items) -%}
+<nav class="amb-nav">
+    {% for item in items %}
+    {{ nav_link(item.section, item.icon, item.label, item.active) }}
+    {% endfor %}
+</nav>
+{%- endmacro %}

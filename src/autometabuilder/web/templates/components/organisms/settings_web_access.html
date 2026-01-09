@@ -1,0 +1,26 @@
+{# Settings web access card macro. #}
+{% macro settings_web_access() -%}
+{% set settings_desc = metadata.get('settings_descriptions', {}) %}
+<div class="amb-card">
+    <div class="amb-card-header">
+        <h5><i class="bi bi-shield-lock"></i> {{ t('ui.settings.web_access', 'Web UI Access') }}</h5>
+    </div>
+    <div class="amb-card-body">
+        {% for key in ['WEB_USER', 'WEB_PASSWORD'] %}
+        {% set desc = settings_desc.get(key, {}) %}
+        {% set desc_label = desc.get('label', key) %}
+        {% set desc_text = desc.get('description', '') %}
+        <div class="amb-form-group">
+            <label class="amb-form-label">{{ t(desc_label, desc_label) }}</label>
+            {% if desc_text %}
+            <p class="text-muted small mb-2">{{ t(desc_text, desc_text) }}</p>
+            {% endif %}
+            <input type="{{ desc.get('type', 'text') }}"
+                   name="env_{{ key }}"
+                   class="form-control"
+                   value="{{ env_vars.get(key, '') }}">
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{%- endmacro %}

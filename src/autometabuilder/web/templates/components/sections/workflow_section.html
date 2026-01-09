@@ -1,9 +1,12 @@
 {# Workflow section macro. #}
 {% from "components/atoms/section_header.html" import section_header %}
+{% from "components/organisms/workflow_templates.html" import workflow_templates with context %}
 
 {% macro workflow_section() -%}
 <section id="workflow" class="amb-section">
     {{ section_header(t('ui.workflow.title', 'Workflow Builder'), t('ui.workflow.subtitle', "Design the bot's task execution pipeline")) }}
+
+    {{ workflow_templates() }}
 
     <div class="amb-card">
         <div class="amb-card-header">

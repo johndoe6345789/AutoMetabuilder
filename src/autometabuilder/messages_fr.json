@@ -364,5 +364,22 @@
   "ui.workflow.run_when_placeholder": "$flag_key",
   "ui.workflow.loop_body_label": "Corps de la boucle",
   "ui.workflow.add_loop_node": "Ajouter un nœud à la boucle",
-  "ui.workflow.delete_node": "Supprimer le nœud"
+  "ui.workflow.delete_node": "Supprimer le nœud",
+  "ui.workflow.templates.title": "Modèles de flux de travail",
+  "ui.workflow.templates.select_label": "Modèle",
+  "ui.workflow.templates.select_placeholder": "Sélectionnez un modèle...",
+  "ui.workflow.templates.description_placeholder": "Choisissez un modèle pour voir ce qu'il fait.",
+  "ui.workflow.templates.apply": "Appliquer le modèle",
+  "ui.workflow.templates.confirm_apply": "Remplacer le flux de travail actuel par ce modèle ?",
+  "ui.workflow.templates.loaded": "Modèle chargé.",
+  "ui.workflow.templates.error": "Impossible de charger les modèles.",
+  "ui.workflow.templates.error_load": "Impossible de charger le modèle sélectionné.",
+  "meta.workflow_packages.blank.label": "Toile vierge",
+  "meta.workflow_packages.blank.description": "Commencez avec un workflow vide.",
+  "meta.workflow_packages.iterative_loop.label": "Boucle itérative de l'agent",
+  "meta.workflow_packages.iterative_loop.description": "Itère la planification IA, l'exécution des outils et les retours jusqu'à ce qu'il n'y ait plus d'appels d'outils.",
+  "meta.workflow_packages.single_pass.label": "Passe unique",
+  "meta.workflow_packages.single_pass.description": "Exécute une requête IA et une séquence d'outils une seule fois, sans boucle.",
+  "meta.workflow_packages.plan_execute_summarize.label": "Planifier, exécuter, résumer",
+  "meta.workflow_packages.plan_execute_summarize.description": "Planifiez avec le modèle, exécutez les outils, puis demandez un récapitulatif final."
 }

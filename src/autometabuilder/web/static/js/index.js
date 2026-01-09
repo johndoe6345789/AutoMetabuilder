@@ -7,11 +7,118 @@
     const format = (text, values = {}) => text.replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
 
     const fetchWorkflowPlugins = async () => {
-        const response = await fetch('/api/workflow/plugins');
+        const response = await fetch('/api/workflow/plugins', { credentials: 'include' });
         if (!response.ok) {
             throw new Error(`Plugin fetch failed: ${response.status}`);
         }
         return response.json();
+    };
+
+    const fetchWorkflowPackages = async () => {
+        const response = await fetch('/api/workflow/packages', { credentials: 'include' });
+        if (!response.ok) {
+            throw new Error(`Package fetch failed: ${response.status}`);
+        }
+        return response.json();
+    };
+
+    const WorkflowTemplates = {
+        packages: [],
+        selectEl: null,
+        descEl: null,
+        applyBtn: null,
+
+        async init() {
+            this.selectEl = document.getElementById('workflow-template-select');
+            this.descEl = document.getElementById('workflow-template-description');
+            this.applyBtn = document.getElementById('workflow-template-apply');
+            if (!this.selectEl) return;
+
+            try {
+                const data = await fetchWorkflowPackages();
+                this.packages = data.packages || [];
+                this.renderOptions();
+                this.updateDescription();
+            } catch (error) {
+                console.error('Workflow template fetch failed', error);
+                if (this.descEl) {
+                    this.descEl.textContent = t('ui.workflow.templates.error', 'Unable to load templates.');
+                }
+                return;
+            }
+
+            this.selectEl.addEventListener('change', () => this.updateDescription());
+            this.applyBtn?.addEventListener('click', () => this.applySelected());
+        },
+
+        renderOptions() {
+            if (!this.selectEl) return;
+            this.selectEl.innerHTML = '';
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = t('ui.workflow.templates.select_placeholder', 'Select a template...');
+            placeholder.disabled = true;
+            placeholder.selected = true;
+            this.selectEl.appendChild(placeholder);
+
+            this.packages.forEach(pkg => {
+                const option = document.createElement('option');
+                option.value = pkg.id;
+                option.textContent = t(pkg.label || pkg.id, pkg.label || pkg.id);
+                this.selectEl.appendChild(option);
+            });
+        },
+
+        updateDescription() {
+            if (!this.descEl) return;
+            const selected = this.getSelectedPackage();
+            if (this.applyBtn) {
+                this.applyBtn.disabled = !selected;
+            }
+            if (!selected) {
+                this.descEl.textContent = t(
+                    'ui.workflow.templates.description_placeholder',
+                    'Choose a template to preview what it does.'
+                );
+                return;
+            }
+            const description = selected.description || '';
+            this.descEl.textContent = t(description, description);
+        },
+
+        getSelectedPackage() {
+            if (!this.selectEl) return null;
+            const selectedId = this.selectEl.value;
+            return this.packages.find(pkg => pkg.id === selectedId) || null;
+        },
+
+        async applySelected() {
+            const selected = this.getSelectedPackage();
+            if (!selected) return;
+            const confirmText = t(
+                'ui.workflow.templates.confirm_apply',
+                'Replace the current workflow with this template?'
+            );
+            if (!confirm(confirmText)) return;
+
+            try {
+                const response = await fetch(`/api/workflow/packages/${selected.id}`, { credentials: 'include' });
+                if (!response.ok) {
+                    throw new Error(`Template fetch failed: ${response.status}`);
+                }
+                const data = await response.json();
+                const workflow = data.workflow || data;
+                if (window.WorkflowBuilder && typeof window.WorkflowBuilder.loadWorkflow === 'function') {
+                    window.WorkflowBuilder.loadWorkflow(workflow);
+                }
+                if (window.Toast) {
+                    Toast.show(t('ui.workflow.templates.loaded', 'Template loaded.'), 'success');
+                }
+            } catch (error) {
+                console.error('Workflow template load failed', error);
+                alert(t('ui.workflow.templates.error_load', 'Unable to load the selected template.'));
+            }
+        }
     };
 
     const initWorkflowBuilder = (pluginDefinitions) => {
@@ -367,6 +474,7 @@ model: ${model}
         } catch (error) {
             console.error('Workflow builder failed to initialize', error);
         }
+        await WorkflowTemplates.init();
         wireRunModeToggles();
         wirePromptChips();
     };

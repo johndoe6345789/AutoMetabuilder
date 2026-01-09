@@ -1,0 +1,12 @@
+{# Sidebar macro. #}
+{% from "components/organisms/sidebar_header.html" import sidebar_header %}
+{% from "components/molecules/sidebar_nav.html" import sidebar_nav %}
+{% from "components/organisms/sidebar_footer.html" import sidebar_footer %}
+
+{% macro sidebar(nav_items, app_name, username, toggle_title) -%}
+<aside class="amb-sidebar">
+    {{ sidebar_header(app_name) }}
+    {{ sidebar_nav(nav_items) }}
+    {{ sidebar_footer(username, toggle_title) }}
+</aside>
+{%- endmacro %}
