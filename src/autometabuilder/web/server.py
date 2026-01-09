@@ -4,6 +4,7 @@ import secrets
 from fastapi import FastAPI, Request, Form, BackgroundTasks, Depends, HTTPException, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from dotenv import load_dotenv, set_key
 import subprocess
@@ -38,6 +39,11 @@ mock_running = False
 # Setup templates
 templates_dir = os.path.join(os.path.dirname(__file__), "templates")
 templates = Jinja2Templates(directory=templates_dir)
+
+# Setup static files
+static_dir = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 def run_bot_task():
     global bot_process, mock_running

@@ -1,381 +1,240 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>AutoMetabuilder Dashboard</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center">
-        <h1>AutoMetabuilder Dashboard</h1>
-        <span>Logged in as: <strong>{{ username }}</strong></span>
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Dashboard Section -->
+<section id="dashboard" class="amb-section active">
+    <div class="amb-section-header">
+        <h1>Dashboard</h1>
+        <p>Monitor system status and recent activity</p>
     </div>
-    
-    <div class="row mt-4">
-        <div class="col-md-8">
-            <h2>Recent Logs</h2>
-            <pre id="logs" class="bg-light p-3 border" style="max-height: 400px; overflow-y: scroll;">{{ logs }}</pre>
-        </div>
-        <div class="col-md-4">
-            <h2>System Status</h2>
-            <div id="status-container">
-                <p>Status: 
-                    {% if is_running %}
-                    <span class="badge bg-warning text-dark">Bot Running...</span>
-                    {% else %}
-                    <span class="badge bg-success">Idle</span>
-                    {% endif %}
-                </p>
-                <p>MVP Milestone: 
-                    {% if mvp_reached %}
-                    <span class="badge bg-primary">Reached ✓</span>
-                    {% else %}
-                    <span class="badge bg-secondary">In Progress</span>
-                    {% endif %}
-                </p>
+
+    <div class="row">
+        <!-- Status Card -->
+        <div class="col-lg-4 col-md-6">
+            <div class="amb-card">
+                <div class="amb-card-header">
+                    <h5><i class="bi bi-activity"></i> System Status</h5>
+                </div>
+                <div class="amb-card-body">
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="text-muted">Bot Status</span>
+                            <div id="status-indicator" class="amb-status {% if is_running %}amb-status-running{% else %}amb-status-idle{% endif %}">
+                                <span class="amb-status-dot"></span>
+                                {% if is_running %}Running{% else %}Idle{% endif %}
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="text-muted">MVP Milestone</span>
+                            <span id="mvp-badge" class="badge {% if mvp_reached %}bg-primary{% else %}bg-secondary{% endif %}">
+                                {% if mvp_reached %}
+                                <i class="bi bi-check-circle-fill"></i> Reached
+                                {% else %}
+                                <i class="bi bi-hourglass-split"></i> In Progress
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div id="status-progress" class="progress mt-2" style="display: {% if is_running %}block{% else %}none{% endif %};">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="amb-card-footer">
+                    <form action="/run" method="post" class="m-0">
+                        <button id="run-btn" type="submit" class="btn btn-danger w-100" {% if is_running %}disabled{% endif %}>
+                            <i class="bi bi-play-fill"></i> Run Bot One Iteration
+                        </button>
+                    </form>
+                </div>
             </div>
-            
-            <form action="/run" method="post" class="mt-2">
-                <button id="run-btn" type="submit" class="btn btn-danger w-100" {% if is_running %}disabled{% endif %}>
-                    Run Bot One Iteration
-                </button>
-            </form>
-            
-            <h2 class="mt-4">Translations</h2>
-            <ul class="list-group">
-                {% for lang, file in translations.items() %}
-                <li class="list-group-item">{{ lang }} ({{ file }})</li>
-                {% endfor %}
-            </ul>
-            <form action="/translations" method="post" class="mt-2">
-                <div class="input-group">
-                    <input type="text" name="lang" class="form-control" placeholder="New lang code (e.g. de)" list="lang-suggestions">
-                    <datalist id="lang-suggestions">
-                        {% for lang in metadata.suggestions.languages %}
-                        <option value="{{ lang }}">
-                        {% endfor %}
-                    </datalist>
-                    <button class="btn btn-primary" type="submit">Add</button>
+        </div>
+
+        <!-- Logs Card -->
+        <div class="col-lg-8 col-md-6">
+            <div class="amb-card">
+                <div class="amb-card-header">
+                    <h5><i class="bi bi-terminal"></i> Recent Logs</h5>
+                </div>
+                <div class="amb-card-body p-0">
+                    <pre id="logs" class="amb-logs m-0">{{ logs }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Workflow Section -->
+<section id="workflow" class="amb-section">
+    <div class="amb-section-header">
+        <h1>Workflow Builder</h1>
+        <p>Configure the bot's task execution workflow</p>
+    </div>
+
+    <div class="amb-card">
+        <div class="amb-card-body">
+            <div id="workflow-builder" class="mb-3">
+                <!-- Visual builder will be rendered here -->
+            </div>
+            <form action="/workflow" method="post" id="workflow-form" data-validate>
+                <textarea id="workflow-content" name="content" class="form-control amb-code-editor d-none" rows="15">{{ workflow_content }}</textarea>
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-save"></i> Save Workflow
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="WorkflowBuilder.toggleRaw()">
+                        <i class="bi bi-code-slash"></i> Toggle Raw JSON
+                    </button>
                 </div>
             </form>
         </div>
     </div>
+</section>
 
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <h2>Settings (.env)</h2>
-            <form action="/settings" method="post">
-                <table class="table table-bordered">
+<!-- Prompt Section -->
+<section id="prompt" class="amb-section">
+    <div class="amb-section-header">
+        <h1>Prompt Editor</h1>
+        <p>Edit the system prompt configuration (prompt.yml)</p>
+    </div>
+
+    <div class="amb-card">
+        <div class="amb-card-body">
+            <form action="/prompt" method="post" data-validate>
+                <textarea name="content" class="form-control amb-code-editor" rows="20" required>{{ prompt_content }}</textarea>
+                <div class="invalid-feedback">Prompt content is required.</div>
+                <button type="submit" class="btn btn-success mt-3">
+                    <i class="bi bi-save"></i> Save Prompt
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Settings Section -->
+<section id="settings" class="amb-section">
+    <div class="amb-section-header">
+        <h1>Settings</h1>
+        <p>Manage environment variables (.env)</p>
+    </div>
+
+    <div class="amb-card">
+        <div class="amb-card-body">
+            <form action="/settings" method="post" data-validate>
+                <table class="table table-bordered mb-3">
                     <thead>
                         <tr>
-                            <th>Key</th>
+                            <th style="width: 40%;">Key</th>
                             <th>Value</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for key, value in env_vars.items() %}
                         <tr>
-                            <td>{{ key }}</td>
+                            <td><code>{{ key }}</code></td>
                             <td>
-                                <input type="text" name="env_{{ key }}" value="{{ value }}" class="form-control" list="env-value-suggestions">
+                                <select name="env_{{ key }}" class="form-select form-select-sm" data-choices>
+                                    <option value="{{ value }}" selected>{{ value }}</option>
+                                    {% for val in metadata.suggestions.env_values %}
+                                    {% if val != value %}
+                                    <option value="{{ val }}">{{ val }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
                             </td>
                         </tr>
                         {% endfor %}
-                        <tr>
+                        <tr class="table-light">
                             <td>
-                                <input type="text" name="new_env_key" class="form-control" placeholder="NEW_KEY" list="env-key-suggestions">
+                                <select name="new_env_key" class="form-select form-select-sm" data-choices data-placeholder="Add new key...">
+                                    <option value="">Add new key...</option>
+                                    {% for key in metadata.suggestions.env_keys %}
+                                    <option value="{{ key }}">{{ key }}</option>
+                                    {% endfor %}
+                                </select>
                             </td>
                             <td>
-                                <input type="text" name="new_env_value" class="form-control" placeholder="New Value" list="env-value-suggestions">
+                                <select name="new_env_value" class="form-select form-select-sm" data-choices data-placeholder="Value...">
+                                    <option value="">Value...</option>
+                                    {% for val in metadata.suggestions.env_values %}
+                                    <option value="{{ val }}">{{ val }}</option>
+                                    {% endfor %}
+                                </select>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <datalist id="env-key-suggestions">
-                    {% for key in env_vars.keys() %}
-                    <option value="{{ key }}">
-                    {% endfor %}
-                    {% for key in metadata.suggestions.env_keys %}
-                    <option value="{{ key }}">
-                    {% endfor %}
-                </datalist>
-                <datalist id="env-value-suggestions">
-                    {% for value in env_vars.values() %}
-                    <option value="{{ value }}">
-                    {% endfor %}
-                    {% for val in metadata.suggestions.env_values %}
-                    <option value="{{ val }}">
-                    {% endfor %}
-                </datalist>
-                <button type="submit" class="btn btn-success">Save Settings</button>
-            </form>
-        </div>
-        <div class="col-md-6">
-            <h2>Prompt (prompt.yml)</h2>
-            <form action="/prompt" method="post">
-                <textarea name="content" class="form-control" rows="15">{{ prompt_content }}</textarea>
-                <button type="submit" class="btn btn-success mt-2">Save Prompt</button>
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-save"></i> Save Settings
+                </button>
             </form>
         </div>
     </div>
+</section>
 
-    <div class="row mt-4 mb-5">
-        <div class="col-12">
-            <h2>Workflow Builder (workflow.json)</h2>
-            <div id="workflow-builder" class="mb-3">
-                <!-- Visual builder will be rendered here -->
-            </div>
-            <form action="/workflow" method="post" id="workflow-form">
-                <datalist id="task-name-suggestions">
-                    {% for name in metadata.suggestions.task_names %}
-                    <option value="{{ name }}">
-                    {% endfor %}
-                </datalist>
-                <textarea id="workflow-content" name="content" class="form-control d-none" rows="15">{{ workflow_content }}</textarea>
-                <button type="submit" class="btn btn-success mt-2">Save Workflow</button>
-                <button type="button" class="btn btn-secondary mt-2" onclick="toggleRawWorkflow()">Toggle Raw JSON</button>
-            </form>
-        </div>
+<!-- Translations Section -->
+<section id="translations" class="amb-section">
+    <div class="amb-section-header">
+        <h1>Translations</h1>
+        <p>Manage language translations</p>
     </div>
-    <script>
-        let workflow = [];
-        try {
-            workflow = JSON.parse(document.getElementById('workflow-content').value);
-        } catch (e) {
-            console.error("Failed to parse workflow JSON", e);
-        }
 
-        const stepDefinitions = JSON.parse('{{ metadata.step_definitions | tojson | safe }}');
-
-        const allSuggestions = new Set();
-        Object.values(stepDefinitions).forEach(def => {
-            Object.values(def.fields).forEach(f => {
-                if (f.suggestions) f.suggestions.forEach(s => allSuggestions.add(s));
-            });
-        });
-
-        function renderWorkflow() {
-            const container = document.getElementById('workflow-builder');
-            container.innerHTML = '';
-
-            workflow.forEach((task, taskIdx) => {
-                const taskCard = document.createElement('div');
-                taskCard.className = 'card mb-4 border-primary';
-                taskCard.innerHTML = `
-                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                        <div class="flex-grow-1">
-                            <input type="text" class="form-control form-control-sm d-inline-block w-auto" value="${task.name || ''}" list="task-name-suggestions" onchange="updateTask(${taskIdx}, 'name', this.value)" placeholder="Task Name">
-                            <select class="form-select form-select-sm d-inline-block w-auto ms-2" onchange="updateTask(${taskIdx}, 'type', this.value)">
-                                <option value="" ${!task.type ? 'selected' : ''}>Standard Sequence</option>
-                                <option value="loop" ${task.type === 'loop' ? 'selected' : ''}>Loop / Iterate</option>
-                            </select>
-                            ${task.type === 'loop' ? `<input type="number" class="form-control form-control-sm d-inline-block w-auto ms-2" value="${task.max_iterations || 1}" onchange="updateTask(${taskIdx}, 'max_iterations', parseInt(this.value))" title="Max Iterations">` : ''}
-                        </div>
-                        <div>
-                            <button class="btn btn-sm btn-light" onclick="moveTask(${taskIdx}, -1)" ${taskIdx === 0 ? 'disabled' : ''}>↑</button>
-                            <button class="btn btn-sm btn-light" onclick="moveTask(${taskIdx}, 1)" ${taskIdx === workflow.length - 1 ? 'disabled' : ''}>↓</button>
-                            <button class="btn btn-sm btn-danger ms-2" onclick="removeTask(${taskIdx})">Remove Task</button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div id="steps-${taskIdx}"></div>
-                        <button class="btn btn-sm btn-outline-primary mt-2" onclick="addStep(${taskIdx})">+ Add Step</button>
-                    </div>
-                `;
-                container.appendChild(taskCard);
-
-                const stepsContainer = taskCard.querySelector(`#steps-${taskIdx}`);
-                (task.steps || []).forEach((step, stepIdx) => {
-                    const stepDiv = document.createElement('div');
-                    stepDiv.className = 'card mb-2 bg-light';
-                    
-                    let fieldsHtml = `
-                        <select class="form-select form-select-sm mb-2" onchange="updateStepType(${taskIdx}, ${stepIdx}, this.value)">
-                            <option value="">Select Action Type...</option>
-                            ${Object.entries(stepDefinitions).map(([type, def]) => `<option value="${type}" ${step.type === type ? 'selected' : ''}>${def.label}</option>`).join('')}
-                        </select>
-                    `;
-
-                    if (step.type && stepDefinitions[step.type]) {
-                        fieldsHtml += '<div class="row g-2">';
-                        const def = stepDefinitions[step.type];
-                        Object.entries(def.fields).forEach(([field, fieldDef]) => {
-                            const val = step[field] !== undefined ? step[field] : '';
-                            const isCheckbox = fieldDef.type === 'checkbox';
-                            
-                            fieldsHtml += `
-                                <div class="col-md-6">
-                                    <label class="small fw-bold">${fieldDef.label}</label>
-                                    ${isCheckbox 
-                                        ? `<div class="form-check mt-1"><input type="checkbox" class="form-check-input" ${step[field] ? 'checked' : ''} onchange="updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.checked)"></div>`
-                                        : `
-                                            <input type="text" class="form-control form-control-sm" value="${val}" list="suggestions-${taskIdx}-${stepIdx}-${field}" onchange="updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)" placeholder="${fieldDef.default || ''}">
-                                            <datalist id="suggestions-${taskIdx}-${stepIdx}-${field}">
-                                                ${(fieldDef.suggestions || Array.from(allSuggestions)).map(s => `<option value="${s}">`).join('')}
-                                            </datalist>
-                                          `
-                                    }
-                                </div>
-                            `;
-                        });
-                        fieldsHtml += '</div>';
-                    }
-
-                    stepDiv.innerHTML = `
-                        <div class="card-body p-2">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <span class="badge bg-secondary">Step ${stepIdx + 1}</span>
-                                <div>
-                                    <button class="btn btn-sm btn-link p-0 text-decoration-none" onclick="moveStep(${taskIdx}, ${stepIdx}, -1)" ${stepIdx === 0 ? 'disabled' : ''}>↑</button>
-                                    <button class="btn btn-sm btn-link p-0 text-decoration-none ms-1" onclick="moveStep(${taskIdx}, ${stepIdx}, 1)" ${stepIdx === (task.steps.length - 1) ? 'disabled' : ''}>↓</button>
-                                    <button class="btn btn-sm btn-link p-0 text-danger text-decoration-none ms-2" onclick="removeStep(${taskIdx}, ${stepIdx})">✕</button>
-                                </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="amb-card">
+                <div class="amb-card-header">
+                    <h5><i class="bi bi-list-check"></i> Available Languages</h5>
+                </div>
+                <div class="amb-card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% for lang, file in translations.items() %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-globe me-2"></i>
+                                <strong>{{ lang }}</strong>
                             </div>
-                            ${fieldsHtml}
+                            <span class="badge bg-light text-dark">{{ file }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="amb-card">
+                <div class="amb-card-header">
+                    <h5><i class="bi bi-plus-circle"></i> Add Translation</h5>
+                </div>
+                <div class="amb-card-body">
+                    <form action="/translations" method="post" data-validate>
+                        <div class="amb-form-group">
+                            <label class="amb-form-label">
+                                Language Code <span class="amb-required">*</span>
+                            </label>
+                            <select name="lang" class="form-select" data-choices data-placeholder="Select language..." required>
+                                <option value="">Select language...</option>
+                                {% for lang in metadata.suggestions.languages %}
+                                <option value="{{ lang }}">{{ lang }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">Please select a language code.</div>
                         </div>
-                    `;
-                    stepsContainer.appendChild(stepDiv);
-                });
-            });
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-lg"></i> Add Translation
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
 
-            const addTaskBtn = document.createElement('button');
-            addTaskBtn.className = 'btn btn-primary mb-5';
-            addTaskBtn.textContent = '+ Add Task';
-            addTaskBtn.onclick = addTask;
-            container.appendChild(addTaskBtn);
-
-            syncWorkflow();
-        }
-
-        function syncWorkflow() {
-            document.getElementById('workflow-content').value = JSON.stringify(workflow, null, 2);
-        }
-
-        function toggleRawWorkflow() {
-            const textarea = document.getElementById('workflow-content');
-            textarea.classList.toggle('d-none');
-            if (!textarea.classList.contains('d-none')) {
-                textarea.oninput = function() {
-                    try {
-                        workflow = JSON.parse(this.value);
-                        renderWorkflow();
-                    } catch (e) {}
-                };
-            }
-        }
-
-        function updateTask(idx, field, value) {
-            workflow[idx][field] = value;
-            if (field === 'type' && value !== 'loop') {
-                delete workflow[idx].max_iterations;
-            } else if (field === 'type' && value === 'loop' && !workflow[idx].max_iterations) {
-                workflow[idx].max_iterations = 10;
-            }
-            renderWorkflow();
-        }
-
-        function addTask() {
-            workflow.push({ name: 'New Task', steps: [] });
-            renderWorkflow();
-        }
-
-        function removeTask(idx) {
-            if (confirm('Remove this task?')) {
-                workflow.splice(idx, 1);
-                renderWorkflow();
-            }
-        }
-
-        function moveTask(idx, dir) {
-            const target = idx + dir;
-            if (target >= 0 && target < workflow.length) {
-                [workflow[idx], workflow[target]] = [workflow[target], workflow[idx]];
-                renderWorkflow();
-            }
-        }
-
-        function updateStepType(taskIdx, stepIdx, type) {
-            const newStep = { type: type };
-            if (stepDefinitions[type]) {
-                Object.entries(stepDefinitions[type].fields).forEach(([field, fieldDef]) => {
-                    newStep[field] = fieldDef.default;
-                });
-            }
-            workflow[taskIdx].steps[stepIdx] = newStep;
-            renderWorkflow();
-        }
-
-        function updateStepField(taskIdx, stepIdx, field, value) {
-            workflow[taskIdx].steps[stepIdx][field] = value;
-            syncWorkflow();
-        }
-
-        function addStep(taskIdx) {
-            if (!workflow[taskIdx].steps) workflow[taskIdx].steps = [];
-            workflow[taskIdx].steps.push({ type: '' });
-            renderWorkflow();
-        }
-
-        function removeStep(taskIdx, stepIdx) {
-            workflow[taskIdx].steps.splice(stepIdx, 1);
-            renderWorkflow();
-        }
-
-        function moveStep(taskIdx, stepIdx, dir) {
-            const target = stepIdx + dir;
-            const steps = workflow[taskIdx].steps;
-            if (target >= 0 && target < steps.length) {
-                [steps[stepIdx], steps[target]] = [steps[target], steps[stepIdx]];
-                renderWorkflow();
-            }
-        }
-
-        renderWorkflow();
-
-        async function refreshLogs() {
-            try {
-                const response = await fetch('/api/logs');
-                const data = await response.json();
-                const logsPre = document.getElementById('logs');
-                const wasAtBottom = logsPre.scrollHeight - logsPre.clientHeight <= logsPre.scrollTop + 1;
-                logsPre.textContent = data.logs;
-                if (wasAtBottom) {
-                    logsPre.scrollTop = logsPre.scrollHeight;
-                }
-            } catch (error) {
-                console.error('Error fetching logs:', error);
-            }
-        }
-
-        async function refreshStatus() {
-            try {
-                const response = await fetch('/api/status');
-                const data = await response.json();
-                const statusContainer = document.getElementById('status-container');
-                const runBtn = document.getElementById('run-btn');
-
-                if (data.is_running) {
-                    statusContainer.innerHTML = `
-                        <p>Status: <span class="badge bg-warning text-dark">Bot Running...</span></p>
-                        <p>MVP Milestone: ${data.mvp_reached ? '<span class="badge bg-primary">Reached ✓</span>' : '<span class="badge bg-secondary">In Progress</span>'}</p>
-                        <div class="progress mt-2">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
-                        </div>
-                    `;
-                    runBtn.disabled = true;
-                } else {
-                    statusContainer.innerHTML = `
-                        <p>Status: <span class="badge bg-success">Idle</span></p>
-                        <p>MVP Milestone: ${data.mvp_reached ? '<span class="badge bg-primary">Reached ✓</span>' : '<span class="badge bg-secondary">In Progress</span>'}</p>
-                    `;
-                    runBtn.disabled = false;
-                }
-            } catch (error) {
-                console.error('Error fetching status:', error);
-            }
-        }
-
-        setInterval(refreshLogs, 2000);
-        setInterval(refreshStatus, 2000);
-    </script>
-</body>
-</html>
+{% block scripts %}
+<script src="/static/js/workflow.js"></script>
+<script>
+    // Initialize workflow builder with step definitions from metadata
+    const stepDefinitions = {{ metadata.step_definitions | tojson | safe }};
+    WorkflowBuilder.init('workflow-builder', 'workflow-content', stepDefinitions);
+</script>
+{% endblock %}
