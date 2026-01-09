@@ -73,8 +73,12 @@ def get_env_vars():
     
     env_vars = {}
     for line in lines:
+        line = line.strip()
         if "=" in line and not line.startswith("#"):
-            key, value = line.strip().split("=", 1)
+            key, value = line.split("=", 1)
+            # Remove quotes if present
+            if (value.startswith("'") and value.endswith("'")) or (value.startswith('"') and value.endswith('"')):
+                value = value[1:-1]
             env_vars[key] = value
     return env_vars
 
