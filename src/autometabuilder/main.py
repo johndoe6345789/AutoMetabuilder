@@ -4,13 +4,7 @@ import yaml
 import json
 from dotenv import load_dotenv
 from openai import OpenAI
-try:
-    from autometabuilder.github_integration import GitHubIntegration, get_repo_name_from_env
-except ImportError:
-    # Fallback for running as a script without proper package installation
-    import sys
-    sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-    from autometabuilder.github_integration import GitHubIntegration, get_repo_name_from_env
+from .github_integration import GitHubIntegration, get_repo_name_from_env
 
 load_dotenv()
 
