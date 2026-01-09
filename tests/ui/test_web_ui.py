@@ -17,8 +17,7 @@ def t(key, fallback=None):
 
 def test_login_and_dashboard(page: Page, server: str):
     # Go to the server with auth
-    auth_url = server.replace("http://", "http://testuser:testpass@")
-    page.goto(auth_url)
+    page.goto(server)
 
     # Check if we are on the dashboard - select h1 in the active section
     expect(page.locator("#dashboard.active h1")).to_contain_text(t("ui.dashboard.title"))
@@ -26,8 +25,7 @@ def test_login_and_dashboard(page: Page, server: str):
     expect(page.locator(".amb-sidebar-footer")).to_contain_text("testuser")
 
 def test_run_bot_mock(page: Page, server: str):
-    auth_url = server.replace("http://", "http://testuser:testpass@")
-    page.goto(auth_url)
+    page.goto(server)
 
     # Check that run button exists and is clickable
     run_btn = page.locator("#run-btn")
@@ -45,8 +43,7 @@ def test_run_bot_mock(page: Page, server: str):
     expect(page.locator("#dashboard")).to_be_attached()
 
 def test_update_prompt(page: Page, server: str):
-    auth_url = server.replace("http://", "http://testuser:testpass@")
-    page.goto(auth_url)
+    page.goto(server)
 
     # Navigate to prompt section
     wait_for_nav(page)
@@ -70,8 +67,7 @@ def test_update_prompt(page: Page, server: str):
     expect(page.locator("#prompt textarea[name='user_content']")).to_have_value("Test user prompt")
 
 def test_update_settings(page: Page, server: str):
-    auth_url = server.replace("http://", "http://testuser:testpass@")
-    page.goto(auth_url)
+    page.goto(server)
 
     # Navigate to settings section
     wait_for_nav(page)
@@ -96,8 +92,7 @@ def test_update_settings(page: Page, server: str):
 
 def test_navigation_sections(page: Page, server: str):
     """Test that sidebar navigation works correctly"""
-    auth_url = server.replace("http://", "http://testuser:testpass@")
-    page.goto(auth_url)
+    page.goto(server)
 
     # Dashboard should be active by default
     expect(page.locator("#dashboard")).to_have_class(re.compile(r"active"))
@@ -114,8 +109,7 @@ def test_navigation_sections(page: Page, server: str):
 
 def test_theme_toggle(page: Page, server: str):
     """Test dark mode toggle functionality"""
-    auth_url = server.replace("http://", "http://testuser:testpass@")
-    page.goto(auth_url)
+    page.goto(server)
 
     # Get initial theme
     html = page.locator("html")
@@ -137,8 +131,7 @@ def test_theme_toggle(page: Page, server: str):
 
 def test_choices_dropdowns_exist(page: Page, server: str):
     """Test that Choices.js dropdowns are initialized"""
-    auth_url = server.replace("http://", "http://testuser:testpass@")
-    page.goto(auth_url)
+    page.goto(server)
 
     # Navigate to translations to find language dropdown
     wait_for_nav(page)
@@ -164,8 +157,7 @@ def test_autocomplete_values_from_json(page: Page, server: str):
     with open(metadata_path, 'r') as f:
         metadata = json.load(f)
 
-    auth_url = server.replace("http://", "http://testuser:testpass@")
-    page.goto(auth_url)
+    page.goto(server)
 
     # Navigate to translations section to check language options
     wait_for_nav(page)
@@ -209,8 +201,7 @@ def test_autocomplete_values_from_json(page: Page, server: str):
 
 def test_workflow_builder_renders(page: Page, server: str):
     """Test that workflow builder initializes and renders"""
-    auth_url = server.replace("http://", "http://testuser:testpass@")
-    page.goto(auth_url)
+    page.goto(server)
 
     # Navigate to workflow section
     wait_for_nav(page)
