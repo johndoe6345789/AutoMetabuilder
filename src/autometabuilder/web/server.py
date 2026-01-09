@@ -33,13 +33,21 @@ def get_current_user(credentials: HTTPBasicCredentials = Depends(security)):
 
 # Global variable to track if a bot is running
 bot_process = None
+mock_running = False
 
 # Setup templates
 templates_dir = os.path.join(os.path.dirname(__file__), "templates")
 templates = Jinja2Templates(directory=templates_dir)
 
 def run_bot_task():
-    global bot_process
+    global bot_process, mock_running
+    if os.environ.get("MOCK_WEB_UI") == "true":
+        mock_running = True
+        import time
+        time.sleep(5)
+        mock_running = False
+        return
+
     try:
         # Run main.py as a subprocess with --yolo --once
         cmd = [sys.executable, "-m", "autometabuilder.main", "--yolo", "--once"]
@@ -118,7 +126,7 @@ async def read_item(request: Request, username: str = Depends(get_current_user))
     metadata = get_metadata()
     prompt_content = get_prompt_content()
     workflow_content = get_workflow_content()
-    is_running = bot_process is not None
+    is_running = bot_process is not None or mock_running
     mvp_status = is_mvp_reached()
     return templates.TemplateResponse("index.html", {
         "request": request, 
@@ -135,8 +143,8 @@ async def read_item(request: Request, username: str = Depends(get_current_user))
 
 @app.post("/run")
 async def run_bot(background_tasks: BackgroundTasks, username: str = Depends(get_current_user)):
-    global bot_process
-    if bot_process is None:
+    global bot_process, mock_running
+    if bot_process is None and not mock_running:
         background_tasks.add_task(run_bot_task)
     return RedirectResponse(url="/", status_code=303)
 
@@ -177,7 +185,7 @@ async def update_settings(request: Request, username: str = Depends(get_current_
 @app.get("/api/status")
 async def get_status(username: str = Depends(get_current_user)):
     return {
-        "is_running": bot_process is not None,
+        "is_running": bot_process is not None or mock_running,
         "mvp_reached": is_mvp_reached()
     }
 
