@@ -2,7 +2,8 @@
 from ..value_helpers import ValueHelpers
 
 
-def run(runtime, inputs):
+def run(_runtime, inputs):
+    """Map items to formatted strings."""
     items = ValueHelpers.ensure_list(inputs.get("items"))
     template = inputs.get("template", "{item}")
     mapped = []

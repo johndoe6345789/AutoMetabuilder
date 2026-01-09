@@ -2,6 +2,7 @@
 
 
 def run(runtime, inputs):
+    """Create a branch via tool runner."""
     result = runtime.tool_runner.call(
         "create_branch",
         branch_name=inputs.get("branch_name"),

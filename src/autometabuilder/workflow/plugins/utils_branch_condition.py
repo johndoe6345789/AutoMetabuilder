@@ -3,7 +3,8 @@ import re
 from ..value_helpers import ValueHelpers
 
 
-def run(runtime, inputs):
+def run(_runtime, inputs):
+    """Evaluate a branch condition."""
     value = inputs.get("value")
     mode = inputs.get("mode", "is_truthy")
     compare = inputs.get("compare", "")

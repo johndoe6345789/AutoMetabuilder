@@ -21,6 +21,7 @@ from .workflow_engine_builder import build_workflow_engine
 
 
 def run_app() -> None:
+    """Run the AutoMetabuilder CLI."""
     load_env()
     configure_logging()
     logger = logging.getLogger("autometabuilder")
@@ -43,23 +44,21 @@ def run_app() -> None:
     metadata = load_metadata()
     tools = load_tools(metadata)
 
-    registry_entries = load_tool_registry()
-    tool_map = build_tool_map(gh, registry_entries)
+    tool_map = build_tool_map(gh, load_tool_registry())
     load_plugins(tool_map, tools)
 
-    tool_policies = load_tool_policies()
-    workflow_config = load_workflow_config(metadata)
-    workflow_context = build_workflow_context(
-        args,
-        gh,
-        msgs,
-        client,
-        tools,
-        tool_map,
-        prompt,
-        tool_policies
-    )
+    context_parts = {
+        "args": args,
+        "gh": gh,
+        "msgs": msgs,
+        "client": client,
+        "tools": tools,
+        "tool_map": tool_map,
+        "prompt": prompt,
+        "tool_policies": load_tool_policies()
+    }
+    workflow_context = build_workflow_context(context_parts)
     logger.debug("Workflow context ready with %s tools", len(tool_map))
 
-    engine = build_workflow_engine(workflow_config, workflow_context, logger)
+    engine = build_workflow_engine(load_workflow_config(metadata), workflow_context, logger)
     engine.execute()

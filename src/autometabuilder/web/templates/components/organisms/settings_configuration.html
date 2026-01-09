@@ -11,6 +11,7 @@
         {% set desc_label = desc.get('label', key) %}
         {% set desc_text = desc.get('description', '') %}
         {% set desc_placeholder = desc.get('placeholder', '') %}
+        {% set option_labels = desc.get('option_labels', []) %}
         <div class="amb-form-group">
             <label class="amb-form-label">{{ t(desc_label, desc_label) }}</label>
             {% if desc_text %}
@@ -20,7 +21,8 @@
             <select name="env_{{ key }}" class="form-select" data-choices>
                 <option value="">{{ t('ui.common.select_placeholder', 'Select...') }}</option>
                 {% for opt in desc.get('options', []) %}
-                <option value="{{ opt }}" {% if env_vars.get(key) == opt %}selected{% endif %}>{{ opt }}</option>
+                {% set opt_label = option_labels[loop.index0] if option_labels|length > loop.index0 else opt %}
+                <option value="{{ opt }}" {% if env_vars.get(key) == opt %}selected{% endif %}>{{ t(opt_label, opt_label) }}</option>
                 {% endfor %}
             </select>
             {% else %}

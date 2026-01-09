@@ -4,6 +4,7 @@ from ...roadmap_utils import is_mvp_reached
 
 
 def run(runtime, inputs):
+    """Append tool results to the message list."""
     messages = list(inputs.get("messages") or [])
     tool_results = inputs.get("tool_results") or []
     if tool_results:

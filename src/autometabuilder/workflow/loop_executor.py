@@ -2,15 +2,18 @@
 
 
 class LoopExecutor:
+    """Execute loop nodes."""
     def __init__(self, runtime, input_resolver):
         self.runtime = runtime
         self.input_resolver = input_resolver
         self.node_executor = None
 
     def set_node_executor(self, node_executor) -> None:
+        """Inject node executor dependency."""
         self.node_executor = node_executor
 
     def execute(self, node):
+        """Run loop body until stop condition."""
         inputs = node.get("inputs", {})
         max_iterations = self.input_resolver.resolve_binding(inputs.get("max_iterations", 1))
         stop_when_raw = inputs.get("stop_when")

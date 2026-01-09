@@ -7,6 +7,7 @@ logger = logging.getLogger("autometabuilder")
 
 
 def get_sdlc_context(gh: GitHubIntegration, msgs: dict) -> str:
+    """Return SDLC context text from roadmap, issues, and PRs."""
     sdlc_context = ""
     if os.path.exists("ROADMAP.md"):
         with open("ROADMAP.md", "r", encoding="utf-8") as f:

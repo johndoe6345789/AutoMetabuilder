@@ -6,6 +6,7 @@ logger = logging.getLogger("autometabuilder")
 
 
 def create_github_integration(token: str, msgs: dict):
+    """Create GitHub integration if possible."""
     if not token:
         return None
     try:

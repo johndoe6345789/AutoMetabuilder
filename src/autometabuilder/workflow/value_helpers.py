@@ -2,8 +2,10 @@
 
 
 class ValueHelpers:
+    """Normalize values for workflow helpers."""
     @staticmethod
     def ensure_list(value):
+        """Return a list for any incoming value."""
         if value is None:
             return []
         if isinstance(value, list):
@@ -16,6 +18,7 @@ class ValueHelpers:
 
     @staticmethod
     def coerce_bool(value) -> bool:
+        """Coerce values into booleans."""
         if isinstance(value, bool):
             return value
         if isinstance(value, str):
@@ -28,6 +31,7 @@ class ValueHelpers:
 
     @staticmethod
     def normalize_separator(text):
+        """Normalize escaped separators."""
         if text is None:
             return ""
         if isinstance(text, str):

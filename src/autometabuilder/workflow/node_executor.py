@@ -2,6 +2,7 @@
 
 
 class NodeExecutor:
+    """Execute workflow nodes with plugins."""
     def __init__(self, runtime, plugin_registry, input_resolver, loop_executor):
         self.runtime = runtime
         self.plugin_registry = plugin_registry
@@ -9,10 +10,12 @@ class NodeExecutor:
         self.loop_executor = loop_executor
 
     def execute_nodes(self, nodes):
+        """Execute a list of nodes."""
         for node in nodes:
             self.execute_node(node)
 
     def execute_node(self, node):
+        """Execute a single node."""
         node_type = node.get("type")
         if not node_type:
             self.runtime.logger.error("Workflow node missing type.")

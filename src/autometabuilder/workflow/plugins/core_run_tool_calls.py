@@ -4,6 +4,7 @@ from ..tool_calls_handler import handle_tool_calls
 
 
 def run(runtime, inputs):
+    """Execute tool calls from an AI response."""
     resp_msg = inputs.get("response")
     tool_calls = getattr(resp_msg, "tool_calls", None) or []
     if not resp_msg:

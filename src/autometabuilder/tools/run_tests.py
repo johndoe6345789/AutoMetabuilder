@@ -6,6 +6,7 @@ logger = logging.getLogger("autometabuilder")
 
 
 def run_tests(path: str = "tests") -> str:
+    """Run pytest on a path."""
     logger.info("Running tests in %s...", path)
     result = subprocess.run(["pytest", path], capture_output=True, text=True, check=False)
     logger.info(result.stdout)

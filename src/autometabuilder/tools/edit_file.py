@@ -1,6 +1,7 @@
 """Edit file content with search/replace."""
 
 def edit_file(path: str, search: str, replace: str) -> str:
+    """Replace text in a file."""
     try:
         with open(path, "r", encoding="utf-8") as f:
             content = f.read()

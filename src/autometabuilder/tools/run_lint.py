@@ -6,6 +6,7 @@ logger = logging.getLogger("autometabuilder")
 
 
 def run_lint(path: str = "src") -> str:
+    """Run pylint on a path."""
     logger.info("Running linting in %s...", path)
     result = subprocess.run(["pylint", path], capture_output=True, text=True, check=False)
     logger.info(result.stdout)

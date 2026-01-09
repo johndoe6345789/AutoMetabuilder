@@ -2,12 +2,14 @@
 
 
 class ToolRunner:
+    """Run tool callables with shared logging."""
     def __init__(self, tool_map: dict, msgs: dict, logger):
         self.tool_map = tool_map
         self.msgs = msgs
         self.logger = logger
 
     def call(self, tool_name: str, **kwargs):
+        """Call a named tool with filtered kwargs."""
         tool = self.tool_map.get(tool_name)
         if not tool:
             msg = self.msgs.get(

@@ -3,6 +3,7 @@ import json
 
 
 def handle_tool_calls(resp_msg, tool_map: dict, msgs: dict, args, policies: dict, logger) -> list:
+    """Execute tool calls and return tool result messages."""
     if not resp_msg.tool_calls:
         return []
 
@@ -17,9 +18,11 @@ def handle_tool_calls(resp_msg, tool_map: dict, msgs: dict, args, policies: dict
 
         handler = tool_map.get(function_name)
         if not handler:
-            msg = msgs.get("error_tool_not_found", "Tool {name} not found or unavailable.").format(
-                name=function_name
+            msg_template = msgs.get(
+                "error_tool_not_found",
+                "Tool {name} not found or unavailable."
             )
+            msg = msg_template.format(name=function_name)
             logger.error(msg)
             tool_results.append({
                 "tool_call_id": call_id,
@@ -37,7 +40,8 @@ def handle_tool_calls(resp_msg, tool_map: dict, msgs: dict, args, policies: dict
                 ).format(name=function_name, args=payload)
             )
             if confirm.lower() != "y":
-                logger.info(msgs.get("info_tool_skipped", "Skipping tool: {name}").format(name=function_name))
+                skipped_template = msgs.get("info_tool_skipped", "Skipping tool: {name}")
+                logger.info(skipped_template.format(name=function_name))
                 tool_results.append({
                     "tool_call_id": call_id,
                     "role": "tool",
@@ -61,7 +65,8 @@ def handle_tool_calls(resp_msg, tool_map: dict, msgs: dict, args, policies: dict
             })
             continue
 
-        logger.info(msgs.get("info_executing_tool", "Executing tool: {name}").format(name=function_name))
+        exec_template = msgs.get("info_executing_tool", "Executing tool: {name}")
+        logger.info(exec_template.format(name=function_name))
         try:
             result = handler(**payload)
             content = str(result) if result is not None else "Success"

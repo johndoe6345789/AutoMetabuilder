@@ -1,4 +1,8 @@
 {
+  "core_styles": [
+    "/static/css/main.css",
+    "/static/css/workflow_palette.css"
+  ],
   "core_scripts": [
     "/static/js/app_context.js",
     "/static/js/plugin_registry.js",
@@ -14,6 +18,7 @@
     "/static/js/workflow/workflow_utils.js",
     "/static/js/workflow/workflow_state.js",
     "/static/js/workflow/workflow_mutations.js",
+    "/static/js/workflow/workflow_palette.js",
     "/static/js/workflow/workflow_plugin_options.js",
     "/static/js/workflow/workflow_field_renderer.js",
     "/static/js/workflow/workflow_node_template.js",
@@ -26,6 +31,7 @@
   "page_scripts": [
     "/static/js/plugins/navigation_loader.js",
     "/static/js/plugins/workflow_builder.js",
+    "/static/js/plugins/workflow_palette.js",
     "/static/js/plugins/workflow_templates.js",
     "/static/js/plugins/run_mode_toggle.js",
     "/static/js/plugins/prompt_builder.js",

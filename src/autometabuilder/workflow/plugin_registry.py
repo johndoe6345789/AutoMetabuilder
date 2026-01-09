@@ -8,6 +8,7 @@ logger = logging.getLogger("autometabuilder")
 
 
 def load_plugin_map() -> dict:
+    """Load workflow plugin map JSON."""
     map_path = os.path.join(os.path.dirname(__file__), "plugin_map.json")
     if not os.path.exists(map_path):
         return {}
@@ -21,6 +22,7 @@ def load_plugin_map() -> dict:
 
 
 class PluginRegistry:
+    """Resolve workflow plugin handlers."""
     def __init__(self, plugin_map: dict):
         self._plugins = {}
         for node_type, path in plugin_map.items():
@@ -31,4 +33,5 @@ class PluginRegistry:
                 logger.error("Failed to register plugin %s: %s", node_type, error)
 
     def get(self, node_type: str):
+        """Return plugin handler for node type."""
         return self._plugins.get(node_type)

@@ -15,7 +15,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/styles/choices.min.css">
 
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="/static/css/main.css">
+    {% set core_styles = ui_assets.get('core_styles', ['/static/css/main.css']) if ui_assets else ['/static/css/main.css'] %}
+    {% for style in core_styles %}
+    <link rel="stylesheet" href="{{ style }}">
+    {% endfor %}
 
     {% block head %}{% endblock %}
 </head>

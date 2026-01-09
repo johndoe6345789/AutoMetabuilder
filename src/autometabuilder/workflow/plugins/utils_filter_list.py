@@ -3,7 +3,8 @@ import re
 from ..value_helpers import ValueHelpers
 
 
-def run(runtime, inputs):
+def run(_runtime, inputs):
+    """Filter items using a match mode."""
     items = ValueHelpers.ensure_list(inputs.get("items"))
     mode = inputs.get("mode", "contains")
     pattern = inputs.get("pattern", "")

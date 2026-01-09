@@ -4,6 +4,7 @@ import os
 
 
 def load_tool_policies() -> dict:
+    """Load tool policies JSON."""
     path = os.path.join(os.path.dirname(__file__), "tool_policies.json")
     if not os.path.exists(path):
         return {"modifying_tools": []}

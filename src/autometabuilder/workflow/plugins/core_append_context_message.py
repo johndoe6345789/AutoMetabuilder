@@ -2,6 +2,7 @@
 
 
 def run(runtime, inputs):
+    """Append context to the message list."""
     messages = list(inputs.get("messages") or [])
     context_val = inputs.get("context")
     if context_val:

@@ -6,6 +6,7 @@ logger = logging.getLogger("autometabuilder")
 
 
 def list_files(directory: str = ".") -> str:
+    """Return newline-separated files under a directory."""
     files_list = []
     for root, _, files in os.walk(directory):
         if ".git" in root or "__pycache__" in root or ".venv" in root:

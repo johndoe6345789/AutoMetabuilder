@@ -40,10 +40,18 @@
       "description": "meta.settings.log_level.description",
       "type": "select",
       "options": [
+        "TRACE",
         "DEBUG",
         "INFO",
         "WARNING",
         "ERROR"
+      ],
+      "option_labels": [
+        "meta.settings.log_level.options.trace",
+        "meta.settings.log_level.options.debug",
+        "meta.settings.log_level.options.info",
+        "meta.settings.log_level.options.warning",
+        "meta.settings.log_level.options.error"
       ]
     },
     "APP_LANG": {
@@ -56,6 +64,13 @@
         "fr",
         "nl",
         "pirate"
+      ],
+      "option_labels": [
+        "meta.settings.app_lang.options.en",
+        "meta.settings.app_lang.options.es",
+        "meta.settings.app_lang.options.fr",
+        "meta.settings.app_lang.options.nl",
+        "meta.settings.app_lang.options.pirate"
       ]
     },
     "PROMPT_PATH": {
@@ -99,6 +114,7 @@
       "WEB_PASSWORD"
     ],
     "env_values": [
+      "TRACE",
       "INFO",
       "DEBUG",
       "WARNING",

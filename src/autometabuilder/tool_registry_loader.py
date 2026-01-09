@@ -4,6 +4,7 @@ import os
 
 
 def load_tool_registry() -> list:
+    """Load tool registry entries."""
     path = os.path.join(os.path.dirname(__file__), "tool_registry.json")
     if not os.path.exists(path):
         return []

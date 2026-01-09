@@ -8,6 +8,7 @@ logger = logging.getLogger("autometabuilder")
 
 
 def load_plugins(tool_map: dict, tools: list) -> None:
+    """Load plugin tools and append metadata."""
     plugins_dir = os.path.join(os.path.dirname(__file__), "plugins")
     if not os.path.exists(plugins_dir):
         return

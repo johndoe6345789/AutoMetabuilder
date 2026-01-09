@@ -3,6 +3,7 @@ from ...openai_client import get_completion
 
 
 def run(runtime, inputs):
+    """Invoke the model with current messages."""
     messages = list(inputs.get("messages") or [])
     response = get_completion(
         runtime.context["client"],

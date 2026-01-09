@@ -36,14 +36,15 @@
         return candidate;
     };
 
-    const addNode = (targetArray, pluginDefinitions) => {
+    const addNode = (targetArray, pluginDefinitions, typeOverride = '') => {
         const types = Object.keys(pluginDefinitions);
         const defaultType = types[0] || '';
+        const nextType = pluginDefinitions[typeOverride] ? typeOverride : defaultType;
         const node = {
-            id: generateNodeId(defaultType, targetArray),
-            type: defaultType,
-            inputs: buildDefaultFields(pluginDefinitions[defaultType]?.inputs),
-            outputs: buildDefaultFields(pluginDefinitions[defaultType]?.outputs)
+            id: generateNodeId(nextType, targetArray),
+            type: nextType,
+            inputs: buildDefaultFields(pluginDefinitions[nextType]?.inputs),
+            outputs: buildDefaultFields(pluginDefinitions[nextType]?.outputs)
         };
         targetArray.push(node);
     };

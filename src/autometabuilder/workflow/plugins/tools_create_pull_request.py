@@ -2,6 +2,7 @@
 
 
 def run(runtime, inputs):
+    """Create a pull request via tool runner."""
     result = runtime.tool_runner.call(
         "create_pull_request",
         title=inputs.get("title"),

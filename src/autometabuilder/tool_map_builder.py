@@ -3,6 +3,7 @@ from .callable_loader import load_callable
 
 
 def build_tool_map(gh, registry_entries: list) -> dict:
+    """Build tool name to callable map."""
     tool_map = {}
     for entry in registry_entries:
         name = entry.get("name")

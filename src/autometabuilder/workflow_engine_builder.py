@@ -9,6 +9,7 @@ from .workflow.tool_runner import ToolRunner
 
 
 def build_workflow_engine(workflow_config: dict, context: dict, logger):
+    """Assemble workflow engine dependencies."""
     runtime = WorkflowRuntime(context=context, store={}, tool_runner=None, logger=logger)
     tool_runner = ToolRunner(context["tool_map"], context["msgs"], logger)
     runtime.tool_runner = tool_runner
