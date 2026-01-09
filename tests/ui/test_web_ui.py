@@ -4,13 +4,20 @@ import os
 import re
 from playwright.sync_api import Page, expect
 
+UI_MESSAGES_PATH = os.path.join(os.path.dirname(__file__), "../../src/autometabuilder/messages_en.json")
+with open(UI_MESSAGES_PATH, "r", encoding="utf-8") as f:
+    UI_MESSAGES = json.load(f)
+
+def t(key, fallback=None):
+    return UI_MESSAGES.get(key, fallback or key)
+
 def test_login_and_dashboard(page: Page, server: str):
     # Go to the server with auth
     auth_url = server.replace("http://", "http://testuser:testpass@")
     page.goto(auth_url)
 
     # Check if we are on the dashboard - select h1 in the active section
-    expect(page.locator("#dashboard.active h1")).to_contain_text("Dashboard")
+    expect(page.locator("#dashboard.active h1")).to_contain_text(t("ui.dashboard.title"))
     # User info is now in sidebar footer
     expect(page.locator(".amb-sidebar-footer")).to_contain_text("testuser")
 
@@ -41,21 +48,20 @@ def test_update_prompt(page: Page, server: str):
     page.click("[data-section='prompt']")
     page.wait_for_selector("#prompt.active")
 
-    # Find prompt textarea - specifically in the prompt section
-    textarea = page.locator("#prompt textarea[name='content']")
-    original_content = textarea.input_value()
-
-    new_content = original_content + "\n# Test Comment"
-    textarea.fill(new_content)
+    system_prompt = page.locator("#prompt textarea[name='system_content']")
+    user_prompt = page.locator("#prompt textarea[name='user_content']")
+    system_prompt.fill("Test system prompt")
+    user_prompt.fill("Test user prompt")
 
     # Click save prompt
-    page.click("#prompt button:has-text('Save Prompt')")
+    page.click(f"#prompt button:has-text('{t('ui.prompt.save')}')")
 
     # Verify it updated
     page.reload()
     page.click("[data-section='prompt']")
     page.wait_for_selector("#prompt.active")
-    expect(page.locator("#prompt textarea[name='content']")).to_have_value(new_content)
+    expect(page.locator("#prompt textarea[name='system_content']")).to_have_value("Test system prompt")
+    expect(page.locator("#prompt textarea[name='user_content']")).to_have_value("Test user prompt")
 
 def test_update_settings(page: Page, server: str):
     auth_url = server.replace("http://", "http://testuser:testpass@")
@@ -68,26 +74,17 @@ def test_update_settings(page: Page, server: str):
     # Wait for Choices.js to initialize
     page.wait_for_timeout(1000)
 
-    # Add a new setting using Choices.js select
-    # Click on the outer .choices wrapper (first match only)
-    key_choices = page.locator("#settings select[name='new_env_key']").locator("xpath=ancestor::div[@class='choices' or contains(@class, 'choices ')]").first
-    key_choices.click()
-    page.keyboard.type("GITHUB_TOKEN")
-    page.keyboard.press("Enter")
+    # Add a new setting using text inputs
+    page.fill("#settings input[name='new_env_key']", "TEST_SETTING")
+    page.fill("#settings input[name='new_env_value']", "42")
 
-    # For new_env_value
-    value_choices = page.locator("#settings select[name='new_env_value']").locator("xpath=ancestor::div[@class='choices' or contains(@class, 'choices ')]").first
-    value_choices.click()
-    page.keyboard.type("DEBUG")
-    page.keyboard.press("Enter")
-
-    page.click("#settings button:has-text('Save Settings')")
+    page.click(f"#settings button:has-text('{t('ui.settings.save_all')}')")
 
     # Verify it appeared in the table
     page.reload()
     page.click("[data-section='settings']")
     page.wait_for_selector("#settings.active")
-    expect(page.locator("#settings code:has-text('GITHUB_TOKEN')")).to_be_visible()
+    expect(page.locator("#settings input[name='env_TEST_SETTING']")).to_be_visible()
 
 def test_navigation_sections(page: Page, server: str):
     """Test that sidebar navigation works correctly"""
@@ -205,11 +202,11 @@ def test_workflow_builder_renders(page: Page, server: str):
     page.wait_for_selector("#workflow-builder")
 
     # Should have at least the "Add Task" button
-    expect(page.locator("#workflow-builder button:has-text('Add Task')")).to_be_visible()
+    expect(page.locator(f"#workflow-builder button:has-text('{t('ui.workflow.add_task')}')")).to_be_visible()
 
     # Toggle raw JSON should work
-    page.click("#workflow button:has-text('Toggle Raw JSON')")
+    page.click(f"#workflow button:has-text('{t('ui.workflow.toggle_json')}')")
     expect(page.locator("#workflow-content")).to_be_visible()
 
-    page.click("#workflow button:has-text('Toggle Raw JSON')")
+    page.click(f"#workflow button:has-text('{t('ui.workflow.toggle_json')}')")
     expect(page.locator("#workflow-content")).not_to_be_visible()
