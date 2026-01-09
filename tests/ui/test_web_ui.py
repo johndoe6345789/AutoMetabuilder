@@ -49,6 +49,7 @@ def test_update_prompt(page: Page, server: str):
     page.goto(auth_url)
 
     # Navigate to prompt section
+    wait_for_nav(page)
     page.click("[data-section='prompt']")
     page.wait_for_selector("#prompt.active")
 
@@ -62,6 +63,7 @@ def test_update_prompt(page: Page, server: str):
         page.click(f"#prompt button:has-text('{t('ui.prompt.save')}')")
 
     # Verify it updated
+    wait_for_nav(page)
     page.click("[data-section='prompt']")
     page.wait_for_selector("#prompt.active")
     expect(page.locator("#prompt textarea[name='system_content']")).to_have_value("Test system prompt")
@@ -103,6 +105,7 @@ def test_navigation_sections(page: Page, server: str):
     # Navigate to each section
     sections = ["workflow", "prompt", "settings", "translations"]
     for section in sections:
+        wait_for_nav(page)
         page.click(f"[data-section='{section}']")
         page.wait_for_timeout(100)
         expect(page.locator(f"#{section}")).to_have_class(re.compile(r"active"))
