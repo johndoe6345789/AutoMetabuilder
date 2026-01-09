@@ -13,7 +13,7 @@
 - [x] **Feedback Loop**: Support for the AI to read comments on PRs it created.
 
 ## Phase 3: Advanced Automation
-- [ ] **Automated Testing**: Integration with test runners to verify changes before PR.
-- [ ] **Linting Integration**: Automatically run and fix linting issues.
-- [ ] **Multi-Model Support**: Easily switch between different LLM providers.
-- [ ] **CI/CD Integration**: Github Actions to run AutoMetabuilder on schedule or trigger.
+- [x] **Automated Testing**: Integration with test runners to verify changes before PR.
+- [x] **Linting Integration**: Automatically run and fix linting issues.
+- [x] **Multi-Model Support**: Easily switch between different LLM providers.
+- [x] **CI/CD Integration**: Github Actions to run AutoMetabuilder on schedule or trigger.

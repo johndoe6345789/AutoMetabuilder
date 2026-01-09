@@ -3,6 +3,7 @@ Main entry point for AutoMetabuilder.
 """
 import os
 import json
+import subprocess
 import yaml
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -35,7 +36,8 @@ def get_sdlc_context(gh: GitHubIntegration, msgs: dict) -> str:
             roadmap_content = f.read()
             sdlc_context += f"\n{msgs.get('roadmap_label', 'ROADMAP.md Content:')}\n{roadmap_content}\n"
     else:
-        sdlc_context += f"\n{msgs.get('missing_roadmap_msg', 'ROADMAP.md is missing. Please analyze the repository and create it.')}\n"
+        msg = msgs.get('missing_roadmap_msg', 'ROADMAP.md is missing. Please analyze the repository and create it.')
+        sdlc_context += f"\n{msg}\n"
 
     if gh:
         try:
@@ -76,6 +78,26 @@ def list_files(directory: str = "."):
     return result
 
 
+def run_tests(path: str = "tests"):
+    """Run tests using pytest."""
+    print(f"Running tests in {path}...")
+    result = subprocess.run(["pytest", path], capture_output=True, text=True, check=False)
+    print(result.stdout)
+    if result.stderr:
+        print(result.stderr)
+    return result.stdout
+
+
+def run_lint(path: str = "src"):
+    """Run linting using pylint."""
+    print(f"Running linting in {path}...")
+    result = subprocess.run(["pylint", path], capture_output=True, text=True, check=False)
+    print(result.stdout)
+    if result.stderr:
+        print(result.stderr)
+    return result.stdout
+
+
 def handle_tool_calls(resp_msg, gh: GitHubIntegration, msgs: dict):
     """Process tool calls from the AI response using a declarative mapping."""
     if not resp_msg.tool_calls:
@@ -88,6 +110,8 @@ def handle_tool_calls(resp_msg, gh: GitHubIntegration, msgs: dict):
         "get_pull_request_comments": gh.get_pull_request_comments if gh else None,
         "update_roadmap": update_roadmap,
         "list_files": list_files,
+        "run_tests": run_tests,
+        "run_lint": run_lint,
     }
 
     for tool_call in resp_msg.tool_calls:
@@ -143,14 +167,14 @@ def main():
         tools = json.load(f)
 
     # Add SDLC Context if available
-    sdlc_context = get_sdlc_context(gh, msgs)
+    sdlc_context_val = get_sdlc_context(gh, msgs)
 
     messages = prompt["messages"]
-    if sdlc_context:
+    if sdlc_context_val:
         messages.append(
             {
                 "role": "system",
-                "content": f"{msgs['sdlc_context_label']}{sdlc_context}",
+                "content": f"{msgs['sdlc_context_label']}{sdlc_context_val}",
             }
         )
 
@@ -158,7 +182,7 @@ def main():
     messages.append({"role": "user", "content": msgs["user_next_step"]})
 
     response = client.chat.completions.create(
-        model=prompt.get("model", "openai/gpt-4.1"),
+        model=os.environ.get("LLM_MODEL", prompt.get("model", "openai/gpt-4.1")),
         messages=messages,
         tools=tools,
         tool_choice="auto",

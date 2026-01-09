@@ -111,5 +111,39 @@
         }
       }
     }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "run_tests",
+      "description": "Run automated tests in the repository",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "The path to the tests directory",
+            "default": "tests"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "run_lint",
+      "description": "Run linting on the codebase",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "The path to lint",
+            "default": "src"
+          }
+        }
+      }
+    }
   }
 ]
