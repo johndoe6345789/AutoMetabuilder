@@ -1,0 +1,23 @@
+{# Atomic UI primitives for Jinja2 templates. #}
+{% macro icon(name, extra_class='') -%}
+<i class="bi bi-{{ name }} {{ extra_class | e }}"></i>
+{%- endmacro %}
+
+{% macro section_header(title, subtitle='') -%}
+<div class="amb-section-header">
+    <h1>{{ title }}</h1>
+    {% if subtitle %}
+    <p>{{ subtitle }}</p>
+    {% endif %}
+</div>
+{%- endmacro %}
+
+{% macro helper_text(text) -%}
+{% if text %}
+<p class="text-muted small mb-2">{{ text }}</p>
+{% endif %}
+{%- endmacro %}
+
+{% macro pill(text, tone='neutral') -%}
+<span class="amb-pill amb-pill-{{ tone }}">{{ text }}</span>
+{%- endmacro %}

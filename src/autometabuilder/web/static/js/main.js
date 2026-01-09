@@ -1,6 +1,8 @@
 /**
  * AutoMetabuilder - Main JavaScript
  */
+const I18N = window.AMB_I18N || {};
+const i18n = (key, fallback = '') => I18N[key] || fallback || key;
 
 /* ==========================================================================
    Theme Manager
@@ -125,10 +127,10 @@ const ChoicesManager = {
                 allowHTML: false,
                 removeItemButton: options.removeItemButton || false,
                 placeholder: true,
-                placeholderValue: el.dataset.placeholder || 'Select...',
-                searchPlaceholderValue: 'Type to search...',
-                noResultsText: 'No results found',
-                noChoicesText: 'No choices available',
+                placeholderValue: el.dataset.placeholder || i18n('ui.common.select_placeholder', 'Select...'),
+                searchPlaceholderValue: i18n('ui.choices.search_placeholder', 'Type to search...'),
+                noResultsText: i18n('ui.choices.no_results', 'No results found'),
+                noChoicesText: i18n('ui.choices.no_choices', 'No choices available'),
                 ...options
             });
             this.instances.push(instance);
@@ -210,10 +212,10 @@ const StatusPoller = {
             if (statusIndicator) {
                 if (data.is_running) {
                     statusIndicator.className = 'amb-status amb-status-running';
-                    statusIndicator.innerHTML = '<span class="amb-status-dot"></span> Running';
+                    statusIndicator.innerHTML = `<span class="amb-status-dot"></span> ${i18n('ui.dashboard.status.running', 'Running')}`;
                 } else {
                     statusIndicator.className = 'amb-status amb-status-idle';
-                    statusIndicator.innerHTML = '<span class="amb-status-dot"></span> Idle';
+                    statusIndicator.innerHTML = `<span class="amb-status-dot"></span> ${i18n('ui.dashboard.status.idle', 'Idle')}`;
                 }
             }
 
@@ -222,10 +224,10 @@ const StatusPoller = {
             if (mvpBadge) {
                 if (data.mvp_reached) {
                     mvpBadge.className = 'badge bg-primary';
-                    mvpBadge.innerHTML = '<i class="bi bi-check-circle-fill"></i> Reached';
+                    mvpBadge.innerHTML = `<i class="bi bi-check-circle-fill"></i> ${i18n('ui.dashboard.status.mvp_reached', 'Reached')}`;
                 } else {
                     mvpBadge.className = 'badge bg-secondary';
-                    mvpBadge.innerHTML = '<i class="bi bi-hourglass-split"></i> In Progress';
+                    mvpBadge.innerHTML = `<i class="bi bi-hourglass-split"></i> ${i18n('ui.dashboard.status.mvp_progress', 'In Progress')}`;
                 }
             }
 

@@ -1,0 +1,27 @@
+{# Molecular UI components composed from atoms. #}
+{% from "components/atoms.html" import icon %}
+
+{% macro card(title, icon_name=None, actions_html='') -%}
+<div class="amb-card">
+    <div class="amb-card-header">
+        <h5>
+            {% if icon_name %}{{ icon(icon_name) }}{% endif %}
+            {{ title }}
+        </h5>
+        {% if actions_html %}
+        <div class="amb-card-actions">{{ actions_html | safe }}</div>
+        {% endif %}
+    </div>
+    <div class="amb-card-body">
+        {{ caller() }}
+    </div>
+</div>
+{%- endmacro %}
+
+{% macro empty_state(icon_name, title, body) -%}
+<div class="amb-empty-state text-center text-muted py-5">
+    {{ icon(icon_name, 'amb-empty-icon') }}
+    <h6 class="mt-3">{{ title }}</h6>
+    <p class="small mb-0">{{ body }}</p>
+</div>
+{%- endmacro %}

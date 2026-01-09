@@ -10,9 +10,62 @@
   },
   "project_name": "AutoMetabuilder",
   "version": "1.0.0",
+  "settings_descriptions": {
+    "GITHUB_TOKEN": {
+      "label": "GitHub Token",
+      "description": "Personal access token for GitHub API. Required for repository operations like creating branches and pull requests.",
+      "type": "password",
+      "required": true
+    },
+    "GITHUB_REPOSITORY": {
+      "label": "GitHub Repository",
+      "description": "The repository to work with in format 'owner/repo' (e.g., 'myuser/myproject').",
+      "type": "text",
+      "placeholder": "owner/repo"
+    },
+    "OPENAI_API_KEY": {
+      "label": "OpenAI API Key",
+      "description": "API key for OpenAI services. Used for AI-powered code generation and analysis.",
+      "type": "password",
+      "required": true
+    },
+    "LITELLM_API_KEY": {
+      "label": "LiteLLM API Key",
+      "description": "Alternative API key if using LiteLLM proxy for multiple LLM providers.",
+      "type": "password"
+    },
+    "LOG_LEVEL": {
+      "label": "Log Level",
+      "description": "Controls how much detail is written to logs. DEBUG shows everything, ERROR shows only errors.",
+      "type": "select",
+      "options": ["DEBUG", "INFO", "WARNING", "ERROR"]
+    },
+    "APP_LANG": {
+      "label": "Application Language",
+      "description": "Language for bot messages and UI text.",
+      "type": "select",
+      "options": ["en", "es", "fr", "nl", "pirate"]
+    },
+    "PROMPT_PATH": {
+      "label": "Prompt File Path",
+      "description": "Path to the YAML file containing the system prompt configuration.",
+      "type": "text",
+      "default": "prompt.yml"
+    },
+    "WEB_USER": {
+      "label": "Web UI Username",
+      "description": "Username for accessing the web dashboard. Leave empty to disable authentication.",
+      "type": "text"
+    },
+    "WEB_PASSWORD": {
+      "label": "Web UI Password",
+      "description": "Password for accessing the web dashboard. Leave empty to disable authentication.",
+      "type": "password"
+    }
+  },
   "suggestions": {
     "languages": ["en", "es", "fr", "nl", "de", "it", "ja", "zh", "pirate"],
-    "env_keys": ["GITHUB_TOKEN", "OPENAI_API_KEY", "LOG_LEVEL"],
+    "env_keys": ["GITHUB_TOKEN", "GITHUB_REPOSITORY", "OPENAI_API_KEY", "LITELLM_API_KEY", "LOG_LEVEL", "APP_LANG", "PROMPT_PATH", "WEB_USER", "WEB_PASSWORD"],
     "env_values": ["INFO", "DEBUG", "WARNING", "ERROR"],
     "task_names": [
       "Initialize Project",

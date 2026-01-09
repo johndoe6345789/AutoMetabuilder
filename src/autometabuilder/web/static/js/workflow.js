@@ -9,6 +9,15 @@ const WorkflowBuilder = {
     container: null,
     textarea: null,
 
+    t(key, fallback = '') {
+        const dict = window.AMB_I18N || {};
+        return dict[key] || fallback || key;
+    },
+
+    format(text, values = {}) {
+        return text.replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
+    },
+
     init(containerId, textareaId, stepDefinitions) {
         this.container = document.getElementById(containerId);
         this.textarea = document.getElementById(textareaId);
@@ -39,48 +48,59 @@ const WorkflowBuilder = {
 
         this.container.innerHTML = '';
 
+        if (this.workflow.length === 0) {
+            this.container.innerHTML = `
+                <div class="text-center text-muted py-4">
+                    <i class="bi bi-diagram-3" style="font-size: 2.5rem;"></i>
+                    <p class="mt-2">${this.escapeHtml(this.t('ui.workflow.empty', 'No tasks yet. Click \"Add Task\" to create your first workflow task.'))}</p>
+                </div>
+            `;
+        }
+
         this.workflow.forEach((task, taskIdx) => {
             const taskCard = document.createElement('div');
-            taskCard.className = 'amb-workflow-task';
+            taskCard.className = 'amb-workflow-task mb-4';
             taskCard.innerHTML = `
                 <div class="amb-workflow-task-header">
-                    <div class="d-flex align-items-center gap-2 flex-grow-1">
-                        <input type="text" class="form-control form-control-sm" style="max-width: 200px;"
-                               value="${this.escapeHtml(task.name || '')}"
-                               data-choices data-placeholder="Task name"
+                    <div class="amb-workflow-task-main">
+                        <span class="amb-workflow-badge">${this.escapeHtml(this.format(this.t('ui.workflow.task_label', 'Task {number}'), { number: taskIdx + 1 }))}</span>
+                        <input type="text" class="form-control form-control-sm amb-workflow-input amb-workflow-title"
+                               value="${this.escapeHtml(task.name || this.t('ui.workflow.untitled_task', 'Untitled Task'))}"
                                onchange="WorkflowBuilder.updateTask(${taskIdx}, 'name', this.value)"
-                               placeholder="Task Name">
-                        <select class="form-select form-select-sm" style="max-width: 160px;"
+                               placeholder="${this.escapeHtml(this.t('ui.workflow.task_name_placeholder', 'Task Name'))}">
+                        <select class="form-select form-select-sm amb-workflow-input amb-workflow-type"
                                 onchange="WorkflowBuilder.updateTask(${taskIdx}, 'type', this.value)">
-                            <option value="" ${!task.type ? 'selected' : ''}>Standard</option>
-                            <option value="loop" ${task.type === 'loop' ? 'selected' : ''}>Loop</option>
+                            <option value="" ${!task.type ? 'selected' : ''}>${this.escapeHtml(this.t('ui.workflow.type.standard', 'Standard'))}</option>
+                            <option value="loop" ${task.type === 'loop' ? 'selected' : ''}>${this.escapeHtml(this.t('ui.workflow.type.loop', 'Loop'))}</option>
                         </select>
                         ${task.type === 'loop' ? `
-                            <input type="number" class="form-control form-control-sm" style="max-width: 80px;"
-                                   value="${task.max_iterations || 1}"
-                                   onchange="WorkflowBuilder.updateTask(${taskIdx}, 'max_iterations', parseInt(this.value))"
-                                   title="Max Iterations" min="1">
+                            <div class="amb-workflow-inline">
+                                <span class="amb-workflow-meta">${this.escapeHtml(this.t('ui.workflow.max_label', 'Max'))}</span>
+                                <input type="number" class="form-control form-control-sm amb-workflow-input"
+                                       value="${task.max_iterations || 10}" min="1"
+                                       onchange="WorkflowBuilder.updateTask(${taskIdx}, 'max_iterations', parseInt(this.value))">
+                            </div>
                         ` : ''}
                     </div>
-                    <div class="d-flex align-items-center gap-1">
-                        <button class="btn btn-sm btn-light" onclick="WorkflowBuilder.moveTask(${taskIdx}, -1)"
-                                ${taskIdx === 0 ? 'disabled' : ''} title="Move up">
-                            <i class="bi bi-arrow-up"></i>
+                    <div class="amb-workflow-task-actions">
+                        <button class="btn btn-sm btn-outline-secondary amb-icon-btn" onclick="WorkflowBuilder.moveTask(${taskIdx}, -1)"
+                                ${taskIdx === 0 ? 'disabled' : ''} title="${this.escapeHtml(this.t('ui.workflow.move_up', 'Move up'))}">
+                            <i class="bi bi-chevron-up"></i>
                         </button>
-                        <button class="btn btn-sm btn-light" onclick="WorkflowBuilder.moveTask(${taskIdx}, 1)"
-                                ${taskIdx === this.workflow.length - 1 ? 'disabled' : ''} title="Move down">
-                            <i class="bi bi-arrow-down"></i>
+                        <button class="btn btn-sm btn-outline-secondary amb-icon-btn" onclick="WorkflowBuilder.moveTask(${taskIdx}, 1)"
+                                ${taskIdx === this.workflow.length - 1 ? 'disabled' : ''} title="${this.escapeHtml(this.t('ui.workflow.move_down', 'Move down'))}">
+                            <i class="bi bi-chevron-down"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger ms-1" onclick="WorkflowBuilder.removeTask(${taskIdx})"
-                                title="Remove task">
+                        <button class="btn btn-sm btn-outline-danger amb-icon-btn" onclick="WorkflowBuilder.removeTask(${taskIdx})"
+                                title="${this.escapeHtml(this.t('ui.workflow.delete_task', 'Delete task'))}">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
                 </div>
                 <div class="amb-workflow-task-body">
                     <div class="steps-container" id="steps-${taskIdx}"></div>
-                    <button class="btn btn-sm btn-outline-primary mt-2" onclick="WorkflowBuilder.addStep(${taskIdx})">
-                        <i class="bi bi-plus-lg"></i> Add Step
+                    <button class="btn btn-sm btn-outline-primary" onclick="WorkflowBuilder.addStep(${taskIdx})">
+                        <i class="bi bi-plus-lg"></i> ${this.escapeHtml(this.t('ui.workflow.add_step', 'Add Step'))}
                     </button>
                 </div>
             `;
@@ -96,53 +116,43 @@ const WorkflowBuilder = {
         // Add task button
         const addTaskBtn = document.createElement('button');
         addTaskBtn.className = 'btn btn-primary';
-        addTaskBtn.innerHTML = '<i class="bi bi-plus-lg"></i> Add Task';
+        addTaskBtn.innerHTML = `<i class="bi bi-plus-lg"></i> ${this.escapeHtml(this.t('ui.workflow.add_task', 'Add Task'))}`;
         addTaskBtn.onclick = () => this.addTask();
         this.container.appendChild(addTaskBtn);
 
         this.sync();
-
-        // Reinitialize Choices.js for new elements
-        if (window.ChoicesManager) {
-            window.ChoicesManager.refresh();
-        }
     },
 
     createStepElement(task, taskIdx, step, stepIdx) {
         const stepDiv = document.createElement('div');
         stepDiv.className = 'amb-workflow-step';
 
-        let fieldsHtml = `
-            <select class="form-select form-select-sm mb-2" data-choices
-                    onchange="WorkflowBuilder.updateStepType(${taskIdx}, ${stepIdx}, this.value)">
-                <option value="">Select action type...</option>
-                ${Object.entries(this.stepDefinitions).map(([type, def]) =>
-                    `<option value="${type}" ${step.type === type ? 'selected' : ''}>${this.escapeHtml(def.label)}</option>`
-                ).join('')}
-            </select>
-        `;
+        const stepDef = this.stepDefinitions[step.type];
+        const stepLabel = stepDef ? stepDef.label : this.t('ui.workflow.select_action', 'Select action...');
 
-        if (step.type && this.stepDefinitions[step.type]) {
-            fieldsHtml += '<div class="row g-2 mt-2">';
-            const def = this.stepDefinitions[step.type];
-            Object.entries(def.fields || {}).forEach(([field, fieldDef]) => {
-                const val = step[field] !== undefined ? step[field] : '';
+        let fieldsHtml = '';
+        if (step.type && stepDef) {
+            fieldsHtml = '<div class="row g-2 mt-2">';
+            Object.entries(stepDef.fields || {}).forEach(([field, fieldDef]) => {
+                const val = step[field] !== undefined ? step[field] : fieldDef.default || '';
                 const isCheckbox = fieldDef.type === 'checkbox';
                 const suggestions = fieldDef.suggestions || Array.from(this.allSuggestions);
+                const selectLabel = fieldDef.default || this.t('ui.common.select_placeholder', 'Select...');
 
                 fieldsHtml += `
-                    <div class="col-md-6">
-                        <label class="form-label small fw-semibold">${this.escapeHtml(fieldDef.label)}</label>
+                    <div class="col-md-6 amb-workflow-field">
+                        <label class="form-label small text-muted mb-1">${this.escapeHtml(fieldDef.label)}</label>
                         ${isCheckbox ? `
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input"
                                        ${step[field] ? 'checked' : ''}
                                        onchange="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.checked)">
+                                <label class="form-check-label small">${this.escapeHtml(this.t('ui.workflow.field.enable', 'Enable'))}</label>
                             </div>
                         ` : `
-                            <select class="form-select form-select-sm" data-choices
+                            <select class="form-select form-select-sm"
                                     onchange="WorkflowBuilder.updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)">
-                                <option value="">${this.escapeHtml(fieldDef.default || 'Select...')}</option>
+                                <option value="">${this.escapeHtml(selectLabel)}</option>
                                 ${suggestions.map(s =>
                                     `<option value="${this.escapeHtml(s)}" ${val === s ? 'selected' : ''}>${this.escapeHtml(s)}</option>`
                                 ).join('')}
@@ -156,18 +166,28 @@ const WorkflowBuilder = {
 
         stepDiv.innerHTML = `
             <div class="amb-workflow-step-header">
-                <span class="badge bg-secondary">Step ${stepIdx + 1}</span>
-                <div class="d-flex align-items-center gap-1">
-                    <button class="btn btn-sm btn-link p-0" onclick="WorkflowBuilder.moveStep(${taskIdx}, ${stepIdx}, -1)"
-                            ${stepIdx === 0 ? 'disabled' : ''} title="Move up">
-                        <i class="bi bi-arrow-up"></i>
+                <div class="amb-workflow-step-main">
+                    <span class="amb-workflow-step-badge">${stepIdx + 1}</span>
+                    <select class="form-select form-select-sm amb-workflow-step-select"
+                            onchange="WorkflowBuilder.updateStepType(${taskIdx}, ${stepIdx}, this.value)">
+                        <option value="">${this.escapeHtml(this.t('ui.workflow.step_type_placeholder', 'Select action type...'))}</option>
+                        ${Object.entries(this.stepDefinitions).map(([type, def]) =>
+                            `<option value="${type}" ${step.type === type ? 'selected' : ''}>${this.escapeHtml(def.label)}</option>`
+                        ).join('')}
+                    </select>
+                    ${step.type ? `<span class="amb-workflow-step-hint"><i class="bi bi-arrow-right"></i></span>` : ''}
+                </div>
+                <div class="amb-workflow-step-actions">
+                    <button class="btn btn-sm btn-outline-secondary amb-icon-btn" onclick="WorkflowBuilder.moveStep(${taskIdx}, ${stepIdx}, -1)"
+                            ${stepIdx === 0 ? 'disabled' : ''} title="${this.escapeHtml(this.t('ui.workflow.move_up', 'Move up'))}">
+                        <i class="bi bi-chevron-up"></i>
                     </button>
-                    <button class="btn btn-sm btn-link p-0" onclick="WorkflowBuilder.moveStep(${taskIdx}, ${stepIdx}, 1)"
-                            ${stepIdx === (task.steps || []).length - 1 ? 'disabled' : ''} title="Move down">
-                        <i class="bi bi-arrow-down"></i>
+                    <button class="btn btn-sm btn-outline-secondary amb-icon-btn" onclick="WorkflowBuilder.moveStep(${taskIdx}, ${stepIdx}, 1)"
+                            ${stepIdx === (task.steps || []).length - 1 ? 'disabled' : ''} title="${this.escapeHtml(this.t('ui.workflow.move_down', 'Move down'))}">
+                        <i class="bi bi-chevron-down"></i>
                     </button>
-                    <button class="btn btn-sm btn-link p-0 text-danger" onclick="WorkflowBuilder.removeStep(${taskIdx}, ${stepIdx})"
-                            title="Remove step">
+                    <button class="btn btn-sm btn-outline-danger amb-icon-btn" onclick="WorkflowBuilder.removeStep(${taskIdx}, ${stepIdx})"
+                            title="${this.escapeHtml(this.t('ui.workflow.remove_step', 'Remove step'))}">
                         <i class="bi bi-x-lg"></i>
                     </button>
                 </div>
@@ -211,12 +231,12 @@ const WorkflowBuilder = {
     },
 
     addTask() {
-        this.workflow.push({ name: 'New Task', steps: [] });
+        this.workflow.push({ name: this.t('ui.workflow.new_task', 'New Task'), steps: [] });
         this.render();
     },
 
     removeTask(idx) {
-        if (confirm('Remove this task?')) {
+        if (confirm(this.t('ui.workflow.delete_task_confirm', 'Remove this task and all its steps?'))) {
             this.workflow.splice(idx, 1);
             this.render();
         }
@@ -269,8 +289,9 @@ const WorkflowBuilder = {
     },
 
     escapeHtml(text) {
+        if (text === null || text === undefined) return '';
         const div = document.createElement('div');
-        div.textContent = text;
+        div.textContent = String(text);
         return div.innerHTML;
     }
 };

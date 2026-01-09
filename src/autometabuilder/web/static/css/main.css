@@ -262,6 +262,84 @@ body {
     border-radius: 0 0 0.75rem 0.75rem;
 }
 
+.amb-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ==========================================================================
+   4.1 Callouts and Pills
+   ========================================================================== */
+.amb-callout {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 0.85rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--amb-border-color);
+    background: var(--amb-bg-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.amb-callout-info {
+    border-left: 4px solid var(--amb-accent);
+    background: rgba(13, 110, 253, 0.08);
+}
+
+.amb-callout-icon {
+    color: var(--amb-accent);
+    font-size: 1.1rem;
+    margin-top: 0.1rem;
+}
+
+.amb-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--amb-bg-tertiary);
+    color: var(--amb-text-secondary);
+}
+
+.amb-pill-warning {
+    background: rgba(255, 193, 7, 0.15);
+    color: #9a6b00;
+}
+
+.amb-pill-success {
+    background: rgba(25, 135, 84, 0.15);
+    color: var(--amb-success);
+}
+
+[data-theme="dark"] .amb-pill-warning {
+    background: rgba(210, 153, 34, 0.25);
+    color: #f0c36d;
+}
+
+[data-theme="dark"] .amb-pill-success {
+    background: rgba(63, 185, 80, 0.25);
+    color: #7ee787;
+}
+
+[data-theme="dark"] .amb-callout-info {
+    background: rgba(88, 166, 255, 0.12);
+}
+
+.amb-empty-state {
+    border: 1px dashed var(--amb-border-color);
+    border-radius: 0.75rem;
+    background: var(--amb-bg-tertiary);
+}
+
+.amb-empty-icon {
+    font-size: 3rem;
+    opacity: 0.7;
+}
+
 /* ==========================================================================
    5. Forms
    ========================================================================== */
@@ -279,6 +357,139 @@ body {
 .amb-required {
     color: var(--amb-danger);
     margin-left: 0.25rem;
+}
+
+/* Run mode choices */
+.amb-choice-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.amb-choice-card {
+    position: relative;
+    cursor: pointer;
+}
+
+.amb-choice-card input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.amb-choice-content {
+    border: 1px solid var(--amb-border-color);
+    border-radius: 0.75rem;
+    padding: 0.85rem;
+    background: var(--amb-bg-secondary);
+    transition: border-color var(--amb-transition), box-shadow var(--amb-transition), transform var(--amb-transition);
+    min-height: 120px;
+}
+
+.amb-choice-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: var(--amb-text-primary);
+}
+
+.amb-choice-text {
+    margin: 0 0 0.5rem 0;
+    color: var(--amb-text-muted);
+    font-size: 0.85rem;
+}
+
+.amb-choice-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.35rem;
+}
+
+.amb-choice-inline .form-control {
+    max-width: 90px;
+}
+
+.amb-choice-meta {
+    font-size: 0.75rem;
+    color: var(--amb-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.amb-choice-card input:checked + .amb-choice-content {
+    border-color: var(--amb-accent);
+    box-shadow: 0 0.5rem 1rem rgba(13, 110, 253, 0.15);
+    transform: translateY(-2px);
+}
+
+.amb-choice-card:hover .amb-choice-content {
+    border-color: var(--amb-accent);
+}
+
+.amb-toggle-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.amb-toggle {
+    padding: 0.35rem 0;
+}
+
+/* Prompt builder */
+.amb-prompt-step {
+    border: 1px dashed var(--amb-border-color);
+    border-radius: 0.85rem;
+    padding: 1rem;
+    background: var(--amb-bg-tertiary);
+    margin-bottom: 1rem;
+}
+
+.amb-prompt-step-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.amb-step-badge {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--amb-accent);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.amb-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.amb-chip {
+    border: 1px solid var(--amb-border-color);
+    background: var(--amb-bg-secondary);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--amb-transition);
+}
+
+.amb-chip:hover {
+    border-color: var(--amb-accent);
+    color: var(--amb-accent);
+    background: rgba(13, 110, 253, 0.08);
 }
 
 /* Form control overrides for dark mode */
@@ -406,6 +617,68 @@ body {
     --bs-table-hover-bg: var(--amb-bg-tertiary);
 }
 
+/* Translation editor */
+.amb-translation-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+
+.amb-translation-search {
+    flex: 1;
+    min-width: 220px;
+}
+
+.amb-translation-add {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+
+.amb-translation-add input {
+    flex: 1;
+    min-width: 180px;
+}
+
+.amb-translation-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.amb-translation-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.amb-translation-hint {
+    font-size: 0.75rem;
+    color: var(--amb-text-muted);
+}
+
+.amb-translation-missing {
+    background: rgba(255, 193, 7, 0.08);
+}
+
+[data-theme="dark"] .amb-translation-missing {
+    background: rgba(210, 153, 34, 0.12);
+}
+
+.amb-translation-missing code {
+    color: #9a6b00;
+}
+
+#translation-table td {
+    vertical-align: top;
+}
+
 /* ==========================================================================
    8. Logs Panel
    ========================================================================== */
@@ -469,21 +742,91 @@ body {
 .amb-workflow-task {
     background: var(--amb-bg-secondary);
     border: 1px solid var(--amb-border-color);
-    border-radius: 0.75rem;
+    border-left: 4px solid var(--amb-accent);
+    border-radius: 0.85rem;
     margin-bottom: 1rem;
     box-shadow: var(--amb-card-shadow);
-    transition: background-color var(--amb-transition), border-color var(--amb-transition);
+    overflow: hidden;
+    transition: background-color var(--amb-transition), border-color var(--amb-transition), box-shadow var(--amb-transition);
 }
 
 .amb-workflow-task-header {
-    background: var(--amb-accent);
-    color: #fff;
-    padding: 0.75rem 1rem;
-    border-radius: 0.75rem 0.75rem 0 0;
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.12), rgba(13, 110, 253, 0.02));
+    color: var(--amb-text-primary);
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--amb-border-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+}
+
+.amb-workflow-task-main {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.amb-workflow-task-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.amb-workflow-badge {
+    background: var(--amb-bg-secondary);
+    border: 1px solid var(--amb-border-color);
+    color: var(--amb-text-primary);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.amb-workflow-input {
+    background: transparent;
+    border-color: transparent;
+    color: var(--amb-text-primary);
+    box-shadow: none;
+}
+
+.amb-workflow-input:focus {
+    background: var(--amb-bg-secondary);
+    border-color: var(--amb-accent);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+.amb-workflow-title {
+    min-width: 180px;
+    max-width: 240px;
+    font-weight: 600;
+}
+
+.amb-workflow-type {
+    min-width: 140px;
+    max-width: 160px;
+}
+
+.amb-workflow-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(13, 110, 253, 0.08);
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.5rem;
+}
+
+.amb-workflow-meta {
+    font-size: 0.75rem;
+    color: var(--amb-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.amb-icon-btn {
+    padding: 0.25rem 0.4rem;
 }
 
 .amb-workflow-task-body {
@@ -491,9 +834,10 @@ body {
 }
 
 .amb-workflow-step {
-    background: var(--amb-bg-tertiary);
-    border: 1px solid var(--amb-border-color);
-    border-radius: 0.5rem;
+    background: var(--amb-bg-secondary);
+    border: 1px dashed var(--amb-border-color);
+    border-left: 3px solid var(--amb-accent);
+    border-radius: 0.65rem;
     padding: 0.75rem;
     margin-bottom: 0.75rem;
     transition: background-color var(--amb-transition), border-color var(--amb-transition);
@@ -507,7 +851,39 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 0.75rem;
     margin-bottom: 0.75rem;
+}
+
+.amb-workflow-step-main {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.amb-workflow-step-badge {
+    background: var(--amb-bg-tertiary);
+    border-radius: 0.5rem;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.amb-workflow-step-select {
+    min-width: 220px;
+}
+
+.amb-workflow-step-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.amb-workflow-step-hint {
+    color: var(--amb-text-muted);
+    font-size: 0.85rem;
 }
 
 /* ==========================================================================
@@ -624,6 +1000,10 @@ body {
 
     .amb-main {
         margin-left: 0;
+    }
+
+    .amb-choice-grid {
+        grid-template-columns: 1fr;
     }
 }
 
