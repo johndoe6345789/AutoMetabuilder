@@ -19,16 +19,21 @@ def is_mvp_reached() -> bool:
     with open("ROADMAP.md", "r", encoding="utf-8") as f:
         content = f.read()
     
-    # Find the MVP section
-    mvp_match = re.search(r"## .*?\(MVP\)(.*?)##", content, re.DOTALL | re.IGNORECASE)
-    if not mvp_match:
-        # Try finding it if it's the last section
-        mvp_match = re.search(r"## .*?\(MVP\)(.*)", content, re.DOTALL | re.IGNORECASE)
-    
-    if not mvp_match:
+    # Find the header line containing (MVP)
+    header_match = re.search(r"^## .*?\(MVP\).*?$", content, re.MULTILINE | re.IGNORECASE)
+    if not header_match:
         return False
     
-    mvp_section = mvp_match.group(1)
+    # Get the position of the header
+    start_pos = header_match.end()
+    
+    # Find the next header starting from start_pos
+    next_header_match = re.search(r"^## ", content[start_pos:], re.MULTILINE)
+    if next_header_match:
+        mvp_section = content[start_pos : start_pos + next_header_match.start()]
+    else:
+        mvp_section = content[start_pos:]
+    
     # Check if there are any unchecked items [ ]
     if "[ ]" in mvp_section:
         return False
