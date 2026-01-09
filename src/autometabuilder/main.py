@@ -4,6 +4,7 @@ Main entry point for AutoMetabuilder.
 import os
 import json
 import subprocess
+import argparse
 import yaml
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -98,10 +99,10 @@ def run_lint(path: str = "src"):
     return result.stdout
 
 
-def handle_tool_calls(resp_msg, gh: GitHubIntegration, msgs: dict):
-    """Process tool calls from the AI response using a declarative mapping."""
+def handle_tool_calls(resp_msg, gh: GitHubIntegration, msgs: dict, dry_run: bool = False, yolo: bool = False) -> list:
+    """Process tool calls from the AI response and return results for the assistant."""
     if not resp_msg.tool_calls:
-        return
+        return []
 
     # Declarative mapping of tool names to functions
     tool_map = {
@@ -114,31 +115,86 @@ def handle_tool_calls(resp_msg, gh: GitHubIntegration, msgs: dict):
         "run_lint": run_lint,
     }
 
+    # Tools that modify state and should be skipped in dry-run
+    modifying_tools = {"create_branch", "create_pull_request", "update_roadmap"}
+    tool_results = []
+
     for tool_call in resp_msg.tool_calls:
         function_name = tool_call.function.name
         args = json.loads(tool_call.function.arguments)
+        call_id = tool_call.id
 
         handler = tool_map.get(function_name)
         if handler:
+            if not yolo:
+                confirm = input(msgs.get("confirm_tool_execution", "Do you want to execute {name} with {args}? [y/N]: ").format(name=function_name, args=args))
+                if confirm.lower() != 'y':
+                    print(msgs.get("info_tool_skipped", "Skipping tool: {name}").format(name=function_name))
+                    tool_results.append({
+                        "tool_call_id": call_id,
+                        "role": "tool",
+                        "name": function_name,
+                        "content": "Skipped by user.",
+                    })
+                    continue
+
+            if dry_run and function_name in modifying_tools:
+                print(msgs.get("info_dry_run_skipping", "DRY RUN: Skipping state-modifying tool {name}").format(name=function_name))
+                tool_results.append({
+                    "tool_call_id": call_id,
+                    "role": "tool",
+                    "name": function_name,
+                    "content": "Skipped due to dry-run.",
+                })
+                continue
+
             print(msgs.get("info_executing_tool", "Executing tool: {name}").format(name=function_name))
             try:
                 result = handler(**args)
-                if result:
-                    # In a real scenario, we might want to feed this back to the AI
-                    if hasattr(result, "__iter__") and not isinstance(result, str):
-                        # Handle iterables (like PyGithub PaginatedList)
-                        for item in list(result)[:5]:
-                            print(f"- {item}")
-                    else:
-                        print(result)
+                content = str(result) if result is not None else "Success"
+                if hasattr(result, "__iter__") and not isinstance(result, str):
+                    # Handle iterables (like PyGithub PaginatedList)
+                    items = list(result)[:5]
+                    content = "\n".join([f"- {item}" for item in items])
+                    print(content)
+                elif result is not None:
+                    print(result)
+                
+                tool_results.append({
+                    "tool_call_id": call_id,
+                    "role": "tool",
+                    "name": function_name,
+                    "content": content,
+                })
             except Exception as e:
-                print(f"Error executing {function_name}: {e}")
+                error_msg = f"Error executing {function_name}: {e}"
+                print(error_msg)
+                tool_results.append({
+                    "tool_call_id": call_id,
+                    "role": "tool",
+                    "name": function_name,
+                    "content": error_msg,
+                })
         else:
-            print(msgs.get("error_tool_not_found", "Tool {name} not found or unavailable.").format(name=function_name))
+            msg = msgs.get("error_tool_not_found", "Tool {name} not found or unavailable.").format(name=function_name)
+            print(msg)
+            tool_results.append({
+                "tool_call_id": call_id,
+                "role": "tool",
+                "name": function_name,
+                "content": msg,
+            })
+    return tool_results
 
 
 def main():
     """Main function to run AutoMetabuilder."""
+    parser = argparse.ArgumentParser(description="AutoMetabuilder: AI-driven SDLC assistant.")
+    parser.add_argument("--dry-run", action="store_true", help="Do not execute state-modifying tools.")
+    parser.add_argument("--yolo", action="store_true", help="Execute tools without confirmation.")
+    parser.add_argument("--once", action="store_true", help="Run a single full iteration (AI -> Tool -> AI).")
+    args = parser.parse_args()
+
     msgs = load_messages()
     token = os.environ.get("GITHUB_TOKEN")
     if not token:
@@ -198,7 +254,27 @@ def main():
     )
 
     # Handle tool calls
-    handle_tool_calls(resp_msg, gh, msgs)
+    tool_results = handle_tool_calls(resp_msg, gh, msgs, dry_run=args.dry_run, yolo=args.yolo)
+
+    if args.once and tool_results:
+        print(msgs.get("info_second_pass", "Performing second pass with tool results..."))
+        messages.append(resp_msg)
+        messages.extend(tool_results)
+
+        response = client.chat.completions.create(
+            model=os.environ.get("LLM_MODEL", prompt.get("model", "openai/gpt-4.1")),
+            messages=messages,
+            tools=tools,
+            tool_choice="auto",
+            temperature=1.0,
+            top_p=1.0,
+        )
+        final_msg = response.choices[0].message
+        print(final_msg.content if final_msg.content else msgs["info_tool_call_requested"])
+        # In a multi-iteration loop, we would call handle_tool_calls again here.
+        # For --once, we just do one more pass.
+        if final_msg.tool_calls:
+            handle_tool_calls(final_msg, gh, msgs, dry_run=args.dry_run, yolo=args.yolo)
 
 
 if __name__ == "__main__":

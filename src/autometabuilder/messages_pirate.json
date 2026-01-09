@@ -11,5 +11,9 @@
   "error_github_repo_missing": "The GITHUB_REPOSITORY be lost at sea!",
   "sdlc_context_label": "The Ship's Log:",
   "open_issues_label": "Troubles on the horizon:",
-  "open_prs_label": "Bottles in the water:"
+  "open_prs_label": "Bottles in the water:",
+  "confirm_tool_execution": "Do ye want to fire {name} with {args}? [y/N]: ",
+  "info_tool_skipped": "Lettin' {name} sail by.",
+  "info_dry_run_skipping": "DRY RUN: Stoppin' the crew from changin' the ship's course {name}",
+  "info_second_pass": "Making a second tack with the tool's findings..."
 }

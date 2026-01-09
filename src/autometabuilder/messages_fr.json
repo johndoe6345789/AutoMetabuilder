@@ -11,5 +11,9 @@
   "error_github_repo_missing": "La variable d'environnement GITHUB_REPOSITORY n'est pas définie",
   "sdlc_context_label": "Contexte SDLC :",
   "open_issues_label": "Tickets ouverts :",
-  "open_prs_label": "Pull Requests ouvertes :"
+  "open_prs_label": "Pull Requests ouvertes :",
+  "confirm_tool_execution": "Voulez-vous exécuter {name} avec {args} ? [y/N] : ",
+  "info_tool_skipped": "Omission de l'outil : {name}",
+  "info_dry_run_skipping": "DRY RUN : Omission de l'outil de modification d'état {name}",
+  "info_second_pass": "Deuxième passage avec les résultats de l'outil..."
 }

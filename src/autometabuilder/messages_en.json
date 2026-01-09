@@ -15,5 +15,9 @@
   "roadmap_label": "ROADMAP.md Content:",
   "open_issues_label": "Open Issues:",
   "open_prs_label": "Open Pull Requests:",
-  "missing_roadmap_msg": "ROADMAP.md is missing. Please analyze the repository, create ROADMAP.md with tickboxes for completed items, and list tasks that need to be done."
+  "missing_roadmap_msg": "ROADMAP.md is missing. Please analyze the repository, create ROADMAP.md with tickboxes for completed items, and list tasks that need to be done.",
+  "confirm_tool_execution": "Do you want to execute {name} with {args}? [y/N]: ",
+  "info_tool_skipped": "Skipping tool: {name}",
+  "info_dry_run_skipping": "DRY RUN: Skipping state-modifying tool {name}",
+  "info_second_pass": "Performing second pass with tool results..."
 }

@@ -11,5 +11,9 @@
   "error_github_repo_missing": "GITHUB_REPOSITORY omgevingsvariabele is niet ingesteld",
   "sdlc_context_label": "SDLC-context:",
   "open_issues_label": "Openstaande issues:",
-  "open_prs_label": "Openstaande pull requests:"
+  "open_prs_label": "Openstaande pull requests:",
+  "confirm_tool_execution": "Wilt u {name} uitvoeren met {args}? [y/N]: ",
+  "info_tool_skipped": "Overslaan van tool: {name}",
+  "info_dry_run_skipping": "DRY RUN: Overslaan van statuswijzigende tool {name}",
+  "info_second_pass": "Tweede ronde uitvoeren met tool-resultaten..."
 }
