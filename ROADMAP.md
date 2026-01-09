@@ -34,3 +34,11 @@
 - [x] **Remote Command Execution**: Trigger bot runs from the Web UI.
 - [x] **User Authentication**: Secure the Web UI with login.
 - [x] **Visual Task Progress**: Real-time progress bars for long-running tasks.
+
+## Phase 7: Workflow UX & Component Library
+- [x] **Node-Based Workflow Engine**: Replace task steps with micro-plugin nodes (inputs/outputs, loops).
+- [x] **Workflow Templates**: Package reusable workflow presets (blank, single pass, iterative loop, plan/execute/summarize).
+- [x] **Workflow Template Picker**: AJAX-loaded catalog with localized labels/descriptions.
+- [x] **Atomic Jinja Components**: Split dashboard/prompt/settings/translations/sidebar into single-macro files.
+- [x] **AJAX Navigation Data**: Render sidebar links from API payload with a client-side fallback.
+- [ ] **n8n-Style Visual Workflow Canvas**: Graph layout, connectors, and micro-action tiles for every node type.
