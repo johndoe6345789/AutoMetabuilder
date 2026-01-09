@@ -4,6 +4,17 @@ from github.Repository import Repository
 from github.Issue import Issue
 from github.PullRequest import PullRequest
 
+import json
+
+def load_messages():
+    lang = os.environ.get("APP_LANG", "en")
+    messages_path = os.path.join(os.path.dirname(__file__), f"messages_{lang}.json")
+    if not os.path.exists(messages_path):
+        # Fallback to English if the requested language file doesn't exist
+        messages_path = os.path.join(os.path.dirname(__file__), "messages_en.json")
+    with open(messages_path, "r") as f:
+        return json.load(f)
+
 class GitHubIntegration:
     def __init__(self, token: str, repo_name: str):
         self.github = Github(token)
@@ -30,5 +41,6 @@ def get_repo_name_from_env() -> str:
     repo_name = os.environ.get("GITHUB_REPOSITORY")
     if not repo_name:
         # Fallback or error
-        raise ValueError("GITHUB_REPOSITORY environment variable not set")
+        msgs = load_messages()
+        raise ValueError(msgs["error_github_repo_missing"])
     return repo_name

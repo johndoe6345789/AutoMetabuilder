@@ -2,3 +2,4 @@ GITHUB_TOKEN=token123
 GITHUB_REPOSITORY=owner/repo
 RAW_PROMPT_URL=https://raw.githubusercontent.com/johndoe6345789/metabuilder/main/getonwithit.prompt.yml
 GITHUB_MODELS_ENDPOINT=https://models.github.ai/inference
+APP_LANG=en # Supported: en, es, fr, nl, pirate

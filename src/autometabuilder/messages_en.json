@@ -1,0 +1,15 @@
+{
+  "error_github_token_missing": "Error: GITHUB_TOKEN environment variable not set.",
+  "info_integrated_repo": "Integrated with repository: {repo_name}",
+  "warn_github_init_failed": "Warning: GitHub integration failed: {error}",
+  "error_sdlc_context": "Error fetching SDLC context: {error}",
+  "user_next_step": "What should I do next?",
+  "info_tool_call_requested": "Tool call requested...",
+  "info_executing_create_branch": "Executing: create_branch({args})",
+  "info_executing_create_pr": "Executing: create_pull_request({args})",
+  "error_github_not_available": "Error: GitHub integration not available for tool call.",
+  "error_github_repo_missing": "GITHUB_REPOSITORY environment variable not set",
+  "sdlc_context_label": "SDLC Context:",
+  "open_issues_label": "Open Issues:",
+  "open_prs_label": "Open Pull Requests:"
+}

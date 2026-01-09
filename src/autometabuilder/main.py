@@ -17,19 +17,29 @@ def load_prompt_yaml(url: str, token: str) -> dict:
     r.raise_for_status()
     return yaml.safe_load(r.text)
 
+def load_messages():
+    lang = os.environ.get("APP_LANG", "en")
+    messages_path = os.path.join(os.path.dirname(__file__), f"messages_{lang}.json")
+    if not os.path.exists(messages_path):
+        # Fallback to English if the requested language file doesn't exist
+        messages_path = os.path.join(os.path.dirname(__file__), "messages_en.json")
+    with open(messages_path, "r") as f:
+        return json.load(f)
+
 def main():
+    msgs = load_messages()
     token = os.environ.get("GITHUB_TOKEN")
     if not token:
-        print("Error: GITHUB_TOKEN environment variable not set.")
+        print(msgs["error_github_token_missing"])
         return
 
     # Initialize GitHub Integration
     try:
         repo_name = get_repo_name_from_env()
         gh = GitHubIntegration(token, repo_name)
-        print(f"Integrated with repository: {repo_name}")
+        print(msgs["info_integrated_repo"].format(repo_name=repo_name))
     except Exception as e:
-        print(f"Warning: GitHub integration failed: {e}")
+        print(msgs["warn_github_init_failed"].format(error=e))
         gh = None
 
     endpoint = os.environ.get("GITHUB_MODELS_ENDPOINT", DEFAULT_ENDPOINT)
@@ -57,20 +67,20 @@ def main():
             issues = gh.get_open_issues()
             issue_list = "\n".join([f"- #{i.number}: {i.title}" for i in issues[:5]])
             if issue_list:
-                sdlc_context += f"\nOpen Issues:\n{issue_list}"
+                sdlc_context += f"\n{msgs['open_issues_label']}\n{issue_list}"
             
             prs = gh.get_pull_requests()
             pr_list = "\n".join([f"- #{p.number}: {p.title}" for p in prs[:5]])
             if pr_list:
-                sdlc_context += f"\nOpen Pull Requests:\n{pr_list}"
+                sdlc_context += f"\n{msgs['open_prs_label']}\n{pr_list}"
         except Exception as e:
-            print(f"Error fetching SDLC context: {e}")
+            print(msgs["error_sdlc_context"].format(error=e))
 
     if sdlc_context:
-        messages.append({"role": "system", "content": f"SDLC Context:{sdlc_context}"})
+        messages.append({"role": "system", "content": f"{msgs['sdlc_context_label']}{sdlc_context}"})
 
     # Add runtime request
-    messages.append({"role": "user", "content": "What should I do next?"})
+    messages.append({"role": "user", "content": msgs["user_next_step"]})
 
     response = client.chat.completions.create(
         model=model,
@@ -82,7 +92,7 @@ def main():
     )
 
     response_message = response.choices[0].message
-    print(response_message.content if response_message.content else "Tool call requested...")
+    print(response_message.content if response_message.content else msgs["info_tool_call_requested"])
 
     # Handle tool calls
     if response_message.tool_calls:
@@ -92,17 +102,17 @@ def main():
             
             if function_name == "create_branch":
                 if gh:
-                    print(f"Executing: create_branch({args})")
+                    print(msgs["info_executing_create_branch"].format(args=args))
                     gh.create_branch(**args)
                 else:
-                    print("Error: GitHub integration not available for tool call.")
+                    print(msgs["error_github_not_available"])
             
             elif function_name == "create_pull_request":
                 if gh:
-                    print(f"Executing: create_pull_request({args})")
+                    print(msgs["info_executing_create_pr"].format(args=args))
                     gh.create_pull_request(**args)
                 else:
-                    print("Error: GitHub integration not available for tool call.")
+                    print(msgs["error_github_not_available"])
 
 if __name__ == "__main__":
     main()

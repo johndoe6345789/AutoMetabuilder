@@ -1,0 +1,15 @@
+{
+  "error_github_token_missing": "Erreur : la variable d'environnement GITHUB_TOKEN n'est pas définie.",
+  "info_integrated_repo": "Intégré au dépôt : {repo_name}",
+  "warn_github_init_failed": "Avertissement : l'intégration GitHub a échoué : {error}",
+  "error_sdlc_context": "Erreur lors de la récupération du contexte SDLC : {error}",
+  "user_next_step": "Que dois-je faire ensuite ?",
+  "info_tool_call_requested": "Appel d'outil demandé...",
+  "info_executing_create_branch": "Exécution : create_branch({args})",
+  "info_executing_create_pr": "Exécution : create_pull_request({args})",
+  "error_github_not_available": "Erreur : l'intégration GitHub n'est pas disponible pour l'appel d'outil.",
+  "error_github_repo_missing": "La variable d'environnement GITHUB_REPOSITORY n'est pas définie",
+  "sdlc_context_label": "Contexte SDLC :",
+  "open_issues_label": "Tickets ouverts :",
+  "open_prs_label": "Pull Requests ouvertes :"
+}

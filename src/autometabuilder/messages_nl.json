@@ -1,0 +1,15 @@
+{
+  "error_github_token_missing": "Fout: GITHUB_TOKEN omgevingsvariabele is niet ingesteld.",
+  "info_integrated_repo": "Geïntegreerd met repository: {repo_name}",
+  "warn_github_init_failed": "Waarschuwing: GitHub-integratie mislukt: {error}",
+  "error_sdlc_context": "Fout bij het ophalen van SDLC-context: {error}",
+  "user_next_step": "Wat moet ik nu doen?",
+  "info_tool_call_requested": "Tool-aanroep aangevraagd...",
+  "info_executing_create_branch": "Uitvoeren: create_branch({args})",
+  "info_executing_create_pr": "Uitvoeren: create_pull_request({args})",
+  "error_github_not_available": "Fout: GitHub-integratie niet beschikbaar voor tool-aanroep.",
+  "error_github_repo_missing": "GITHUB_REPOSITORY omgevingsvariabele is niet ingesteld",
+  "sdlc_context_label": "SDLC-context:",
+  "open_issues_label": "Openstaande issues:",
+  "open_prs_label": "Openstaande pull requests:"
+}
