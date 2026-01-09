@@ -10,6 +10,7 @@
             window.AMBWorkflowState?.setPlugins?.(pluginDefinitions);
             window.AMBWorkflowState?.loadFromTextarea?.();
             rerender();
+            window.AMBWorkflowPalette?.init?.();
         },
 
         toggleRaw() {
