@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from . import load_messages
 from .github_integration import GitHubIntegration, get_repo_name_from_env
+from .docker_utils import run_command_in_docker
 
 load_dotenv()
 
@@ -99,6 +100,15 @@ def run_lint(path: str = "src"):
     return result.stdout
 
 
+def run_docker_task(image: str, command: str, workdir: str = "/workspace"):
+    """
+    Run a task inside a Docker container.
+    Volumes are automatically mapped from current directory to /workspace.
+    """
+    volumes = {os.getcwd(): "/workspace"}
+    return run_command_in_docker(image, command, volumes=volumes, workdir=workdir)
+
+
 def handle_tool_calls(resp_msg, gh: GitHubIntegration, msgs: dict, dry_run: bool = False, yolo: bool = False) -> list:
     """Process tool calls from the AI response and return results for the assistant."""
     if not resp_msg.tool_calls:
@@ -113,6 +123,7 @@ def handle_tool_calls(resp_msg, gh: GitHubIntegration, msgs: dict, dry_run: bool
         "list_files": list_files,
         "run_tests": run_tests,
         "run_lint": run_lint,
+        "run_docker_task": run_docker_task,
     }
 
     # Tools that modify state and should be skipped in dry-run

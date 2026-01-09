@@ -145,5 +145,34 @@
         }
       }
     }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "run_docker_task",
+      "description": "Run a task inside a Docker container. Useful for git clone, TypeScript, or Python tasks in a isolated environment.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "string",
+            "description": "The Docker image to use (e.g., 'python:3.9', 'node:lts', 'alpine/git')"
+          },
+          "command": {
+            "type": "string",
+            "description": "The command to run inside the container"
+          },
+          "workdir": {
+            "type": "string",
+            "description": "The working directory inside the container",
+            "default": "/workspace"
+          }
+        },
+        "required": [
+          "image",
+          "command"
+        ]
+      }
+    }
   }
 ]

@@ -17,3 +17,10 @@
 - [x] **Linting Integration**: Automatically run and fix linting issues.
 - [x] **Multi-Model Support**: Easily switch between different LLM providers.
 - [x] **CI/CD Integration**: Github Actions to run AutoMetabuilder on schedule or trigger.
+
+## Phase 4: Optimization & Scalability
+- [/] **Dockerization**: Provide a Dockerfile and docker-compose for easy environment setup. Added `run_docker_task` tool.
+- [ ] **Extended Toolset**: Add tools for dependency management (poetry) and file manipulation (read/write/edit).
+- [ ] **Self-Improvement**: Allow the bot to suggest and apply changes to its own `prompt.yml` or `tools.json`.
+- [ ] **Robust Error Handling**: Implement exponential backoff for API calls and better error recovery.
+- [ ] **Monitoring & Logging**: Structured logging and status reporting for long-running tasks.
