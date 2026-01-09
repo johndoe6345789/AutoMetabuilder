@@ -1,0 +1,13 @@
+{
+  "tools_path": "tools.json",
+  "workflow_path": "workflow.json",
+  "messages": {
+    "en": "messages_en.json",
+    "es": "messages_es.json",
+    "fr": "messages_fr.json",
+    "nl": "messages_nl.json",
+    "pirate": "messages_pirate.json"
+  },
+  "project_name": "AutoMetabuilder",
+  "version": "1.0.0"
+}

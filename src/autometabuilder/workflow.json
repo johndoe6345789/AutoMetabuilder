@@ -1,0 +1,39 @@
+[
+  {
+    "name": "initialize_sdlc",
+    "steps": [
+      {
+        "type": "load_context",
+        "output_key": "sdlc_context"
+      },
+      {
+        "type": "prepare_messages",
+        "input_context": "sdlc_context",
+        "output_key": "messages"
+      }
+    ]
+  },
+  {
+    "name": "main_loop",
+    "type": "loop",
+    "max_iterations": 10,
+    "steps": [
+      {
+        "type": "llm_gen",
+        "input_messages": "messages",
+        "output_key": "llm_response"
+      },
+      {
+        "type": "process_response",
+        "input_response": "llm_response",
+        "output_key": "tool_results",
+        "stop_if_no_tools": true
+      },
+      {
+        "type": "update_messages",
+        "input_results": "tool_results",
+        "target_messages": "messages"
+      }
+    ]
+  }
+]

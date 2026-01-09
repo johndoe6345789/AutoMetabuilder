@@ -92,6 +92,16 @@
             </form>
         </div>
     </div>
+
+    <div class="row mt-4 mb-5">
+        <div class="col-12">
+            <h2>Workflow (workflow.json)</h2>
+            <form action="/workflow" method="post">
+                <textarea name="content" class="form-control" rows="15">{{ workflow_content }}</textarea>
+                <button type="submit" class="btn btn-success mt-2">Save Workflow</button>
+            </form>
+        </div>
+    </div>
     <script>
         async function refreshLogs() {
             try {

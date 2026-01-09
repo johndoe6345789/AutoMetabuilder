@@ -270,6 +270,139 @@ def handle_tool_calls(resp_msg, tool_map: dict, gh: GitHubIntegration, msgs: dic
     return tool_results
 
 
+class WorkflowEngine:
+    """Interpret and execute a JSON-defined workflow."""
+
+    def __init__(self, workflow_config, context):
+        self.workflow_config = workflow_config
+        self.context = context
+        self.state = {}
+
+    def execute(self):
+        """Execute the workflow sequence."""
+        for phase in self.workflow_config:
+            if phase.get("type") == "loop":
+                self._execute_loop(phase)
+            else:
+                self._execute_phase(phase)
+
+    def _execute_phase(self, phase):
+        """Execute a phase which contains steps."""
+        logger.info(f"--- Executing phase: {phase.get('name', 'unnamed')} ---")
+        for step in phase.get("steps", []):
+            self._execute_step(step)
+
+    def _execute_loop(self, phase):
+        """Execute a loop of steps."""
+        max_iterations = phase.get("max_iterations", 10)
+        if self.context["args"].once:
+            max_iterations = 2 # At most 2 passes for --once
+
+        iteration = 0
+        while iteration < max_iterations:
+            iteration += 1
+            logger.info(f"--- {phase.get('name', 'loop')} Iteration {iteration} ---")
+            should_stop = False
+            for step in phase.get("steps", []):
+                result = self._execute_step(step)
+                if step.get("stop_if_no_tools") and result is True:
+                    should_stop = True
+                    break
+            
+            if should_stop or (self.context["args"].once and iteration >= 1 and not self.state.get("llm_response").tool_calls):
+                 break
+            
+            if self.context["args"].once and iteration == 2:
+                break
+
+    def _execute_step(self, step):
+        """Execute a single workflow step."""
+        step_type = step.get("type")
+        output_key = step.get("output_key")
+
+        try:
+            if step_type == "load_context":
+                sdlc_context = get_sdlc_context(self.context["gh"], self.context["msgs"])
+                if output_key:
+                    self.state[output_key] = sdlc_context
+                return sdlc_context
+
+            elif step_type == "prepare_messages":
+                prompt = self.context["prompt"]
+                msgs = self.context["msgs"]
+                sdlc_context_val = self.state.get(step.get("input_context"))
+                messages = list(prompt["messages"]) # Copy to avoid mutating original prompt
+                if sdlc_context_val:
+                    messages.append(
+                        {
+                            "role": "system",
+                            "content": f"{msgs['sdlc_context_label']}{sdlc_context_val}",
+                        }
+                    )
+                messages.append({"role": "user", "content": msgs["user_next_step"]})
+                if output_key:
+                    self.state[output_key] = messages
+                return messages
+
+            elif step_type == "llm_gen":
+                messages = self.state.get(step.get("input_messages"))
+                response = get_completion(
+                    self.context["client"],
+                    self.context["model_name"],
+                    messages,
+                    self.context["tools"]
+                )
+                resp_msg = response.choices[0].message
+                logger.info(
+                    resp_msg.content
+                    if resp_msg.content
+                    else self.context["msgs"]["info_tool_call_requested"]
+                )
+                messages.append(resp_msg)  # Append AI response to messages
+                if output_key:
+                    self.state[output_key] = resp_msg
+                return resp_msg
+
+            elif step_type == "process_response":
+                resp_msg = self.state.get(step.get("input_response"))
+                tool_results = handle_tool_calls(
+                    resp_msg,
+                    self.context["tool_map"],
+                    self.context["gh"],
+                    self.context["msgs"],
+                    dry_run=self.context["args"].dry_run,
+                    yolo=self.context["args"].yolo
+                )
+                if output_key:
+                    self.state[output_key] = tool_results
+                
+                if step.get("stop_if_no_tools") and not resp_msg.tool_calls:
+                    notify_all(f"AutoMetabuilder task complete: {resp_msg.content[:100]}...")
+                    return True # Signal to stop loop
+                return False
+
+            elif step_type == "update_messages":
+                tool_results = self.state.get(step.get("input_results"))
+                target_messages = self.state.get(step.get("target_messages"))
+                if tool_results and target_messages is not None:
+                    target_messages.extend(tool_results)
+                
+                # Check for MVP if yolo
+                if self.context["args"].yolo and is_mvp_reached():
+                    logger.info("MVP reached. Stopping YOLO loop.")
+                    notify_all("AutoMetabuilder YOLO loop stopped: MVP reached.")
+                    return True
+
+            else:
+                logger.error(f"Unknown step type: {step_type}")
+
+        except Exception as e:
+            logger.error(f"Error executing step {step_type}: {e}")
+            raise
+
+        return None
+
+
 def main():
     """Main function to run AutoMetabuilder."""
     parser = argparse.ArgumentParser(description="AutoMetabuilder: AI-driven SDLC assistant.")
@@ -306,8 +439,13 @@ def main():
 
     prompt = load_prompt_yaml()
 
+    # Load Metadata
+    metadata_path = os.path.join(os.path.dirname(__file__), "metadata.json")
+    with open(metadata_path, "r", encoding="utf-8") as f:
+        metadata = json.load(f)
+
     # Load tools for SDLC operations from JSON file
-    tools_path = os.path.join(os.path.dirname(__file__), "tools.json")
+    tools_path = os.path.join(os.path.dirname(__file__), metadata.get("tools_path", "tools.json"))
     with open(tools_path, "r", encoding="utf-8") as f:
         tools = json.load(f)
 
@@ -329,71 +467,27 @@ def main():
     # Load plugins and update tool_map and tools list
     load_plugins(tool_map, tools)
 
-    # Add SDLC Context if available
-    sdlc_context_val = get_sdlc_context(gh, msgs)
-
-    messages = prompt["messages"]
-    if sdlc_context_val:
-        messages.append(
-            {
-                "role": "system",
-                "content": f"{msgs['sdlc_context_label']}{sdlc_context_val}",
-            }
-        )
-
-    # Add runtime request
-    messages.append({"role": "user", "content": msgs["user_next_step"]})
-
     model_name = os.environ.get("LLM_MODEL", prompt.get("model", DEFAULT_MODEL))
 
-    # Multi-iteration loop
-    iteration = 0
-    max_iterations = 10
-    
-    while iteration < max_iterations:
-        iteration += 1
-        logger.info(f"--- Iteration {iteration} ---")
-        
-        response = get_completion(client, model_name, messages, tools)
-        resp_msg = response.choices[0].message
-        
-        logger.info(
-            resp_msg.content
-            if resp_msg.content
-            else msgs["info_tool_call_requested"]
-        )
-        
-        messages.append(resp_msg)
-        
-        if not resp_msg.tool_calls:
-            # If no more tools requested, we are done
-            notify_all(f"AutoMetabuilder task complete: {resp_msg.content[:100]}...")
-            break
-            
-        # Handle tool calls
-        tool_results = handle_tool_calls(resp_msg, tool_map, gh, msgs, dry_run=args.dry_run, yolo=args.yolo)
-        messages.extend(tool_results)
+    # Load Workflow
+    workflow_path = os.path.join(os.path.dirname(__file__), metadata.get("workflow_path", "workflow.json"))
+    with open(workflow_path, "r", encoding="utf-8") as f:
+        workflow_config = json.load(f)
 
-        if args.yolo and is_mvp_reached():
-            logger.info("MVP reached. Stopping YOLO loop.")
-            notify_all("AutoMetabuilder YOLO loop stopped: MVP reached.")
-            break
-        
-        if args.once:
-            # If --once is set, we do one more pass to show the final result
-            logger.info(msgs.get("info_second_pass", "Performing second pass with tool results..."))
-            response = get_completion(client, model_name, messages, tools)
-            final_msg = response.choices[0].message
-            logger.info(final_msg.content if final_msg.content else msgs["info_tool_call_requested"])
-            notify_all(f"AutoMetabuilder task complete: {final_msg.content[:100]}...")
-            
-            # For --once, we still handle tool calls if any in the second pass, but then stop.
-            if final_msg.tool_calls:
-                handle_tool_calls(final_msg, tool_map, gh, msgs, dry_run=args.dry_run, yolo=args.yolo)
-            break
-    else:
-        logger.warning(f"Reached maximum iterations ({max_iterations}). Stopping.")
-        notify_all(f"AutoMetabuilder stopped: Reached {max_iterations} iterations.")
+    # Initialize Context for Workflow Engine
+    workflow_context = {
+        "gh": gh,
+        "msgs": msgs,
+        "client": client,
+        "prompt": prompt,
+        "tools": tools,
+        "tool_map": tool_map,
+        "model_name": model_name,
+        "args": args
+    }
+
+    engine = WorkflowEngine(workflow_config, workflow_context)
+    engine.execute()
 
 
 if __name__ == "__main__":

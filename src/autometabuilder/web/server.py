@@ -70,7 +70,21 @@ def get_env_vars():
             env_vars[key] = value
     return env_vars
 
+def get_metadata():
+    pkg_dir = os.path.dirname(os.path.dirname(__file__))
+    metadata_path = os.path.join(pkg_dir, "metadata.json")
+    if not os.path.exists(metadata_path):
+        return {}
+    with open(metadata_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
 def get_translations():
+    metadata = get_metadata()
+    messages_map = metadata.get("messages", {})
+    if messages_map:
+        return messages_map
+    
+    # Fallback to scanning if metadata is empty
     pkg_dir = os.path.dirname(os.path.dirname(__file__))
     files = [f for f in os.listdir(pkg_dir) if f.startswith("messages_") and f.endswith(".json")]
     translations = {}
@@ -86,12 +100,23 @@ def get_prompt_content():
     with open(prompt_path, "r", encoding="utf-8") as f:
         return f.read()
 
+def get_workflow_content():
+    pkg_dir = os.path.dirname(os.path.dirname(__file__))
+    metadata = get_metadata()
+    workflow_file = metadata.get("workflow_path", "workflow.json")
+    workflow_path = os.path.join(pkg_dir, workflow_file)
+    if not os.path.exists(workflow_path):
+        return ""
+    with open(workflow_path, "r", encoding="utf-8") as f:
+        return f.read()
+
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request, username: str = Depends(get_current_user)):
     logs = get_recent_logs()
     env_vars = get_env_vars()
     translations = get_translations()
     prompt_content = get_prompt_content()
+    workflow_content = get_workflow_content()
     is_running = bot_process is not None
     mvp_status = is_mvp_reached()
     return templates.TemplateResponse("index.html", {
@@ -100,6 +125,7 @@ async def read_item(request: Request, username: str = Depends(get_current_user))
         "env_vars": env_vars,
         "translations": translations,
         "prompt_content": prompt_content,
+        "workflow_content": workflow_content,
         "is_running": is_running,
         "mvp_reached": mvp_status,
         "username": username
@@ -116,6 +142,16 @@ async def run_bot(background_tasks: BackgroundTasks, username: str = Depends(get
 async def update_prompt(content: str = Form(...), username: str = Depends(get_current_user)):
     prompt_path = os.environ.get("PROMPT_PATH", "prompt.yml")
     with open(prompt_path, "w", encoding="utf-8") as f:
+        f.write(content)
+    return RedirectResponse(url="/", status_code=303)
+
+@app.post("/workflow")
+async def update_workflow(content: str = Form(...), username: str = Depends(get_current_user)):
+    pkg_dir = os.path.dirname(os.path.dirname(__file__))
+    metadata = get_metadata()
+    workflow_file = metadata.get("workflow_path", "workflow.json")
+    workflow_path = os.path.join(pkg_dir, workflow_file)
+    with open(workflow_path, "w", encoding="utf-8") as f:
         f.write(content)
     return RedirectResponse(url="/", status_code=303)
 
@@ -150,14 +186,27 @@ async def get_logs(username: str = Depends(get_current_user)):
 @app.post("/translations")
 async def create_translation(lang: str = Form(...), username: str = Depends(get_current_user)):
     pkg_dir = os.path.dirname(os.path.dirname(__file__))
-    en_path = os.path.join(pkg_dir, "messages_en.json")
-    new_path = os.path.join(pkg_dir, f"messages_{lang}.json")
+    metadata = get_metadata()
+    messages_map = metadata.get("messages", {})
+    
+    en_file = messages_map.get("en", "messages_en.json")
+    en_path = os.path.join(pkg_dir, en_file)
+    
+    new_file = f"messages_{lang}.json"
+    new_path = os.path.join(pkg_dir, new_file)
     
     if not os.path.exists(new_path):
         with open(en_path, "r", encoding="utf-8") as f:
             content = json.load(f)
         with open(new_path, "w", encoding="utf-8") as f:
             json.dump(content, f, indent=2)
+        
+        # Update metadata.json
+        messages_map[lang] = new_file
+        metadata["messages"] = messages_map
+        metadata_path = os.path.join(pkg_dir, "metadata.json")
+        with open(metadata_path, "w", encoding="utf-8") as f:
+            json.dump(metadata, f, indent=2)
             
     return RedirectResponse(url="/", status_code=303)
 
