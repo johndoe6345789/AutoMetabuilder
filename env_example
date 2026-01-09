@@ -5,3 +5,9 @@ GITHUB_MODELS_ENDPOINT=https://models.github.ai/inference
 APP_LANG=en # Supported: en, es, fr, nl, pirate
 WEB_USER=admin
 WEB_PASSWORD=password
+LLM_MODEL=gpt-4o
+# Optional Notifications
+SLACK_BOT_TOKEN=
+SLACK_CHANNEL=
+DISCORD_BOT_TOKEN=
+DISCORD_CHANNEL_ID=
