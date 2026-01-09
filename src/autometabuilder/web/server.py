@@ -162,6 +162,19 @@ def get_metadata():
     with open(metadata_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+def get_ui_assets():
+    assets_path = os.path.join(os.path.dirname(__file__), "ui_assets.json")
+    if not os.path.exists(assets_path):
+        return {"core_scripts": [], "workflow_scripts": [], "page_scripts": []}
+    try:
+        with open(assets_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except json.JSONDecodeError:
+        return {"core_scripts": [], "workflow_scripts": [], "page_scripts": []}
+    if not isinstance(data, dict):
+        return {"core_scripts": [], "workflow_scripts": [], "page_scripts": []}
+    return data
+
 def load_translation_file(messages_map, lang):
     pkg_dir = os.path.dirname(os.path.dirname(__file__))
     messages_file = messages_map.get(lang, f"messages_{lang}.json")
@@ -285,6 +298,7 @@ async def read_item(request: Request, username: str = Depends(get_current_user))
     env_vars = get_env_vars()
     translations = get_translations()
     metadata = get_metadata()
+    ui_assets = get_ui_assets()
     prompt_content = get_prompt_content()
     workflow_content = get_workflow_content()
     is_running = bot_process is not None or mock_running
@@ -300,6 +314,7 @@ async def read_item(request: Request, username: str = Depends(get_current_user))
         "env_vars": env_vars,
         "translations": translations,
         "metadata": metadata,
+        "ui_assets": ui_assets,
         "prompt_content": prompt_content,
         "workflow_content": workflow_content,
         "is_running": is_running,

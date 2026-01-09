@@ -34,17 +34,7 @@
     <!-- Choices.js -->
     <script src="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/scripts/choices.min.js"></script>
 
-    {% set core_scripts = [
-        '/static/js/app_context.js',
-        '/static/js/plugin_registry.js',
-        '/static/js/services/toast.js',
-        '/static/js/plugins/theme_manager.js',
-        '/static/js/plugins/navigation_manager.js',
-        '/static/js/plugins/choices_manager.js',
-        '/static/js/plugins/workflow_toggle.js',
-        '/static/js/plugins/form_validator.js',
-        '/static/js/plugins/status_poller.js'
-    ] %}
+    {% set core_scripts = ui_assets.get('core_scripts', []) if ui_assets else [] %}
     {% for script in core_scripts %}
     <script src="{{ script }}"></script>
     {% endfor %}

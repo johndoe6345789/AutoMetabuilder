@@ -1,0 +1,37 @@
+{
+  "core_scripts": [
+    "/static/js/app_context.js",
+    "/static/js/plugin_registry.js",
+    "/static/js/services/toast.js",
+    "/static/js/plugins/theme_manager.js",
+    "/static/js/plugins/navigation_manager.js",
+    "/static/js/plugins/choices_manager.js",
+    "/static/js/plugins/workflow_toggle.js",
+    "/static/js/plugins/form_validator.js",
+    "/static/js/plugins/status_poller.js"
+  ],
+  "workflow_scripts": [
+    "/static/js/workflow/workflow_utils.js",
+    "/static/js/workflow/workflow_state.js",
+    "/static/js/workflow/workflow_mutations.js",
+    "/static/js/workflow/workflow_plugin_options.js",
+    "/static/js/workflow/workflow_field_renderer.js",
+    "/static/js/workflow/workflow_node_template.js",
+    "/static/js/workflow/workflow_node_events.js",
+    "/static/js/workflow/workflow_loop_renderer.js",
+    "/static/js/workflow/workflow_node_renderer.js",
+    "/static/js/workflow/workflow_canvas_renderer.js",
+    "/static/js/workflow/workflow_builder.js"
+  ],
+  "page_scripts": [
+    "/static/js/plugins/navigation_loader.js",
+    "/static/js/plugins/workflow_builder.js",
+    "/static/js/plugins/workflow_templates.js",
+    "/static/js/plugins/run_mode_toggle.js",
+    "/static/js/plugins/prompt_builder.js",
+    "/static/js/plugins/translation_editor_base.js",
+    "/static/js/plugins/translation_editor_render.js",
+    "/static/js/plugins/translation_editor_actions.js",
+    "/static/js/plugins/translation_editor_network.js"
+  ]
+}

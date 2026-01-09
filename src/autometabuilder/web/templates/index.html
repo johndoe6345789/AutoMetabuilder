@@ -14,33 +14,11 @@
 {% endblock %}
 
 {% block scripts %}
-{% set workflow_scripts = [
-    '/static/js/workflow/workflow_utils.js',
-    '/static/js/workflow/workflow_state.js',
-    '/static/js/workflow/workflow_mutations.js',
-    '/static/js/workflow/workflow_plugin_options.js',
-    '/static/js/workflow/workflow_field_renderer.js',
-    '/static/js/workflow/workflow_node_template.js',
-    '/static/js/workflow/workflow_node_events.js',
-    '/static/js/workflow/workflow_loop_renderer.js',
-    '/static/js/workflow/workflow_node_renderer.js',
-    '/static/js/workflow/workflow_canvas_renderer.js',
-    '/static/js/workflow/workflow_builder.js'
-] %}
+{% set workflow_scripts = ui_assets.get('workflow_scripts', []) if ui_assets else [] %}
 {% for script in workflow_scripts %}
 <script src="{{ script }}"></script>
 {% endfor %}
-{% set page_scripts = [
-    '/static/js/plugins/navigation_loader.js',
-    '/static/js/plugins/workflow_builder.js',
-    '/static/js/plugins/workflow_templates.js',
-    '/static/js/plugins/run_mode_toggle.js',
-    '/static/js/plugins/prompt_builder.js',
-    '/static/js/plugins/translation_editor_base.js',
-    '/static/js/plugins/translation_editor_render.js',
-    '/static/js/plugins/translation_editor_actions.js',
-    '/static/js/plugins/translation_editor_network.js'
-] %}
+{% set page_scripts = ui_assets.get('page_scripts', []) if ui_assets else [] %}
 {% for script in page_scripts %}
 <script src="{{ script }}"></script>
 {% endfor %}
