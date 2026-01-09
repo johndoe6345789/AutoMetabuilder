@@ -3,7 +3,6 @@ Main entry point for AutoMetabuilder.
 """
 import os
 import json
-import requests
 import yaml
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -13,27 +12,17 @@ from .github_integration import GitHubIntegration, get_repo_name_from_env
 load_dotenv()
 
 DEFAULT_PROMPT_PATH = "prompt.yml"
-DEFAULT_RAW_PROMPT_URL = (
-    "https://raw.githubusercontent.com/johndoe6345789/"
-    "metabuilder/main/getonwithit.prompt.yml"
-)
 DEFAULT_ENDPOINT = "https://models.github.ai/inference"
 
 
-def load_prompt_yaml(token: str) -> dict:
-    """Load prompt configuration from local file or remote URL."""
-    # Try local file first
+def load_prompt_yaml() -> dict:
+    """Load prompt configuration from local file."""
     local_path = os.environ.get("PROMPT_PATH", DEFAULT_PROMPT_PATH)
     if os.path.exists(local_path):
         with open(local_path, "r", encoding="utf-8") as f:
             return yaml.safe_load(f)
 
-    # Fallback to remote URL
-    url = os.environ.get("RAW_PROMPT_URL", DEFAULT_RAW_PROMPT_URL)
-    headers = {"Authorization": f"Bearer {token}"}
-    r = requests.get(url, headers=headers, timeout=30)
-    r.raise_for_status()
-    return yaml.safe_load(r.text)
+    raise FileNotFoundError(f"Prompt file not found at {local_path}")
 
 
 def get_sdlc_context(gh: GitHubIntegration, msgs: dict) -> str:
@@ -103,7 +92,7 @@ def main():
         api_key=token,
     )
 
-    prompt = load_prompt_yaml(token)
+    prompt = load_prompt_yaml()
 
     # Load tools for SDLC operations from JSON file
     tools_path = os.path.join(os.path.dirname(__file__), "tools.json")

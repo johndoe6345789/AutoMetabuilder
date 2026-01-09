@@ -6,7 +6,7 @@ AutoMetabuilder is an AI-powered tool designed to integrate with the metabuilder
 
 - **GitHub Integration**: Automatically fetches context from GitHub Issues and Pull Requests.
 - **SDLC Automation**: Can create branches and pull requests based on the AI's decisions.
-- **Customizable Prompts**: Loads workflow instructions from a remote YAML prompt.
+- **Customizable Prompts**: Loads workflow instructions from a local YAML prompt.
 
 ## Configuration
 
