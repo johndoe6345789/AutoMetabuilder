@@ -1,5 +1,5 @@
-{# Organisms combine molecules into larger UI blocks. #}
-{% from "components/atoms.html" import icon %}
+{# Callout component. #}
+{% from "components/atoms/icon.html" import icon %}
 
 {% macro callout(title, body, tone='info', icon_name='info-circle') -%}
 <div class="amb-callout amb-callout-{{ tone }}">

@@ -1,0 +1,4 @@
+{# Atomic UI primitive for Jinja2 templates. #}
+{% macro icon(name, extra_class='') -%}
+<i class="bi bi-{{ name }} {{ extra_class | e }}"></i>
+{%- endmacro %}

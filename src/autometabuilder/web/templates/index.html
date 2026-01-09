@@ -1,12 +1,16 @@
 {% extends "base.html" %}
-{% import "components/sections.html" as sections with context %}
+{% from "components/sections/dashboard_section.html" import dashboard_section with context %}
+{% from "components/sections/workflow_section.html" import workflow_section with context %}
+{% from "components/sections/prompt_section.html" import prompt_section with context %}
+{% from "components/sections/settings_section.html" import settings_section with context %}
+{% from "components/sections/translations_section.html" import translations_section with context %}
 
 {% block content %}
-{{ sections.dashboard_section() }}
-{{ sections.workflow_section() }}
-{{ sections.prompt_section() }}
-{{ sections.settings_section() }}
-{{ sections.translations_section() }}
+{{ dashboard_section() }}
+{{ workflow_section() }}
+{{ prompt_section() }}
+{{ settings_section() }}
+{{ translations_section() }}
 {% endblock %}
 
 {% block scripts %}

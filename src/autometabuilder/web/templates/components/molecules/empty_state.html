@@ -1,0 +1,10 @@
+{# Empty state component. #}
+{% from "components/atoms/icon.html" import icon %}
+
+{% macro empty_state(icon_name, title, body) -%}
+<div class="amb-empty-state text-center text-muted py-5">
+    {{ icon(icon_name, 'amb-empty-icon') }}
+    <h6 class="mt-3">{{ title }}</h6>
+    <p class="small mb-0">{{ body }}</p>
+</div>
+{%- endmacro %}

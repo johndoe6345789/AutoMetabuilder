@@ -1,0 +1,13 @@
+{# Choice card macro. #}
+{% macro choice_card(id, value, icon_name, title, description, checked=False, extra_html='') -%}
+<label class="amb-choice-card" for="{{ id }}">
+    <input type="radio" name="mode" id="{{ id }}" value="{{ value }}" {% if checked %}checked{% endif %}>
+    <div class="amb-choice-content">
+        <div class="amb-choice-title">
+            <i class="bi bi-{{ icon_name }}"></i> {{ title }}
+        </div>
+        <p class="amb-choice-text">{{ description }}</p>
+        {% if extra_html %}{{ extra_html | safe }}{% endif %}
+    </div>
+</label>
+{%- endmacro %}
