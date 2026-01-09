@@ -10,6 +10,19 @@
   },
   "project_name": "AutoMetabuilder",
   "version": "1.0.0",
+  "suggestions": {
+    "languages": ["en", "es", "fr", "nl", "de", "it", "ja", "zh", "pirate"],
+    "env_keys": ["GITHUB_TOKEN", "OPENAI_API_KEY", "LOG_LEVEL"],
+    "env_values": ["INFO", "DEBUG", "WARNING", "ERROR"],
+    "task_names": [
+      "Initialize Project",
+      "Analyze Requirements",
+      "Generate Code",
+      "Run Tests",
+      "Deploy",
+      "Iterative Refinement"
+    ]
+  },
   "step_definitions": {
     "load_context": {
       "label": "Load Project Context",

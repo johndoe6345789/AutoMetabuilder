@@ -50,14 +50,9 @@
                 <div class="input-group">
                     <input type="text" name="lang" class="form-control" placeholder="New lang code (e.g. de)" list="lang-suggestions">
                     <datalist id="lang-suggestions">
-                        <option value="en">
-                        <option value="es">
-                        <option value="fr">
-                        <option value="nl">
-                        <option value="de">
-                        <option value="it">
-                        <option value="ja">
-                        <option value="zh">
+                        {% for lang in metadata.suggestions.languages %}
+                        <option value="{{ lang }}">
+                        {% endfor %}
                     </datalist>
                     <button class="btn btn-primary" type="submit">Add</button>
                 </div>
@@ -99,18 +94,17 @@
                     {% for key in env_vars.keys() %}
                     <option value="{{ key }}">
                     {% endfor %}
-                    <option value="GITHUB_TOKEN">
-                    <option value="OPENAI_API_KEY">
-                    <option value="LOG_LEVEL">
+                    {% for key in metadata.suggestions.env_keys %}
+                    <option value="{{ key }}">
+                    {% endfor %}
                 </datalist>
                 <datalist id="env-value-suggestions">
                     {% for value in env_vars.values() %}
                     <option value="{{ value }}">
                     {% endfor %}
-                    <option value="INFO">
-                    <option value="DEBUG">
-                    <option value="WARNING">
-                    <option value="ERROR">
+                    {% for val in metadata.suggestions.env_values %}
+                    <option value="{{ val }}">
+                    {% endfor %}
                 </datalist>
                 <button type="submit" class="btn btn-success">Save Settings</button>
             </form>
@@ -132,12 +126,9 @@
             </div>
             <form action="/workflow" method="post" id="workflow-form">
                 <datalist id="task-name-suggestions">
-                    <option value="Initialize Project">
-                    <option value="Analyze Requirements">
-                    <option value="Generate Code">
-                    <option value="Run Tests">
-                    <option value="Deploy">
-                    <option value="Iterative Refinement">
+                    {% for name in metadata.suggestions.task_names %}
+                    <option value="{{ name }}">
+                    {% endfor %}
                 </datalist>
                 <textarea id="workflow-content" name="content" class="form-control d-none" rows="15">{{ workflow_content }}</textarea>
                 <button type="submit" class="btn btn-success mt-2">Save Workflow</button>
