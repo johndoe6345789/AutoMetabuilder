@@ -1,0 +1,14 @@
+{# Dashboard logs card macro. #}
+{% macro dashboard_logs() -%}
+<div class="amb-card" style="height: calc(100% - 1.5rem);">
+    <div class="amb-card-header">
+        <h5><i class="bi bi-terminal"></i> {{ t('ui.dashboard.logs.title', 'Recent Logs') }}</h5>
+        <button class="btn btn-sm btn-outline-secondary" onclick="StatusPoller.refreshLogs()" title="{{ t('ui.actions.refresh', 'Refresh') }}">
+            <i class="bi bi-arrow-clockwise"></i>
+        </button>
+    </div>
+    <div class="amb-card-body p-0">
+        <pre id="logs" class="amb-logs m-0" style="height: 450px;">{{ logs }}</pre>
+    </div>
+</div>
+{%- endmacro %}

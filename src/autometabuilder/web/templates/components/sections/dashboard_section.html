@@ -1,6 +1,8 @@
 {# Dashboard section macro. #}
 {% from "components/atoms/section_header.html" import section_header %}
-{% from "components/sections/choice_card.html" import choice_card %}
+{% from "components/organisms/dashboard_bot_control.html" import dashboard_bot_control with context %}
+{% from "components/organisms/dashboard_status.html" import dashboard_status with context %}
+{% from "components/organisms/dashboard_logs.html" import dashboard_logs with context %}
 
 {% macro dashboard_section() -%}
 <section id="dashboard" class="amb-section active">
@@ -8,99 +10,12 @@
 
     <div class="row">
         <div class="col-lg-5 col-md-6">
-            <div class="amb-card">
-                <div class="amb-card-header">
-                    <h5><i class="bi bi-robot"></i> {{ t('ui.dashboard.bot_control', 'Bot Control') }}</h5>
-                </div>
-                <div class="amb-card-body">
-                    <form action="/run" method="post" id="run-form">
-                        <div class="amb-form-group">
-                            <label class="amb-form-label">{{ t('ui.dashboard.run_strategy', 'Run Strategy') }}</label>
-                            <div class="amb-choice-grid">
-                                {% set iterations_extra %}
-                                <div class="amb-choice-inline" id="iterations-group" style="display: none;">
-                                    <span class="amb-choice-meta">{{ t('ui.dashboard.run.repeat.label', 'Iterations') }}</span>
-                                    <input type="number" name="iterations" class="form-control form-control-sm"
-                                           value="5" min="1" max="100">
-                                </div>
-                                {% endset %}
-
-                                {{ choice_card('mode-once', 'once', '1-circle', t('ui.dashboard.run.single.title', 'Single Iteration'), t('ui.dashboard.run.single.desc', 'One full pass through the workflow.'), True) }}
-                                {{ choice_card('mode-iterations', 'iterations', 'arrow-repeat', t('ui.dashboard.run.repeat.title', 'Repeat'), t('ui.dashboard.run.repeat.desc', 'Run a fixed number of cycles.'), False, iterations_extra) }}
-                                {{ choice_card('mode-yolo', 'yolo', 'infinity', t('ui.dashboard.run.yolo.title', 'YOLO'), t('ui.dashboard.run.yolo.desc', 'Keep iterating until you stop it.')) }}
-                            </div>
-                        </div>
-
-                        <div class="amb-form-group">
-                            <label class="amb-form-label">{{ t('ui.dashboard.automation', 'Automation') }}</label>
-                            <div class="amb-toggle-stack">
-                                <div class="form-check form-switch amb-toggle">
-                                    <input class="form-check-input" type="checkbox" name="yolo" id="yolo-check" value="true" checked>
-                                    <label class="form-check-label" for="yolo-check">
-                                        <strong>{{ t('ui.dashboard.auto_approve.title', 'Auto-approve tools') }}</strong>
-                                        <small class="text-muted d-block">{{ t('ui.dashboard.auto_approve.desc', 'Skip confirmations so the bot can run faster.') }}</small>
-                                    </label>
-                                </div>
-                                <div class="form-check form-switch amb-toggle">
-                                    <input class="form-check-input" type="checkbox" name="stop_at_mvp" id="mvp-check" value="true">
-                                    <label class="form-check-label" for="mvp-check">
-                                        <strong>{{ t('ui.dashboard.stop_mvp.title', 'Stop at MVP') }}</strong>
-                                        <small class="text-muted d-block">{{ t('ui.dashboard.stop_mvp.desc', 'Pause automatically when the MVP milestone is reached.') }}</small>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button id="run-btn" type="submit" class="btn btn-danger w-100" {% if is_running %}disabled{% endif %}>
-                            <i class="bi bi-play-fill"></i> {{ t('ui.dashboard.start_bot', 'Start Bot') }}
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="amb-card">
-                <div class="amb-card-header">
-                    <h5><i class="bi bi-activity"></i> {{ t('ui.dashboard.status.title', 'Status') }}</h5>
-                </div>
-                <div class="amb-card-body">
-                    <div class="d-flex flex-column gap-3">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <span>{{ t('ui.dashboard.status.bot_label', 'Bot Status') }}</span>
-                            <div id="status-indicator" class="amb-status {% if is_running %}amb-status-running{% else %}amb-status-idle{% endif %}">
-                                <span class="amb-status-dot"></span>
-                                {% if is_running %}{{ t('ui.dashboard.status.running', 'Running') }}{% else %}{{ t('ui.dashboard.status.idle', 'Idle') }}{% endif %}
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between">
-                            <span>{{ t('ui.dashboard.status.mvp_label', 'MVP Milestone') }}</span>
-                            <span id="mvp-badge" class="badge {% if mvp_reached %}bg-success{% else %}bg-secondary{% endif %}">
-                                {% if mvp_reached %}
-                                <i class="bi bi-check-circle-fill"></i> {{ t('ui.dashboard.status.mvp_reached', 'Reached') }}
-                                {% else %}
-                                <i class="bi bi-hourglass-split"></i> {{ t('ui.dashboard.status.mvp_progress', 'In Progress') }}
-                                {% endif %}
-                            </span>
-                        </div>
-                        <div id="status-progress" class="progress" style="display: {% if is_running %}block{% else %}none{% endif %};">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {{ dashboard_bot_control() }}
+            {{ dashboard_status() }}
         </div>
 
         <div class="col-lg-7 col-md-6">
-            <div class="amb-card" style="height: calc(100% - 1.5rem);">
-                <div class="amb-card-header">
-                    <h5><i class="bi bi-terminal"></i> {{ t('ui.dashboard.logs.title', 'Recent Logs') }}</h5>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="StatusPoller.refreshLogs()" title="{{ t('ui.actions.refresh', 'Refresh') }}">
-                        <i class="bi bi-arrow-clockwise"></i>
-                    </button>
-                </div>
-                <div class="amb-card-body p-0">
-                    <pre id="logs" class="amb-logs m-0" style="height: 450px;">{{ logs }}</pre>
-                </div>
-            </div>
+            {{ dashboard_logs() }}
         </div>
     </div>
 </section>

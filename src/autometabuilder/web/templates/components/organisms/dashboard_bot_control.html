@@ -1,0 +1,54 @@
+{# Dashboard bot control card macro. #}
+{% from "components/sections/choice_card.html" import choice_card %}
+
+{% macro dashboard_bot_control() -%}
+<div class="amb-card">
+    <div class="amb-card-header">
+        <h5><i class="bi bi-robot"></i> {{ t('ui.dashboard.bot_control', 'Bot Control') }}</h5>
+    </div>
+    <div class="amb-card-body">
+        <form action="/run" method="post" id="run-form">
+            <div class="amb-form-group">
+                <label class="amb-form-label">{{ t('ui.dashboard.run_strategy', 'Run Strategy') }}</label>
+                <div class="amb-choice-grid">
+                    {% set iterations_extra %}
+                    <div class="amb-choice-inline" id="iterations-group" style="display: none;">
+                        <span class="amb-choice-meta">{{ t('ui.dashboard.run.repeat.label', 'Iterations') }}</span>
+                        <input type="number" name="iterations" class="form-control form-control-sm"
+                               value="5" min="1" max="100">
+                    </div>
+                    {% endset %}
+
+                    {{ choice_card('mode-once', 'once', '1-circle', t('ui.dashboard.run.single.title', 'Single Iteration'), t('ui.dashboard.run.single.desc', 'One full pass through the workflow.'), True) }}
+                    {{ choice_card('mode-iterations', 'iterations', 'arrow-repeat', t('ui.dashboard.run.repeat.title', 'Repeat'), t('ui.dashboard.run.repeat.desc', 'Run a fixed number of cycles.'), False, iterations_extra) }}
+                    {{ choice_card('mode-yolo', 'yolo', 'infinity', t('ui.dashboard.run.yolo.title', 'YOLO'), t('ui.dashboard.run.yolo.desc', 'Keep iterating until you stop it.')) }}
+                </div>
+            </div>
+
+            <div class="amb-form-group">
+                <label class="amb-form-label">{{ t('ui.dashboard.automation', 'Automation') }}</label>
+                <div class="amb-toggle-stack">
+                    <div class="form-check form-switch amb-toggle">
+                        <input class="form-check-input" type="checkbox" name="yolo" id="yolo-check" value="true" checked>
+                        <label class="form-check-label" for="yolo-check">
+                            <strong>{{ t('ui.dashboard.auto_approve.title', 'Auto-approve tools') }}</strong>
+                            <small class="text-muted d-block">{{ t('ui.dashboard.auto_approve.desc', 'Skip confirmations so the bot can run faster.') }}</small>
+                        </label>
+                    </div>
+                    <div class="form-check form-switch amb-toggle">
+                        <input class="form-check-input" type="checkbox" name="stop_at_mvp" id="mvp-check" value="true">
+                        <label class="form-check-label" for="mvp-check">
+                            <strong>{{ t('ui.dashboard.stop_mvp.title', 'Stop at MVP') }}</strong>
+                            <small class="text-muted d-block">{{ t('ui.dashboard.stop_mvp.desc', 'Pause automatically when the MVP milestone is reached.') }}</small>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button id="run-btn" type="submit" class="btn btn-danger w-100" {% if is_running %}disabled{% endif %}>
+                <i class="bi bi-play-fill"></i> {{ t('ui.dashboard.start_bot', 'Start Bot') }}
+            </button>
+        </form>
+    </div>
+</div>
+{%- endmacro %}
