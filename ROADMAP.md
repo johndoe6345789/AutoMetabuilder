@@ -19,8 +19,18 @@
 - [x] **CI/CD Integration**: Github Actions to run AutoMetabuilder on schedule or trigger.
 
 ## Phase 4: Optimization & Scalability
-- [/] **Dockerization**: Provide a Dockerfile and docker-compose for easy environment setup. Added `run_docker_task` tool.
-- [ ] **Extended Toolset**: Add tools for dependency management (poetry) and file manipulation (read/write/edit).
-- [ ] **Self-Improvement**: Allow the bot to suggest and apply changes to its own `prompt.yml` or `tools.json`.
-- [ ] **Robust Error Handling**: Implement exponential backoff for API calls and better error recovery.
-- [ ] **Monitoring & Logging**: Structured logging and status reporting for long-running tasks.
+- [x] **Dockerization**: Provide a Dockerfile and docker-compose for easy environment setup. Added `run_docker_task` tool.
+- [x] **Extended Toolset**: Add tools for dependency management (poetry) and file manipulation (read/write/edit).
+- [x] **Self-Improvement**: Allow the bot to suggest and apply changes to its own `prompt.yml` or `tools.json`.
+- [x] **Robust Error Handling**: Implement exponential backoff for API calls and better error recovery.
+- [x] **Monitoring & Logging**: Structured logging and status reporting for long-running tasks.
+
+## Phase 5: Ecosystem & User Experience
+- [x] **Web UI**: A simple dashboard to monitor tasks and approve tool executions. Enhanced with settings and translation management.
+- [x] **Plugin System**: Allow users to add custom tools via a plugin directory.
+- [x] **Slack/Discord Integration**: Command and notify the bot from chat platforms.
+
+## Phase 6: Advanced Web UI & Remote Control
+- [ ] **Remote Command Execution**: Trigger bot runs from the Web UI.
+- [ ] **User Authentication**: Secure the Web UI with login.
+- [ ] **Visual Task Progress**: Real-time progress bars for long-running tasks.

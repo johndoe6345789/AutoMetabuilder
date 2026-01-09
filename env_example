@@ -3,3 +3,5 @@ GITHUB_REPOSITORY=owner/repo
 PROMPT_PATH=prompt.yml
 GITHUB_MODELS_ENDPOINT=https://models.github.ai/inference
 APP_LANG=en # Supported: en, es, fr, nl, pirate
+WEB_USER=admin
+WEB_PASSWORD=password

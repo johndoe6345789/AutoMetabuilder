@@ -1,5 +1,8 @@
 import subprocess
 import os
+import logging
+
+logger = logging.getLogger("autometabuilder.docker")
 
 def run_command_in_docker(image: str, command: str, volumes: dict = None, workdir: str = None):
     """
@@ -23,12 +26,12 @@ def run_command_in_docker(image: str, command: str, volumes: dict = None, workdi
     docker_command.append(image)
     docker_command.extend(["sh", "-c", command])
     
-    print(f"Executing in Docker ({image}): {command}")
+    logger.info(f"Executing in Docker ({image}): {command}")
     result = subprocess.run(docker_command, capture_output=True, text=True, check=False)
     
     output = result.stdout
     if result.stderr:
         output += "\n" + result.stderr
         
-    print(output)
+    logger.info(output)
     return output

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AutoMetabuilder Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+    <h1>AutoMetabuilder Dashboard</h1>
+    
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <h2>Recent Logs</h2>
+            <pre id="logs" class="bg-light p-3 border" style="max-height: 400px; overflow-y: scroll;">{{ logs }}</pre>
+        </div>
+        <div class="col-md-4">
+            <h2>System Status</h2>
+            <p>Status: 
+                {% if is_running %}
+                <span class="badge bg-warning text-dark">Bot Running...</span>
+                {% else %}
+                <span class="badge bg-success">Idle</span>
+                {% endif %}
+            </p>
+            
+            <form action="/run" method="post" class="mt-2">
+                <button type="submit" class="btn btn-danger w-100" {% if is_running %}disabled{% endif %}>
+                    Run Bot One Iteration
+                </button>
+            </form>
+            
+            <h2 class="mt-4">Translations</h2>
+            <ul class="list-group">
+                {% for lang, file in translations.items() %}
+                <li class="list-group-item">{{ lang }} ({{ file }})</li>
+                {% endfor %}
+            </ul>
+            <form action="/translations" method="post" class="mt-2">
+                <div class="input-group">
+                    <input type="text" name="lang" class="form-control" placeholder="New lang code (e.g. de)">
+                    <button class="btn btn-primary" type="submit">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h2>Settings (.env)</h2>
+            <form action="/settings" method="post">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, value in env_vars.items() %}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td>
+                                <input type="text" name="env_{{ key }}" value="{{ value }}" class="form-control">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><input type="text" name="new_env_key" class="form-control" placeholder="NEW_KEY"></td>
+                            <td><input type="text" name="new_env_value" class="form-control" placeholder="New Value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-success">Save Settings</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h2>Prompt (prompt.yml)</h2>
+            <form action="/prompt" method="post">
+                <textarea name="content" class="form-control" rows="15">{{ prompt_content }}</textarea>
+                <button type="submit" class="btn btn-success mt-2">Save Prompt</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

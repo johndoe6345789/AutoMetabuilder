@@ -10,6 +10,7 @@ messages:
       5. Following security best practices and performance optimization.
       6. Adhering to project-specific coding standards and linting rules.
       7. Keeping documentation (README, ROADMAP, etc.) up to date.
+      8. Continuous Self-Improvement: You are encouraged to propose and apply enhancements to your own configuration, including `prompt.yml` and `tools.json`, to improve your effectiveness and reasoning.
   - role: user
     content: >-
       Analyze the current state of the repository, including open issues,
