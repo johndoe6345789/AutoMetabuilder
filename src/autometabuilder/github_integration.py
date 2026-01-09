@@ -47,6 +47,11 @@ class GitHubIntegration:
         """Get pull requests from the repository."""
         return self.repo.get_pulls(state=state)
 
+    def get_pull_request_comments(self, pr_number: int):
+        """Get comments from a specific pull request."""
+        pr = self.repo.get_pull(pr_number)
+        return pr.get_issue_comments()
+
 
 def get_repo_name_from_env() -> str:
     """Retrieve repository name from environment variable."""

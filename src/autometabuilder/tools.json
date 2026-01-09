@@ -56,5 +56,60 @@
         ]
       }
     }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_pull_request_comments",
+      "description": "Get comments from a specific pull request to read feedback",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pr_number": {
+            "type": "integer",
+            "description": "The number of the pull request"
+          }
+        },
+        "required": [
+          "pr_number"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "update_roadmap",
+      "description": "Update the ROADMAP.md file with new progress",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "The full new content for ROADMAP.md"
+          }
+        },
+        "required": [
+          "content"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "list_files",
+      "description": "List all files in the repository for indexing and context",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "description": "The directory to list (default is root)",
+            "default": "."
+          }
+        }
+      }
+    }
   }
 ]

@@ -55,28 +55,62 @@ def get_sdlc_context(gh: GitHubIntegration, msgs: dict) -> str:
     return sdlc_context
 
 
+def update_roadmap(content: str):
+    """Update ROADMAP.md with new content."""
+    with open("ROADMAP.md", "w", encoding="utf-8") as f:
+        f.write(content)
+    print("ROADMAP.md updated successfully.")
+
+
+def list_files(directory: str = "."):
+    """List files in the repository for indexing."""
+    files_list = []
+    for root, _, files in os.walk(directory):
+        if ".git" in root or "__pycache__" in root or ".venv" in root:
+            continue
+        for file in files:
+            files_list.append(os.path.join(root, file))
+    
+    result = "\n".join(files_list)
+    print(f"Indexing repository files in {directory}...")
+    return result
+
+
 def handle_tool_calls(resp_msg, gh: GitHubIntegration, msgs: dict):
-    """Process tool calls from the AI response."""
-    if resp_msg.tool_calls:
-        for tool_call in resp_msg.tool_calls:
-            function_name = tool_call.function.name
-            args = json.loads(tool_call.function.arguments)
+    """Process tool calls from the AI response using a declarative mapping."""
+    if not resp_msg.tool_calls:
+        return
 
-            if function_name == "create_branch":
-                if gh:
-                    print(
-                        msgs["info_executing_create_branch"].format(args=args)
-                    )
-                    gh.create_branch(**args)
-                else:
-                    print(msgs["error_github_not_available"])
+    # Declarative mapping of tool names to functions
+    tool_map = {
+        "create_branch": gh.create_branch if gh else None,
+        "create_pull_request": gh.create_pull_request if gh else None,
+        "get_pull_request_comments": gh.get_pull_request_comments if gh else None,
+        "update_roadmap": update_roadmap,
+        "list_files": list_files,
+    }
 
-            elif function_name == "create_pull_request":
-                if gh:
-                    print(msgs["info_executing_create_pr"].format(args=args))
-                    gh.create_pull_request(**args)
-                else:
-                    print(msgs["error_github_not_available"])
+    for tool_call in resp_msg.tool_calls:
+        function_name = tool_call.function.name
+        args = json.loads(tool_call.function.arguments)
+
+        handler = tool_map.get(function_name)
+        if handler:
+            print(msgs.get("info_executing_tool", "Executing tool: {name}").format(name=function_name))
+            try:
+                result = handler(**args)
+                if result:
+                    # In a real scenario, we might want to feed this back to the AI
+                    if hasattr(result, "__iter__") and not isinstance(result, str):
+                        # Handle iterables (like PyGithub PaginatedList)
+                        for item in list(result)[:5]:
+                            print(f"- {item}")
+                    else:
+                        print(result)
+            except Exception as e:
+                print(f"Error executing {function_name}: {e}")
+        else:
+            print(msgs.get("error_tool_not_found", "Tool {name} not found or unavailable.").format(name=function_name))
 
 
 def main():
