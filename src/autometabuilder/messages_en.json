@@ -10,6 +10,8 @@
   "error_github_not_available": "Error: GitHub integration not available for tool call.",
   "error_github_repo_missing": "GITHUB_REPOSITORY environment variable not set",
   "sdlc_context_label": "SDLC Context:",
+  "roadmap_label": "ROADMAP.md Content:",
   "open_issues_label": "Open Issues:",
-  "open_prs_label": "Open Pull Requests:"
+  "open_prs_label": "Open Pull Requests:",
+  "missing_roadmap_msg": "ROADMAP.md is missing. Please analyze the repository, create ROADMAP.md with tickboxes for completed items, and list tasks that need to be done."
 }

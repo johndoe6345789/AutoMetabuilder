@@ -26,8 +26,17 @@ def load_prompt_yaml() -> dict:
 
 
 def get_sdlc_context(gh: GitHubIntegration, msgs: dict) -> str:
-    """Retrieve SDLC context (issues and PRs) from GitHub."""
+    """Retrieve SDLC context (issues, PRs, and Roadmap) from GitHub/Local."""
     sdlc_context = ""
+    
+    # Load ROADMAP.md if it exists, otherwise add instruction to create it
+    if os.path.exists("ROADMAP.md"):
+        with open("ROADMAP.md", "r", encoding="utf-8") as f:
+            roadmap_content = f.read()
+            sdlc_context += f"\n{msgs.get('roadmap_label', 'ROADMAP.md Content:')}\n{roadmap_content}\n"
+    else:
+        sdlc_context += f"\n{msgs.get('missing_roadmap_msg', 'ROADMAP.md is missing. Please analyze the repository and create it.')}\n"
+
     if gh:
         try:
             issues = gh.get_open_issues()
