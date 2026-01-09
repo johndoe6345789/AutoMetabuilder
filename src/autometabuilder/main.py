@@ -8,7 +8,8 @@ from .github_integration import GitHubIntegration, get_repo_name_from_env
 
 load_dotenv()
 
-RAW_PROMPT_URL = "https://raw.githubusercontent.com/johndoe6345789/metabuilder/main/getonwithit.prompt.yml"
+DEFAULT_RAW_PROMPT_URL = "https://raw.githubusercontent.com/johndoe6345789/metabuilder/main/getonwithit.prompt.yml"
+DEFAULT_ENDPOINT = "https://models.github.ai/inference"
 
 def load_prompt_yaml(url: str, token: str) -> dict:
     headers = {"Authorization": f"Bearer {token}"}
@@ -31,53 +32,23 @@ def main():
         print(f"Warning: GitHub integration failed: {e}")
         gh = None
 
-    endpoint = "https://models.github.ai/inference"
+    endpoint = os.environ.get("GITHUB_MODELS_ENDPOINT", DEFAULT_ENDPOINT)
 
     client = OpenAI(
         base_url=endpoint,
         api_key=token,
     )
 
-    prompt = load_prompt_yaml(RAW_PROMPT_URL, token)
+    prompt_url = os.environ.get("RAW_PROMPT_URL", DEFAULT_RAW_PROMPT_URL)
+    prompt = load_prompt_yaml(prompt_url, token)
 
     messages = prompt["messages"]
     model = prompt.get("model", "openai/gpt-4.1")
 
-    # Define tools for SDLC operations
-    tools = [
-        {
-            "type": "function",
-            "function": {
-                "name": "create_branch",
-                "description": "Create a new git branch in the repository",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "branch_name": {"type": "string", "description": "The name of the new branch"},
-                        "base_branch": {"type": "string", "description": "The name of the base branch", "default": "main"},
-                    },
-                    "required": ["branch_name"],
-                },
-            },
-        },
-        {
-            "type": "function",
-            "function": {
-                "name": "create_pull_request",
-                "description": "Create a new pull request",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "title": {"type": "string", "description": "The title of the PR"},
-                        "body": {"type": "string", "description": "The body content of the PR"},
-                        "head_branch": {"type": "string", "description": "The branch where changes are implemented"},
-                        "base_branch": {"type": "string", "description": "The branch to merge into", "default": "main"},
-                    },
-                    "required": ["title", "body", "head_branch"],
-                },
-            },
-        }
-    ]
+    # Load tools for SDLC operations from JSON file
+    tools_path = os.path.join(os.path.dirname(__file__), "tools.json")
+    with open(tools_path, "r") as f:
+        tools = json.load(f)
 
     # Add SDLC Context if available
     sdlc_context = ""
