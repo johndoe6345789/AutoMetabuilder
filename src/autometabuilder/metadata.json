@@ -9,5 +9,109 @@
     "pirate": "messages_pirate.json"
   },
   "project_name": "AutoMetabuilder",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "step_definitions": {
+    "load_context": {
+      "label": "Load Project Context",
+      "fields": {
+        "output_key": {
+          "label": "Save Context As",
+          "type": "text",
+          "default": "sdlc_context",
+          "suggestions": [
+            "sdlc_context"
+          ]
+        }
+      }
+    },
+    "prepare_messages": {
+      "label": "Prepare LLM Prompt",
+      "fields": {
+        "input_context": {
+          "label": "Input Context Key",
+          "type": "text",
+          "default": "sdlc_context",
+          "suggestions": [
+            "sdlc_context"
+          ]
+        },
+        "output_key": {
+          "label": "Save Messages As",
+          "type": "text",
+          "default": "messages",
+          "suggestions": [
+            "messages"
+          ]
+        }
+      }
+    },
+    "llm_gen": {
+      "label": "Generate AI Response",
+      "fields": {
+        "input_messages": {
+          "label": "Input Messages Key",
+          "type": "text",
+          "default": "messages",
+          "suggestions": [
+            "messages"
+          ]
+        },
+        "output_key": {
+          "label": "Save Response As",
+          "type": "text",
+          "default": "llm_response",
+          "suggestions": [
+            "llm_response"
+          ]
+        }
+      }
+    },
+    "process_response": {
+      "label": "Execute Tools / Process Response",
+      "fields": {
+        "input_response": {
+          "label": "Input Response Key",
+          "type": "text",
+          "default": "llm_response",
+          "suggestions": [
+            "llm_response"
+          ]
+        },
+        "output_key": {
+          "label": "Save Tool Results As",
+          "type": "text",
+          "default": "tool_results",
+          "suggestions": [
+            "tool_results"
+          ]
+        },
+        "stop_if_no_tools": {
+          "label": "Stop if no tool calls",
+          "type": "checkbox",
+          "default": false
+        }
+      }
+    },
+    "update_messages": {
+      "label": "Update Message History",
+      "fields": {
+        "input_results": {
+          "label": "Input Tool Results Key",
+          "type": "text",
+          "default": "tool_results",
+          "suggestions": [
+            "tool_results"
+          ]
+        },
+        "target_messages": {
+          "label": "Target Messages Key",
+          "type": "text",
+          "default": "messages",
+          "suggestions": [
+            "messages"
+          ]
+        }
+      }
+    }
+  }
 }

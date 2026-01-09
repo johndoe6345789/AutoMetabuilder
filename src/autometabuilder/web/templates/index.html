@@ -114,17 +114,28 @@
             console.error("Failed to parse workflow JSON", e);
         }
 
-        const stepDefinitions = {
-            'load_context': ['output_key'],
-            'prepare_messages': ['input_context', 'output_key'],
-            'llm_gen': ['input_messages', 'output_key'],
-            'process_response': ['input_response', 'output_key', 'stop_if_no_tools'],
-            'update_messages': ['input_results', 'target_messages']
-        };
+        const stepDefinitions = JSON.parse('{{ metadata.step_definitions | tojson | safe }}');
+
+        const allSuggestions = new Set();
+        Object.values(stepDefinitions).forEach(def => {
+            Object.values(def.fields).forEach(f => {
+                if (f.suggestions) f.suggestions.forEach(s => allSuggestions.add(s));
+            });
+        });
 
         function renderWorkflow() {
             const container = document.getElementById('workflow-builder');
             container.innerHTML = '';
+
+            // Create datalist for suggestions
+            const datalist = document.createElement('datalist');
+            datalist.id = 'workflow-suggestions';
+            allSuggestions.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                datalist.appendChild(opt);
+            });
+            container.appendChild(datalist);
 
             workflow.forEach((task, taskIdx) => {
                 const taskCard = document.createElement('div');
@@ -134,8 +145,8 @@
                         <div class="flex-grow-1">
                             <input type="text" class="form-control form-control-sm d-inline-block w-auto" value="${task.name || ''}" onchange="updateTask(${taskIdx}, 'name', this.value)" placeholder="Task Name">
                             <select class="form-select form-select-sm d-inline-block w-auto ms-2" onchange="updateTask(${taskIdx}, 'type', this.value)">
-                                <option value="" ${!task.type ? 'selected' : ''}>Standard</option>
-                                <option value="loop" ${task.type === 'loop' ? 'selected' : ''}>Loop</option>
+                                <option value="" ${!task.type ? 'selected' : ''}>Standard Sequence</option>
+                                <option value="loop" ${task.type === 'loop' ? 'selected' : ''}>Loop / Iterate</option>
                             </select>
                             ${task.type === 'loop' ? `<input type="number" class="form-control form-control-sm d-inline-block w-auto ms-2" value="${task.max_iterations || 1}" onchange="updateTask(${taskIdx}, 'max_iterations', parseInt(this.value))" title="Max Iterations">` : ''}
                         </div>
@@ -159,23 +170,24 @@
                     
                     let fieldsHtml = `
                         <select class="form-select form-select-sm mb-2" onchange="updateStepType(${taskIdx}, ${stepIdx}, this.value)">
-                            <option value="">Select Type</option>
-                            ${Object.keys(stepDefinitions).map(type => `<option value="${type}" ${step.type === type ? 'selected' : ''}>${type}</option>`).join('')}
+                            <option value="">Select Action Type...</option>
+                            ${Object.entries(stepDefinitions).map(([type, def]) => `<option value="${type}" ${step.type === type ? 'selected' : ''}>${def.label}</option>`).join('')}
                         </select>
                     `;
 
                     if (step.type && stepDefinitions[step.type]) {
                         fieldsHtml += '<div class="row g-2">';
-                        stepDefinitions[step.type].forEach(field => {
+                        const def = stepDefinitions[step.type];
+                        Object.entries(def.fields).forEach(([field, fieldDef]) => {
                             const val = step[field] !== undefined ? step[field] : '';
-                            const inputType = typeof val === 'boolean' || field === 'stop_if_no_tools' ? 'checkbox' : 'text';
+                            const isCheckbox = fieldDef.type === 'checkbox';
                             
                             fieldsHtml += `
-                                <div class="col-md-4">
-                                    <label class="small">${field}</label>
-                                    ${inputType === 'checkbox' 
-                                        ? `<div class="form-check"><input type="checkbox" class="form-check-input" ${step[field] ? 'checked' : ''} onchange="updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.checked)"></div>`
-                                        : `<input type="text" class="form-control form-control-sm" value="${val}" onchange="updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)">`
+                                <div class="col-md-6">
+                                    <label class="small fw-bold">${fieldDef.label}</label>
+                                    ${isCheckbox 
+                                        ? `<div class="form-check mt-1"><input type="checkbox" class="form-check-input" ${step[field] ? 'checked' : ''} onchange="updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.checked)"></div>`
+                                        : `<input type="text" class="form-control form-control-sm" value="${val}" list="workflow-suggestions" onchange="updateStepField(${taskIdx}, ${stepIdx}, '${field}', this.value)" placeholder="${fieldDef.default || ''}">`
                                     }
                                 </div>
                             `;
@@ -257,12 +269,10 @@
         }
 
         function updateStepType(taskIdx, stepIdx, type) {
-            const oldStep = workflow[taskIdx].steps[stepIdx];
             const newStep = { type: type };
             if (stepDefinitions[type]) {
-                stepDefinitions[type].forEach(field => {
-                    if (field === 'stop_if_no_tools') newStep[field] = false;
-                    else newStep[field] = '';
+                Object.entries(stepDefinitions[type].fields).forEach(([field, fieldDef]) => {
+                    newStep[field] = fieldDef.default;
                 });
             }
             workflow[taskIdx].steps[stepIdx] = newStep;

@@ -115,6 +115,7 @@ async def read_item(request: Request, username: str = Depends(get_current_user))
     logs = get_recent_logs()
     env_vars = get_env_vars()
     translations = get_translations()
+    metadata = get_metadata()
     prompt_content = get_prompt_content()
     workflow_content = get_workflow_content()
     is_running = bot_process is not None
@@ -124,6 +125,7 @@ async def read_item(request: Request, username: str = Depends(get_current_user))
         "logs": logs, 
         "env_vars": env_vars,
         "translations": translations,
+        "metadata": metadata,
         "prompt_content": prompt_content,
         "workflow_content": workflow_content,
         "is_running": is_running,
