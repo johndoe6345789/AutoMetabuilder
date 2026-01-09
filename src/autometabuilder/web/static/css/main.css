@@ -886,6 +886,89 @@ body {
     font-size: 0.85rem;
 }
 
+.amb-workflow-node {
+    background: var(--amb-bg-secondary);
+    border: 1px solid var(--amb-border-color);
+    border-radius: 0.85rem;
+    box-shadow: var(--amb-card-shadow);
+    overflow: hidden;
+}
+
+.amb-workflow-node-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--amb-border-color);
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.12), rgba(13, 110, 253, 0.02));
+}
+
+.amb-workflow-node-main {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.amb-workflow-node-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.amb-workflow-node-badge {
+    background: var(--amb-bg-secondary);
+    border: 1px solid var(--amb-border-color);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--amb-text-primary);
+}
+
+.amb-workflow-node-id {
+    min-width: 160px;
+    max-width: 200px;
+}
+
+.amb-workflow-node-meta {
+    padding: 0.85rem 1rem 0;
+}
+
+.amb-workflow-node-body {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.amb-workflow-node-section {
+    background: var(--amb-bg-tertiary);
+    border: 1px solid var(--amb-border-color);
+    border-radius: 0.6rem;
+    padding: 0.75rem;
+}
+
+.amb-workflow-node-section h6 {
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--amb-text-muted);
+}
+
+.amb-workflow-node-nested {
+    margin: 1rem 0 0 0.5rem;
+    padding-left: 0.75rem;
+    border-left: 2px dashed var(--amb-border-color);
+}
+
+.amb-workflow-node-nested-header {
+    margin-bottom: 0.75rem;
+    color: var(--amb-text-muted);
+}
+
 /* ==========================================================================
    11. Buttons
    ========================================================================== */

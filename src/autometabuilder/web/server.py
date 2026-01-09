@@ -2,7 +2,7 @@ import os
 import json
 import secrets
 from fastapi import FastAPI, Request, Form, BackgroundTasks, Depends, HTTPException, status
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -312,6 +312,11 @@ async def get_status(username: str = Depends(get_current_user)):
         "is_running": bot_process is not None or mock_running,
         "mvp_reached": is_mvp_reached()
     }
+
+@app.get("/api/workflow/plugins", response_class=JSONResponse)
+async def get_workflow_plugins(username: str = Depends(get_current_user)):
+    metadata = get_metadata()
+    return metadata.get("workflow_plugins", {})
 
 @app.get("/api/logs")
 async def get_logs(username: str = Depends(get_current_user)):
