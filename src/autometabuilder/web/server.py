@@ -369,6 +369,11 @@ async def update_settings(request: Request, username: str = Depends(get_current_
         
     return RedirectResponse(url="/", status_code=303)
 
+@app.get("/api/ui-context", response_class=JSONResponse)
+async def get_ui_context(username: str = Depends(get_current_user)):
+    ui_messages, ui_lang = get_ui_messages()
+    return {"lang": ui_lang, "messages": ui_messages}
+
 @app.get("/api/status")
 async def get_status(username: str = Depends(get_current_user)):
     return {

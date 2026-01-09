@@ -10,6 +10,9 @@
     };
 
     const initAll = async () => {
+        if (window.AMBContext?.ready) {
+            await window.AMBContext.ready;
+        }
         for (const plugin of plugins) {
             try {
                 await plugin.init();
