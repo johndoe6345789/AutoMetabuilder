@@ -65,3 +65,27 @@ def test_update_settings(page: Page, server: str):
     # Verify it appeared in the table
     page.reload()
     expect(page.locator("input[name='env_TEST_SETTING']")).to_have_value("test_value")
+
+def test_all_text_inputs_have_autocomplete(page: Page, server: str):
+    auth_url = server.replace("http://", "http://testuser:testpass@")
+    page.goto(auth_url)
+    
+    # Wait for the workflow builder to render
+    page.wait_for_selector("#workflow-builder")
+    
+    # Select all text inputs
+    inputs = page.locator("input[type='text']")
+    
+    count = inputs.count()
+    assert count > 0, "No text inputs found on the page"
+    
+    for i in range(count):
+        input_element = inputs.nth(i)
+        # Check if the 'list' attribute is present and not empty
+        list_attr = input_element.get_attribute("list")
+        input_name = input_element.get_attribute("name") or input_element.get_attribute("placeholder") or f"index {i}"
+        assert list_attr, f"Input '{input_name}' does not have a 'list' attribute for autocomplete"
+        
+        # Check if the corresponding datalist exists
+        datalist = page.locator(f"datalist#{list_attr}")
+        expect(datalist).to_be_attached(), f"Datalist '{list_attr}' for input '{input_name}' is missing"

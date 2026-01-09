@@ -48,7 +48,17 @@
             </ul>
             <form action="/translations" method="post" class="mt-2">
                 <div class="input-group">
-                    <input type="text" name="lang" class="form-control" placeholder="New lang code (e.g. de)">
+                    <input type="text" name="lang" class="form-control" placeholder="New lang code (e.g. de)" list="lang-suggestions">
+                    <datalist id="lang-suggestions">
+                        <option value="en">
+                        <option value="es">
+                        <option value="fr">
+                        <option value="nl">
+                        <option value="de">
+                        <option value="it">
+                        <option value="ja">
+                        <option value="zh">
+                    </datalist>
                     <button class="btn btn-primary" type="submit">Add</button>
                 </div>
             </form>
@@ -71,16 +81,37 @@
                         <tr>
                             <td>{{ key }}</td>
                             <td>
-                                <input type="text" name="env_{{ key }}" value="{{ value }}" class="form-control">
+                                <input type="text" name="env_{{ key }}" value="{{ value }}" class="form-control" list="env-value-suggestions">
                             </td>
                         </tr>
                         {% endfor %}
                         <tr>
-                            <td><input type="text" name="new_env_key" class="form-control" placeholder="NEW_KEY"></td>
-                            <td><input type="text" name="new_env_value" class="form-control" placeholder="New Value"></td>
+                            <td>
+                                <input type="text" name="new_env_key" class="form-control" placeholder="NEW_KEY" list="env-key-suggestions">
+                            </td>
+                            <td>
+                                <input type="text" name="new_env_value" class="form-control" placeholder="New Value" list="env-value-suggestions">
+                            </td>
                         </tr>
                     </tbody>
                 </table>
+                <datalist id="env-key-suggestions">
+                    {% for key in env_vars.keys() %}
+                    <option value="{{ key }}">
+                    {% endfor %}
+                    <option value="GITHUB_TOKEN">
+                    <option value="OPENAI_API_KEY">
+                    <option value="LOG_LEVEL">
+                </datalist>
+                <datalist id="env-value-suggestions">
+                    {% for value in env_vars.values() %}
+                    <option value="{{ value }}">
+                    {% endfor %}
+                    <option value="INFO">
+                    <option value="DEBUG">
+                    <option value="WARNING">
+                    <option value="ERROR">
+                </datalist>
                 <button type="submit" class="btn btn-success">Save Settings</button>
             </form>
         </div>
@@ -100,6 +131,14 @@
                 <!-- Visual builder will be rendered here -->
             </div>
             <form action="/workflow" method="post" id="workflow-form">
+                <datalist id="task-name-suggestions">
+                    <option value="Initialize Project">
+                    <option value="Analyze Requirements">
+                    <option value="Generate Code">
+                    <option value="Run Tests">
+                    <option value="Deploy">
+                    <option value="Iterative Refinement">
+                </datalist>
                 <textarea id="workflow-content" name="content" class="form-control d-none" rows="15">{{ workflow_content }}</textarea>
                 <button type="submit" class="btn btn-success mt-2">Save Workflow</button>
                 <button type="button" class="btn btn-secondary mt-2" onclick="toggleRawWorkflow()">Toggle Raw JSON</button>
@@ -133,7 +172,7 @@
                 taskCard.innerHTML = `
                     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                         <div class="flex-grow-1">
-                            <input type="text" class="form-control form-control-sm d-inline-block w-auto" value="${task.name || ''}" onchange="updateTask(${taskIdx}, 'name', this.value)" placeholder="Task Name">
+                            <input type="text" class="form-control form-control-sm d-inline-block w-auto" value="${task.name || ''}" list="task-name-suggestions" onchange="updateTask(${taskIdx}, 'name', this.value)" placeholder="Task Name">
                             <select class="form-select form-select-sm d-inline-block w-auto ms-2" onchange="updateTask(${taskIdx}, 'type', this.value)">
                                 <option value="" ${!task.type ? 'selected' : ''}>Standard Sequence</option>
                                 <option value="loop" ${task.type === 'loop' ? 'selected' : ''}>Loop / Iterate</option>
