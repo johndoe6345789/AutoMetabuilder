@@ -49,6 +49,13 @@
     const NavigationLoader = {
         items: [],
         container: null,
+        defaults: [
+            { section: 'dashboard', icon: 'speedometer2', label_key: 'ui.nav.dashboard', default_label: 'Dashboard' },
+            { section: 'workflow', icon: 'diagram-3', label_key: 'ui.nav.workflow', default_label: 'Workflow' },
+            { section: 'prompt', icon: 'file-text', label_key: 'ui.nav.prompt', default_label: 'Prompt' },
+            { section: 'settings', icon: 'gear', label_key: 'ui.nav.settings', default_label: 'Settings' },
+            { section: 'translations', icon: 'translate', label_key: 'ui.nav.translations', default_label: 'Translations' }
+        ],
 
         async init() {
             this.container = document.getElementById('amb-nav');
@@ -56,12 +63,16 @@
             try {
                 const data = await fetchNavigation();
                 this.items = data.items || [];
-                this.render();
-                if (window.NavigationManager && typeof window.NavigationManager.refresh === 'function') {
-                    window.NavigationManager.refresh();
-                }
             } catch (error) {
                 console.error('Navigation fetch failed', error);
+                this.items = [];
+            }
+            if (!this.items.length) {
+                this.items = this.defaults;
+            }
+            this.render();
+            if (window.NavigationManager && typeof window.NavigationManager.refresh === 'function') {
+                window.NavigationManager.refresh();
             }
         },
 
