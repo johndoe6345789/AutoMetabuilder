@@ -16,9 +16,10 @@ Plugins are now organized into subdirectories by category:
 - **convert/** - Type conversions (7 plugins)
 - **control/** - Control flow (1 plugin)
 - **var/** - Variable management (4 plugins)
+- **test/** - Unit testing and assertions (5 plugins)
 - **utils/** - Utility functions (7 plugins)
 
-**Total: 85 plugins**
+**Total: 90 plugins**
 
 ## Categories
 
@@ -32,6 +33,7 @@ Plugins are now organized into subdirectories by category:
 - [Conversion Plugins](#conversion-plugins) - Type conversions
 - [Control Flow Plugins](#control-flow-plugins) - Branching and switching
 - [Variable Plugins](#variable-plugins) - State management
+- [Test Plugins](#test-plugins) - Unit testing and assertions
 - [Backend Plugins](#backend-plugins) - System initialization
 - [Utility Plugins](#utility-plugins) - General utilities
 
@@ -722,6 +724,75 @@ Check if variable exists.
 
 **Outputs:**
 - `result` - Boolean
+
+---
+
+## Test Plugins
+
+### `test.assert_equals`
+Assert that two values are equal.
+
+**Inputs:**
+- `actual` - Actual value
+- `expected` - Expected value
+- `message` - Optional assertion message
+
+**Outputs:**
+- `passed` - Boolean (true if values are equal)
+- `expected` - Expected value
+- `actual` - Actual value
+- `error` - Error message (if failed)
+
+### `test.assert_true`
+Assert that a value is true.
+
+**Inputs:**
+- `value` - Value to check
+- `message` - Optional assertion message
+
+**Outputs:**
+- `passed` - Boolean (true if value is true)
+- `value` - The checked value
+- `error` - Error message (if failed)
+
+### `test.assert_false`
+Assert that a value is false.
+
+**Inputs:**
+- `value` - Value to check
+- `message` - Optional assertion message
+
+**Outputs:**
+- `passed` - Boolean (true if value is false)
+- `value` - The checked value
+- `error` - Error message (if failed)
+
+### `test.assert_exists`
+Assert that a value exists (is not None/null).
+
+**Inputs:**
+- `value` - Value to check
+- `message` - Optional assertion message
+
+**Outputs:**
+- `passed` - Boolean (true if value is not None)
+- `value` - The checked value
+- `error` - Error message (if failed)
+
+### `test.run_suite`
+Run a suite of test assertions and aggregate results.
+
+**Inputs:**
+- `results` - Array of test result objects (each with 'passed' field)
+- `suite_name` - Optional name for the test suite
+
+**Outputs:**
+- `passed` - Boolean (true if all tests passed)
+- `total` - Total number of tests
+- `passed_count` - Number of tests that passed
+- `failed_count` - Number of tests that failed
+- `failures` - Array of failed test details
+- `summary` - Summary string
 
 ---
 

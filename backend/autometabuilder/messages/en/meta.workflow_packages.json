@@ -14,5 +14,16 @@
   "meta.workflow_packages.contextual_iterative_loop.label": "Contextual Iterative Loop",
   "meta.workflow_packages.contextual_iterative_loop.description": "Scan files into context, then loop AI/tool steps until no tool calls remain.",
   "meta.workflow_packages.game_tick_loop.label": "Game Tick Loop",
-  "meta.workflow_packages.game_tick_loop.description": "Seed a tick script and loop AI/tool steps for a few cycles."
+  "meta.workflow_packages.game_tick_loop.description": "Seed a tick script and loop AI/tool steps for a few cycles.",
+  "meta.workflow_packages.logic_plugins_test.label": "Logic Plugins Test",
+  "meta.workflow_packages.logic_plugins_test.description": "Unit tests for logic workflow plugins (and, or, equals, gt, lt, etc.).",
+  "meta.workflow_packages.math_plugins_test.label": "Math Plugins Test",
+  "meta.workflow_packages.math_plugins_test.description": "Unit tests for math workflow plugins (add, multiply, subtract, divide, min, max, etc.).",
+  "meta.workflow_packages.string_plugins_test.label": "String Plugins Test",
+  "meta.workflow_packages.string_plugins_test.description": "Unit tests for string workflow plugins (concat, upper, lower, split, length, etc.).",
+  "meta.workflow_packages.list_plugins_test.label": "List Plugins Test",
+  "meta.workflow_packages.list_plugins_test.description": "Unit tests for list workflow plugins (concat, length, slice, find, etc.).",
+  "meta.workflow_packages.dict_plugins_test.label": "Dict Plugins Test",
+  "meta.workflow_packages.dict_plugins_test.description": "Unit tests for dict workflow plugins (get, set, keys, merge, etc.)."
 }
+

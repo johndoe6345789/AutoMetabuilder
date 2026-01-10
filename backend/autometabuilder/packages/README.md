@@ -40,6 +40,7 @@ The N8N workflow definition:
 
 ## Available Packages
 
+### Workflow Templates
 - **blank**: Empty workflow canvas starter
 - **single_pass**: Single AI request + tool execution
 - **iterative_loop**: Looping AI agent with tool calls
@@ -48,6 +49,15 @@ The N8N workflow definition:
 - **testing_triangle**: Lint + unit + UI test pipeline
 - **repo_scan_context**: Repository file scanning
 - **game_tick_loop**: Game engine tick simulation
+
+### Plugin Testing Packages
+These packages test the correctness of workflow plugins using the `test.*` assertion plugins:
+
+- **logic_plugins_test**: Tests for logic plugins (and, or, equals, gt, lt, gte, lte, xor, in)
+- **math_plugins_test**: Tests for math plugins (add, multiply, subtract, divide, min, max)
+- **string_plugins_test**: Tests for string plugins (concat, upper, lower, split, length)
+- **list_plugins_test**: Tests for list plugins (concat, length, slice, find)
+- **dict_plugins_test**: Tests for dict plugins (get, set, keys, merge)
 
 ## Creating New Packages
 

@@ -82,5 +82,10 @@
   "var.delete": "autometabuilder.workflow.plugins.var.var_delete.run",
   "var.exists": "autometabuilder.workflow.plugins.var.var_exists.run",
   "var.get": "autometabuilder.workflow.plugins.var.var_get.run",
-  "var.set": "autometabuilder.workflow.plugins.var.var_set.run"
+  "var.set": "autometabuilder.workflow.plugins.var.var_set.run",
+  "test.assert_equals": "autometabuilder.workflow.plugins.test.test_assert_equals.run",
+  "test.assert_true": "autometabuilder.workflow.plugins.test.test_assert_true.run",
+  "test.assert_false": "autometabuilder.workflow.plugins.test.test_assert_false.run",
+  "test.assert_exists": "autometabuilder.workflow.plugins.test.test_assert_exists.run",
+  "test.run_suite": "autometabuilder.workflow.plugins.test.test_run_suite.run"
 }
