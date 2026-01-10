@@ -24,6 +24,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 autometabuilder = "autometabuilder.main:main"
+validate-workflows = "autometabuilder.tools.validate_workflows:main"
 
 [dependency-groups]
 dev = [
