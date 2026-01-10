@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Button, Paper, Stack, TextField, Typography } from "@mui/material";
 
 type PromptSectionProps = {
   content: string;
