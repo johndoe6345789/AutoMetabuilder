@@ -49,3 +49,7 @@ Avoid stagnation; improve structure, clarity, and expressiveness over time.
 Roadmap discipline. 
 If you run out of ROADMAP.md tasks, stop and report. 
 We should reassess priorities before inventing work.
+
+React component logic (just above the bottom jsx) can be converted to one or more custom hooks.
+
+Use atomic React components.

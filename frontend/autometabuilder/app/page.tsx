@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { Alert, Snackbar } from "@mui/material";
 import DashboardSection from "../components/sections/DashboardSection";
 import PromptSection from "../components/sections/PromptSection";
@@ -8,42 +8,29 @@ import SettingsSection from "../components/sections/SettingsSection";
 import TranslationsSection from "../components/sections/TranslationsSection";
 import WorkflowSection from "../components/sections/WorkflowSection";
 import PageLayout from "../components/layout/PageLayout";
-import useWebhook, { emitWebhook } from "../hooks/useWebhook";
-import {
-  fetchContext,
-  fetchWorkflowPackage,
-  runBot,
-  savePrompt,
-  saveSettings,
-  saveWorkflow,
-} from "../lib/api";
-import { UIContext } from "../lib/types";
+import useDashboardContext from "../hooks/useDashboardContext";
+import { emitWebhook, useWebhook } from "../hooks/useWebhook";
+import { fetchWorkflowPackage, runBot, savePrompt, saveSettings, saveWorkflow } from "../lib/api";
 
 export default function HomePage() {
-  const [context, setContext] = useState<UIContext | null>(null);
-  const [selectedSection, setSelectedSection] = useState("dashboard");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [snack, setSnack] = useState("");
-  const [snackOpen, setSnackOpen] = useState(false);
-
-  const loadContext = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const data = await fetchContext();
-      setContext(data);
-      setSelectedSection((prev) => prev || data.navigation[0]?.section || "dashboard");
-    } catch (err) {
-      setError(String(err));
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    context,
+    selectedSection,
+    setSelectedSection,
+    loading,
+    error,
+    snack,
+    setSnack,
+    snackOpen,
+    setSnackOpen,
+    ready,
+    loadContext,
+    t,
+  } = useDashboardContext();
 
   useEffect(() => {
     void loadContext();
-  }, []);
+  }, [loadContext]);
 
   useWebhook(
     "botRunComplete",
@@ -55,39 +42,13 @@ export default function HomePage() {
     []
   );
 
-  const t = useMemo(
-    () => (key: string, fallback?: string) => context?.messages[key] ?? fallback ?? key,
-    [context]
-  );
-
   const handleRun = async (payload: Parameters<typeof runBot>[0]) => {
     await runBot(payload);
-    await loadContext();
-    emitWebhook("runRequested", payload);
-  };
-
-  const handleWorkflowSave = async (content: string) => {
-    await saveWorkflow(content);
+    emitWebhook("botRunComplete", payload);
     await loadContext();
   };
 
-  const handleTemplateSelect = async (id: string) => {
-    const pkg = await fetchWorkflowPackage(id);
-    const workflowPayload = JSON.stringify(pkg.workflow ?? {}, null, 2);
-    setContext((prev) => (prev ? { ...prev, workflow_content: workflowPayload } : prev));
-  };
-
-  const handlePromptSave = async (content: string) => {
-    await savePrompt(content);
-    await loadContext();
-  };
-
-  const handleSettingsSave = async (values: Record<string, string>) => {
-    await saveSettings(values);
-    await loadContext();
-  };
-
-  if (loading) {
+  if (isLoading) {
     return (
       <main className="app-loading">
         <p>Loading dashboard…</p>
@@ -95,7 +56,7 @@ export default function HomePage() {
     );
   }
 
-  if (error || !context) {
+  if (error || !ready || !context) {
     return (
       <main className="app-loading">
         <p>{error || "Unable to load context."}</p>
@@ -108,31 +69,54 @@ export default function HomePage() {
 
   return (
     <>
-      <PageLayout
-        navItems={context.navigation}
-      section={selectedSection}
-      onSectionChange={setSelectedSection}
-      t={t}
-    >
-      {selectedSection === "dashboard" && (
-        <DashboardSection logs={context.logs} status={context.status} onRun={handleRun} t={t} />
-      )}
-      {selectedSection === "workflow" && (
-        <WorkflowSection
-          content={context.workflow_content}
-          packages={context.workflow_packages}
-          onSave={handleWorkflowSave}
-          onTemplateSelect={handleTemplateSelect}
-          t={t}
-        />
-      )}
-      {selectedSection === "prompt" && <PromptSection content={context.prompt_content} onSave={handlePromptSave} t={t} />}
-      {selectedSection === "settings" && (
-        <SettingsSection envVars={context.env_vars} onSave={handleSettingsSave} t={t} />
-      )}
-      {selectedSection === "translations" && (
-        <TranslationsSection languages={context.translations} onRefresh={loadContext} t={t} />
-      )}
+      <PageLayout navItems={context.navigation} section={selectedSection} onSectionChange={setSelectedSection} t={t}>
+        {selectedSection === "dashboard" && (
+          <DashboardSection logs={context.logs} status={context.status} onRun={handleRun} t={t} />
+        )}
+        {selectedSection === "workflow" && (
+          <WorkflowSection
+            content={context.workflow_content}
+            packages={context.workflow_packages}
+            onSave={async (content) => {
+              await saveWorkflow(content);
+              emitWebhook("workflow.save", { content });
+              await loadContext();
+            }}
+            onTemplateSelect={async (id) => {
+              const pkg = await fetchWorkflowPackage(id);
+              if (pkg.workflow) {
+                const workflowPayload = JSON.stringify(pkg.workflow ?? {}, null, 2);
+                await saveWorkflow(workflowPayload);
+                emitWebhook("workflow.template.selected", { id });
+                await loadContext();
+              }
+            }}
+            t={t}
+          />
+        )}
+        {selectedSection === "prompt" && (
+          <PromptSection
+            content={context.prompt_content}
+            onSave={async (content) => {
+              await savePrompt(content);
+              emitWebhook("prompt.save", { content });
+              await loadContext();
+            }}
+            t={t}
+          />
+        )}
+        {selectedSection === "settings" && (
+          <SettingsSection
+            envVars={context.env_vars}
+            onSave={async (values) => {
+              await saveSettings(values);
+              emitWebhook("settings.save", { values });
+              await loadContext();
+            }}
+            t={t}
+          />
+        )}
+        {selectedSection === "translations" && <TranslationsSection languages={context.translations} onRefresh={loadContext} t={t} />}
       </PageLayout>
       <Snackbar open={snackOpen} autoHideDuration={4000} onClose={() => setSnackOpen(false)}>
         <Alert onClose={() => setSnackOpen(false)} severity="info" sx={{ width: "100%" }}>
