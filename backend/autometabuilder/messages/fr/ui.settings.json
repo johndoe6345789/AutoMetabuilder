@@ -1,0 +1,16 @@
+{
+  "ui.settings.title": "Paramètres",
+  "ui.settings.subtitle": "Configurez les services, la sécurité et les préférences d'environnement",
+  "ui.settings.callout.title": "Paramètres compréhensibles",
+  "ui.settings.callout.body": "Chaque champ explique son rôle. Ajoutez des descriptions dans metadata.json pour rendre les paramètres personnalisés lisibles.",
+  "ui.settings.api_keys": "Clés API",
+  "ui.settings.configuration": "Configuration",
+  "ui.settings.web_access": "Accès à l'interface web",
+  "ui.settings.other": "Autres paramètres",
+  "ui.settings.custom_default_desc": "Paramètre d'environnement personnalisé. Ajoutez une description dans metadata.json pour l'afficher ici.",
+  "ui.settings.add.title": "Ajouter un paramètre",
+  "ui.settings.add.desc": "Utilisez des clés en majuscules avec des underscores, comme API_TIMEOUT.",
+  "ui.settings.add.placeholder_key": "CLÉ",
+  "ui.settings.add.placeholder_value": "Valeur",
+  "ui.settings.save_all": "Enregistrer tous les paramètres"
+}

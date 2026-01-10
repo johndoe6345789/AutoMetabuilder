@@ -1,0 +1,79 @@
+@import "variables";
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  background: linear-gradient(180deg, #111827, #0f172a);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid $border-color;
+}
+
+.sidebar__brand {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.9rem;
+}
+
+.sidebar__item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: $muted;
+  text-align: left;
+  padding: 0.65rem 0;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border-bottom: 1px solid rgba($border-color, 0.4);
+}
+
+.sidebar__item.active,
+.sidebar__item:hover {
+  color: $text;
+}
+
+.content-shell {
+  flex: 1;
+  padding: 2rem;
+  background: linear-gradient(135deg, #04070f, #101828);
+}
+
+.content-shell__header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.content-shell__header p {
+  margin-top: 0.25rem;
+  color: $muted;
+}
+
+.section-card {
+  margin-bottom: 2rem;
+}
+
+.section-card__header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.section-card__header p {
+  margin: 0.35rem 0 1rem;
+  color: $muted;
+}
+
+.app-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: $text;
+}

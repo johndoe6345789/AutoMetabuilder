@@ -1,0 +1,24 @@
+{
+  "core.append_context_message": {
+    "label": "meta.plugins.core_append_context_message.label",
+    "inputs": {
+      "messages": {
+        "label": "meta.plugins.core_append_context_message.inputs.messages.label",
+        "type": "text",
+        "default": "$messages"
+      },
+      "context": {
+        "label": "meta.plugins.core_append_context_message.inputs.context.label",
+        "type": "text",
+        "default": "$sdlc_context"
+      }
+    },
+    "outputs": {
+      "messages": {
+        "label": "meta.plugins.core_append_context_message.outputs.messages.label",
+        "type": "text",
+        "default": "messages"
+      }
+    }
+  }
+}

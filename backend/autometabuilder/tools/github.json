@@ -1,0 +1,79 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "create_branch",
+      "description": "Create a new git branch in the repository",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "branch_name": {
+            "type": "string",
+            "description": "The name of the new branch"
+          },
+          "base_branch": {
+            "type": "string",
+            "description": "The name of the base branch",
+            "default": "main"
+          }
+        },
+        "required": [
+          "branch_name"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_pull_request",
+      "description": "Create a new pull request",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The title of the PR"
+          },
+          "body": {
+            "type": "string",
+            "description": "The body content of the PR"
+          },
+          "head_branch": {
+            "type": "string",
+            "description": "The branch where changes are implemented"
+          },
+          "base_branch": {
+            "type": "string",
+            "description": "The branch to merge into",
+            "default": "main"
+          }
+        },
+        "required": [
+          "title",
+          "body",
+          "head_branch"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_pull_request_comments",
+      "description": "Get comments from a specific pull request to read feedback",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pr_number": {
+            "type": "integer",
+            "description": "The number of the pull request"
+          }
+        },
+        "required": [
+          "pr_number"
+        ]
+      }
+    }
+  }
+]

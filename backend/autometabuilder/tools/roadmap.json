@@ -1,0 +1,21 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "update_roadmap",
+      "description": "Update the ROADMAP.md file with new progress",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "The full new content for ROADMAP.md"
+          }
+        },
+        "required": [
+          "content"
+        ]
+      }
+    }
+  }
+]

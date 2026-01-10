@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Box,
   Button,
@@ -13,33 +12,20 @@ import {
   Typography,
 } from "@mui/material";
 import { UIStatus } from "../../lib/types";
-import { emitWebhook } from "../../hooks/useWebhook";
+import useDashboardControls, { DashboardRunPayload } from "../../hooks/useDashboardControls";
 
 type DashboardSectionProps = {
   status: UIStatus;
   logs: string;
-  onRun: (payload: { mode?: string; iterations?: number; yolo?: boolean; stop_at_mvp?: boolean }) => Promise<void>;
+  onRun: (payload: DashboardRunPayload) => Promise<void>;
   t: (key: string, fallback?: string) => string;
 };
 
 export default function DashboardSection({ status, logs, onRun, t }: DashboardSectionProps) {
-  const [mode, setMode] = useState("once");
-  const [iterations, setIterations] = useState(1);
-  const [stopAtMvp, setStopAtMvp] = useState(false);
-  const [feedback, setFeedback] = useState("");
-
-  const handleRun = async () => {
-    const isYolo = mode === "yolo";
-    setFeedback(t("ui.dashboard.status.bot_label", "Bot Status") + " — submitting");
-    try {
-      await onRun({ mode, iterations, yolo: isYolo, stop_at_mvp: stopAtMvp });
-      setFeedback(t("ui.dashboard.start_bot", "Start Bot") + " " + t("ui.dashboard.status.running", "Running"));
-      emitWebhook("botRunComplete", { mode, iterations });
-    } catch (error) {
-      console.error(error);
-      setFeedback(t("ui.dashboard.status.idle", "Idle"));
-    }
-  };
+  const { mode, setMode, iterations, setIterations, stopAtMvp, setStopAtMvp, feedback, handleRun } = useDashboardControls({
+    onRun,
+    t,
+  });
 
   return (
     <Paper id="dashboard" sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)" }}>

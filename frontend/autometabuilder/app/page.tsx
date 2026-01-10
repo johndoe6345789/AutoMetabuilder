@@ -2,15 +2,11 @@
 
 import { useEffect } from "react";
 import { Alert, Snackbar } from "@mui/material";
-import DashboardSection from "../components/sections/DashboardSection";
-import PromptSection from "../components/sections/PromptSection";
-import SettingsSection from "../components/sections/SettingsSection";
-import TranslationsSection from "../components/sections/TranslationsSection";
-import WorkflowSection from "../components/sections/WorkflowSection";
 import PageLayout from "../components/layout/PageLayout";
+import DashboardSections from "../components/sections/DashboardSections";
 import useDashboardContext from "../hooks/useDashboardContext";
-import { emitWebhook, useWebhook } from "../hooks/useWebhook";
-import { fetchWorkflowPackage, runBot, savePrompt, saveSettings, saveWorkflow } from "../lib/api";
+import useDashboardActions from "../hooks/useDashboardActions";
+import { useWebhook } from "../hooks/useWebhook";
 
 export default function HomePage() {
   const {
@@ -42,11 +38,9 @@ export default function HomePage() {
     []
   );
 
-  const handleRun = async (payload: Parameters<typeof runBot>[0]) => {
-    await runBot(payload);
-    emitWebhook("botRunComplete", payload);
-    await loadContext();
-  };
+  const { handleRun, handleWorkflowSave, handleTemplateSelect, handlePromptSave, handleSettingsSave } = useDashboardActions({
+    loadContext,
+  });
 
   if (loading) {
     return (
@@ -70,53 +64,17 @@ export default function HomePage() {
   return (
     <>
       <PageLayout navItems={context.navigation} section={selectedSection} onSectionChange={setSelectedSection} t={t}>
-        {selectedSection === "dashboard" && (
-          <DashboardSection logs={context.logs} status={context.status} onRun={handleRun} t={t} />
-        )}
-        {selectedSection === "workflow" && (
-          <WorkflowSection
-            content={context.workflow_content}
-            packages={context.workflow_packages}
-            onSave={async (content) => {
-              await saveWorkflow(content);
-              emitWebhook("workflow.save", { content });
-              await loadContext();
-            }}
-            onTemplateSelect={async (id) => {
-              const pkg = await fetchWorkflowPackage(id);
-              if (pkg.workflow) {
-                const workflowPayload = JSON.stringify(pkg.workflow ?? {}, null, 2);
-                await saveWorkflow(workflowPayload);
-                emitWebhook("workflow.template.selected", { id });
-                await loadContext();
-              }
-            }}
-            t={t}
-          />
-        )}
-        {selectedSection === "prompt" && (
-          <PromptSection
-            content={context.prompt_content}
-            onSave={async (content) => {
-              await savePrompt(content);
-              emitWebhook("prompt.save", { content });
-              await loadContext();
-            }}
-            t={t}
-          />
-        )}
-        {selectedSection === "settings" && (
-          <SettingsSection
-            envVars={context.env_vars}
-            onSave={async (values) => {
-              await saveSettings(values);
-              emitWebhook("settings.save", { values });
-              await loadContext();
-            }}
-            t={t}
-          />
-        )}
-        {selectedSection === "translations" && <TranslationsSection languages={context.translations} onRefresh={loadContext} t={t} />}
+        <DashboardSections
+          section={selectedSection}
+          context={context}
+          onRun={handleRun}
+          onWorkflowSave={handleWorkflowSave}
+          onTemplateSelect={handleTemplateSelect}
+          onPromptSave={handlePromptSave}
+          onSettingsSave={handleSettingsSave}
+          onTranslationsRefresh={loadContext}
+          t={t}
+        />
       </PageLayout>
       <Snackbar open={snackOpen} autoHideDuration={4000} onClose={() => setSnackOpen(false)}>
         <Alert onClose={() => setSnackOpen(false)} severity="info" sx={{ width: "100%" }}>

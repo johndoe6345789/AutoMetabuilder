@@ -1,0 +1,16 @@
+{
+  "ui.settings.title": "Settings",
+  "ui.settings.subtitle": "Configure services, security, and environment preferences",
+  "ui.settings.callout.title": "Human-friendly settings",
+  "ui.settings.callout.body": "Each field explains what it does. Add descriptions in metadata.json to keep custom settings readable for everyone.",
+  "ui.settings.api_keys": "API Keys",
+  "ui.settings.configuration": "Configuration",
+  "ui.settings.web_access": "Web UI Access",
+  "ui.settings.other": "Other Settings",
+  "ui.settings.custom_default_desc": "Custom environment setting. Add a description in metadata.json to show it here.",
+  "ui.settings.add.title": "Add New Setting",
+  "ui.settings.add.desc": "Use uppercase keys with underscores, like API_TIMEOUT.",
+  "ui.settings.add.placeholder_key": "KEY",
+  "ui.settings.add.placeholder_value": "Value",
+  "ui.settings.save_all": "Save All Settings"
+}

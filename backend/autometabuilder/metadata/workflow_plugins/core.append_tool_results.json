@@ -1,0 +1,24 @@
+{
+  "core.append_tool_results": {
+    "label": "meta.plugins.core_append_tool_results.label",
+    "inputs": {
+      "messages": {
+        "label": "meta.plugins.core_append_tool_results.inputs.messages.label",
+        "type": "text",
+        "default": "$messages"
+      },
+      "tool_results": {
+        "label": "meta.plugins.core_append_tool_results.inputs.tool_results.label",
+        "type": "text",
+        "default": "$tool_results"
+      }
+    },
+    "outputs": {
+      "messages": {
+        "label": "meta.plugins.core_append_tool_results.outputs.messages.label",
+        "type": "text",
+        "default": "messages"
+      }
+    }
+  }
+}

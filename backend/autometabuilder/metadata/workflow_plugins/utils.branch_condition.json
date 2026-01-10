@@ -1,0 +1,45 @@
+{
+  "utils.branch_condition": {
+    "label": "meta.plugins.utils_branch_condition.label",
+    "inputs": {
+      "value": {
+        "label": "meta.plugins.utils_branch_condition.inputs.value.label",
+        "type": "text",
+        "default": "$reduced_output"
+      },
+      "mode": {
+        "label": "meta.plugins.utils_branch_condition.inputs.mode.label",
+        "type": "select",
+        "default": "is_empty",
+        "options": [
+          "is_empty",
+          "is_truthy",
+          "equals",
+          "not_equals",
+          "contains",
+          "regex"
+        ],
+        "option_labels": [
+          "meta.plugins.utils_branch_condition.inputs.mode.options.is_empty",
+          "meta.plugins.utils_branch_condition.inputs.mode.options.is_truthy",
+          "meta.plugins.utils_branch_condition.inputs.mode.options.equals",
+          "meta.plugins.utils_branch_condition.inputs.mode.options.not_equals",
+          "meta.plugins.utils_branch_condition.inputs.mode.options.contains",
+          "meta.plugins.utils_branch_condition.inputs.mode.options.regex"
+        ]
+      },
+      "compare": {
+        "label": "meta.plugins.utils_branch_condition.inputs.compare.label",
+        "type": "text",
+        "default": ""
+      }
+    },
+    "outputs": {
+      "result": {
+        "label": "meta.plugins.utils_branch_condition.outputs.result.label",
+        "type": "text",
+        "default": "branch_decision"
+      }
+    }
+  }
+}

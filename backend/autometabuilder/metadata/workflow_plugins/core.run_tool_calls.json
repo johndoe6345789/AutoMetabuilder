@@ -1,0 +1,24 @@
+{
+  "core.run_tool_calls": {
+    "label": "meta.plugins.core_run_tool_calls.label",
+    "inputs": {
+      "response": {
+        "label": "meta.plugins.core_run_tool_calls.inputs.response.label",
+        "type": "text",
+        "default": "$llm_response"
+      }
+    },
+    "outputs": {
+      "tool_results": {
+        "label": "meta.plugins.core_run_tool_calls.outputs.tool_results.label",
+        "type": "text",
+        "default": "tool_results"
+      },
+      "no_tool_calls": {
+        "label": "meta.plugins.core_run_tool_calls.outputs.no_tool_calls.label",
+        "type": "text",
+        "default": "no_tool_calls"
+      }
+    }
+  }
+}

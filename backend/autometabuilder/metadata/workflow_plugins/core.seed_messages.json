@@ -1,0 +1,13 @@
+{
+  "core.seed_messages": {
+    "label": "meta.plugins.core_seed_messages.label",
+    "inputs": {},
+    "outputs": {
+      "messages": {
+        "label": "meta.plugins.core_seed_messages.outputs.messages.label",
+        "type": "text",
+        "default": "messages"
+      }
+    }
+  }
+}

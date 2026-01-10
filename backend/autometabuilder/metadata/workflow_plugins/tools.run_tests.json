@@ -1,0 +1,19 @@
+{
+  "tools.run_tests": {
+    "label": "meta.plugins.tools_run_tests.label",
+    "inputs": {
+      "path": {
+        "label": "meta.plugins.tools_run_tests.inputs.path.label",
+        "type": "text",
+        "default": "tests"
+      }
+    },
+    "outputs": {
+      "results": {
+        "label": "meta.plugins.tools_run_tests.outputs.results.label",
+        "type": "text",
+        "default": "test_results"
+      }
+    }
+  }
+}

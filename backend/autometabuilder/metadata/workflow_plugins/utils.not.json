@@ -1,0 +1,19 @@
+{
+  "utils.not": {
+    "label": "meta.plugins.utils_not.label",
+    "inputs": {
+      "value": {
+        "label": "meta.plugins.utils_not.inputs.value.label",
+        "type": "text",
+        "default": "$branch_decision"
+      }
+    },
+    "outputs": {
+      "result": {
+        "label": "meta.plugins.utils_not.outputs.result.label",
+        "type": "text",
+        "default": "not_branch_decision"
+      }
+    }
+  }
+}

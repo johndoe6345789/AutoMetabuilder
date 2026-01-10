@@ -1,0 +1,33 @@
+@import "variables";
+
+.dashboard-grid,
+.workflow-grid,
+.settings-grid,
+.translations-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.dashboard-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.workflow-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.settings-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.settings-grid .field-group {
+  @include panel;
+}
+
+.settings-grid--new {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.translations-layout {
+  grid-template-columns: minmax(0, 1fr);
+}

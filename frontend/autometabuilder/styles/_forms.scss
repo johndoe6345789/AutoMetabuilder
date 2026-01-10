@@ -1,0 +1,45 @@
+@import "variables";
+
+.workflow-editor textarea,
+.prompt-editor,
+.translations-layout textarea {
+  width: 100%;
+  border-radius: $radius;
+  border: 1px solid $border-color;
+  background: #02040a;
+  color: $text;
+  padding: 1rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9rem;
+}
+
+.workflow-actions,
+.translations-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.translations-actions button {
+  background: none;
+  border: 1px solid $border-color;
+  border-radius: $radius;
+  color: $text;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+}
+
+.language-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.language-form input {
+  flex: 1;
+  border-radius: $radius;
+  border: 1px solid $border-color;
+  padding: 0.5rem;
+  background: #02040a;
+  color: $text;
+}

@@ -1,0 +1,24 @@
+{
+  "utils.map_list": {
+    "label": "meta.plugins.utils_map_list.label",
+    "inputs": {
+      "items": {
+        "label": "meta.plugins.utils_map_list.inputs.items.label",
+        "type": "text",
+        "default": "$filtered_list"
+      },
+      "template": {
+        "label": "meta.plugins.utils_map_list.inputs.template.label",
+        "type": "text",
+        "default": "File: {item}"
+      }
+    },
+    "outputs": {
+      "items": {
+        "label": "meta.plugins.utils_map_list.outputs.items.label",
+        "type": "text",
+        "default": "mapped_list"
+      }
+    }
+  }
+}

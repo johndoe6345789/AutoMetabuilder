@@ -1,0 +1,29 @@
+@import "variables";
+
+.language-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.language-chip {
+  border-radius: 999px;
+  border: 1px solid $border-color;
+  padding: 0.35rem 0.75rem;
+  background: transparent;
+  color: $muted;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.language-chip.active {
+  background: rgba($accent, 0.15);
+  color: white;
+}
+
+.language-chip span {
+  display: block;
+  font-size: 0.7rem;
+  color: $muted;
+}

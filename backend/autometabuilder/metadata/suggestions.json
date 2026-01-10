@@ -1,0 +1,39 @@
+{
+  "languages": [
+    "en",
+    "es",
+    "fr",
+    "nl",
+    "de",
+    "it",
+    "ja",
+    "zh",
+    "pirate"
+  ],
+  "env_keys": [
+    "GITHUB_TOKEN",
+    "GITHUB_REPOSITORY",
+    "OPENAI_API_KEY",
+    "LITELLM_API_KEY",
+    "LOG_LEVEL",
+    "APP_LANG",
+    "PROMPT_PATH",
+    "WEB_USER",
+    "WEB_PASSWORD"
+  ],
+  "env_values": [
+    "TRACE",
+    "INFO",
+    "DEBUG",
+    "WARNING",
+    "ERROR"
+  ],
+  "task_names": [
+    "Initialize Project",
+    "Analyze Requirements",
+    "Generate Code",
+    "Run Tests",
+    "Deploy",
+    "Iterative Refinement"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "core.append_user_instruction": {
+    "label": "meta.plugins.core_append_user_instruction.label",
+    "inputs": {
+      "messages": {
+        "label": "meta.plugins.core_append_user_instruction.inputs.messages.label",
+        "type": "text",
+        "default": "$messages"
+      }
+    },
+    "outputs": {
+      "messages": {
+        "label": "meta.plugins.core_append_user_instruction.outputs.messages.label",
+        "type": "text",
+        "default": "messages"
+      }
+    }
+  }
+}

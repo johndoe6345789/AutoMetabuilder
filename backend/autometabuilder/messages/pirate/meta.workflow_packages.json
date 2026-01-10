@@ -1,0 +1,18 @@
+{
+  "meta.workflow_packages.blank.label": "Blank Deck",
+  "meta.workflow_packages.blank.description": "Start with an empty workflow.",
+  "meta.workflow_packages.iterative_loop.label": "Iterative Matey Loop",
+  "meta.workflow_packages.iterative_loop.description": "Cycle AI planning, tool work, and feedback till there be no tool calls.",
+  "meta.workflow_packages.single_pass.label": "Single Pass",
+  "meta.workflow_packages.single_pass.description": "Run one AI request and tool run, no loop.",
+  "meta.workflow_packages.plan_execute_summarize.label": "Plan, Plunder, Summarize",
+  "meta.workflow_packages.plan_execute_summarize.description": "Plan with the model, run tools, then ask for a final recap.",
+  "meta.workflow_packages.testing_triangle.label": "Testin' Triangle",
+  "meta.workflow_packages.testing_triangle.description": "Run lint, unit, then UI tests with conditional gating.",
+  "meta.workflow_packages.repo_scan_context.label": "Repo Scan Context",
+  "meta.workflow_packages.repo_scan_context.description": "Map-reduce repo files into context before the AI request.",
+  "meta.workflow_packages.contextual_iterative_loop.label": "Contextual Iterative Loop",
+  "meta.workflow_packages.contextual_iterative_loop.description": "Scan files, then loop AI/tool steps till no tool calls remain.",
+  "meta.workflow_packages.game_tick_loop.label": "Game Tick Loop",
+  "meta.workflow_packages.game_tick_loop.description": "Seed a tick script and loop AI/tool steps fer a few cycles."
+}

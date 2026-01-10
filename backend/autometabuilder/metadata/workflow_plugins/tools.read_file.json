@@ -1,0 +1,19 @@
+{
+  "tools.read_file": {
+    "label": "meta.plugins.tools_read_file.label",
+    "inputs": {
+      "path": {
+        "label": "meta.plugins.tools_read_file.inputs.path.label",
+        "type": "text",
+        "default": "README.md"
+      }
+    },
+    "outputs": {
+      "content": {
+        "label": "meta.plugins.tools_read_file.outputs.content.label",
+        "type": "text",
+        "default": "file_content"
+      }
+    }
+  }
+}

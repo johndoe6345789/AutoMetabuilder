@@ -1,0 +1,16 @@
+{
+  "ui.settings.title": "Configuración",
+  "ui.settings.subtitle": "Configura servicios, seguridad y preferencias del entorno",
+  "ui.settings.callout.title": "Configuración clara",
+  "ui.settings.callout.body": "Cada campo explica qué hace. Añade descripciones en metadata.json para mantener legibles los ajustes personalizados.",
+  "ui.settings.api_keys": "Claves API",
+  "ui.settings.configuration": "Configuración",
+  "ui.settings.web_access": "Acceso a la interfaz web",
+  "ui.settings.other": "Otros ajustes",
+  "ui.settings.custom_default_desc": "Ajuste de entorno personalizado. Añade una descripción en metadata.json para verla aquí.",
+  "ui.settings.add.title": "Añadir nuevo ajuste",
+  "ui.settings.add.desc": "Usa claves en mayúsculas con guiones bajos, como API_TIMEOUT.",
+  "ui.settings.add.placeholder_key": "CLAVE",
+  "ui.settings.add.placeholder_value": "Valor",
+  "ui.settings.save_all": "Guardar todos los ajustes"
+}

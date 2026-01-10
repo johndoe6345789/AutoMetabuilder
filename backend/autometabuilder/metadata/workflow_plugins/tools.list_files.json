@@ -1,0 +1,19 @@
+{
+  "tools.list_files": {
+    "label": "meta.plugins.tools_list_files.label",
+    "inputs": {
+      "path": {
+        "label": "meta.plugins.tools_list_files.inputs.path.label",
+        "type": "text",
+        "default": "."
+      }
+    },
+    "outputs": {
+      "files": {
+        "label": "meta.plugins.tools_list_files.outputs.files.label",
+        "type": "text",
+        "default": "file_list"
+      }
+    }
+  }
+}

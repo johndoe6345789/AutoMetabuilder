@@ -1,0 +1,79 @@
+{
+  "GITHUB_TOKEN": {
+    "label": "meta.settings.github_token.label",
+    "description": "meta.settings.github_token.description",
+    "type": "password",
+    "required": true
+  },
+  "GITHUB_REPOSITORY": {
+    "label": "meta.settings.github_repository.label",
+    "description": "meta.settings.github_repository.description",
+    "type": "text",
+    "placeholder": "meta.settings.github_repository.placeholder"
+  },
+  "OPENAI_API_KEY": {
+    "label": "meta.settings.openai_api_key.label",
+    "description": "meta.settings.openai_api_key.description",
+    "type": "password",
+    "required": true
+  },
+  "LITELLM_API_KEY": {
+    "label": "meta.settings.litellm_api_key.label",
+    "description": "meta.settings.litellm_api_key.description",
+    "type": "password"
+  },
+  "LOG_LEVEL": {
+    "label": "meta.settings.log_level.label",
+    "description": "meta.settings.log_level.description",
+    "type": "select",
+    "options": [
+      "TRACE",
+      "DEBUG",
+      "INFO",
+      "WARNING",
+      "ERROR"
+    ],
+    "option_labels": [
+      "meta.settings.log_level.options.trace",
+      "meta.settings.log_level.options.debug",
+      "meta.settings.log_level.options.info",
+      "meta.settings.log_level.options.warning",
+      "meta.settings.log_level.options.error"
+    ]
+  },
+  "APP_LANG": {
+    "label": "meta.settings.app_lang.label",
+    "description": "meta.settings.app_lang.description",
+    "type": "select",
+    "options": [
+      "en",
+      "es",
+      "fr",
+      "nl",
+      "pirate"
+    ],
+    "option_labels": [
+      "meta.settings.app_lang.options.en",
+      "meta.settings.app_lang.options.es",
+      "meta.settings.app_lang.options.fr",
+      "meta.settings.app_lang.options.nl",
+      "meta.settings.app_lang.options.pirate"
+    ]
+  },
+  "PROMPT_PATH": {
+    "label": "meta.settings.prompt_path.label",
+    "description": "meta.settings.prompt_path.description",
+    "type": "text",
+    "default": "prompt.yml"
+  },
+  "WEB_USER": {
+    "label": "meta.settings.web_user.label",
+    "description": "meta.settings.web_user.description",
+    "type": "text"
+  },
+  "WEB_PASSWORD": {
+    "label": "meta.settings.web_password.label",
+    "description": "meta.settings.web_password.description",
+    "type": "password"
+  }
+}

@@ -1,0 +1,42 @@
+@import "variables";
+
+.workflow-editor {
+  @include panel;
+}
+
+.workflow-message {
+  font-size: 0.85rem;
+  color: $accent;
+}
+
+.workflow-error {
+  font-size: 0.85rem;
+  color: #f87171;
+}
+
+.workflow-templates {
+  @include panel;
+}
+
+.template-palette {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.template-card {
+  border: 1px dashed rgba($border-color, 0.7);
+  border-radius: $radius;
+  padding: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.template-card button {
+  border: none;
+  background: transparent;
+  color: $accent;
+  cursor: pointer;
+}

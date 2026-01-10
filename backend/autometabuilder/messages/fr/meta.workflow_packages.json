@@ -1,0 +1,18 @@
+{
+  "meta.workflow_packages.blank.label": "Toile vierge",
+  "meta.workflow_packages.blank.description": "Commencez avec un workflow vide.",
+  "meta.workflow_packages.iterative_loop.label": "Boucle itérative de l'agent",
+  "meta.workflow_packages.iterative_loop.description": "Itère la planification IA, l'exécution des outils et les retours jusqu'à ce qu'il n'y ait plus d'appels d'outils.",
+  "meta.workflow_packages.single_pass.label": "Passe unique",
+  "meta.workflow_packages.single_pass.description": "Exécute une requête IA et une séquence d'outils une seule fois, sans boucle.",
+  "meta.workflow_packages.plan_execute_summarize.label": "Planifier, exécuter, résumer",
+  "meta.workflow_packages.plan_execute_summarize.description": "Planifiez avec le modèle, exécutez les outils, puis demandez un récapitulatif final.",
+  "meta.workflow_packages.testing_triangle.label": "Triangle de tests",
+  "meta.workflow_packages.testing_triangle.description": "Exécute lint, tests unitaires puis UI avec contrôle conditionnel.",
+  "meta.workflow_packages.repo_scan_context.label": "Contexte d'exploration du dépôt",
+  "meta.workflow_packages.repo_scan_context.description": "Réduit les fichiers du dépôt en contexte avant la requête IA.",
+  "meta.workflow_packages.contextual_iterative_loop.label": "Boucle itérative contextualisée",
+  "meta.workflow_packages.contextual_iterative_loop.description": "Scanne les fichiers puis boucle IA/outils jusqu'à absence d'appels.",
+  "meta.workflow_packages.game_tick_loop.label": "Boucle de ticks de jeu",
+  "meta.workflow_packages.game_tick_loop.description": "Sème un script de ticks puis boucle IA/outils sur quelques cycles."
+}

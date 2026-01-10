@@ -1,0 +1,19 @@
+{
+  "error_github_token_missing": "Error: variable de entorno GITHUB_TOKEN no configurada.",
+  "info_integrated_repo": "Integrado con el repositorio: {repo_name}",
+  "warn_github_init_failed": "Advertencia: falló la integración con GitHub: {error}",
+  "error_sdlc_context": "Error al obtener el contexto de SDLC: {error}",
+  "user_next_step": "¿Qué debo hacer a continuación?",
+  "info_tool_call_requested": "Llamada a herramienta solicitada...",
+  "info_executing_create_branch": "Ejecutando: create_branch({args})",
+  "info_executing_create_pr": "Ejecutando: create_pull_request({args})",
+  "error_github_not_available": "Error: la integración de GitHub no está disponible para la llamada a la herramienta.",
+  "error_github_repo_missing": "variable de entorno GITHUB_REPOSITORY no configurada",
+  "sdlc_context_label": "Contexto de SDLC:",
+  "open_issues_label": "Issues abiertos:",
+  "open_prs_label": "Pull Requests abiertos:",
+  "confirm_tool_execution": "¿Desea ejecutar {name} con {args}? [y/N]: ",
+  "info_tool_skipped": "Omitiendo herramienta: {name}",
+  "info_dry_run_skipping": "DRY RUN: Omitiendo herramienta de modificación de estado {name}",
+  "info_second_pass": "Realizando un segundo paso con los resultados de la herramienta..."
+}

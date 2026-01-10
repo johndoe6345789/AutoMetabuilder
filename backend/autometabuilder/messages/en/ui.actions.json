@@ -1,0 +1,8 @@
+{
+  "ui.actions.add": "Add",
+  "ui.actions.save": "Save",
+  "ui.actions.reset": "Reset",
+  "ui.actions.delete": "Delete",
+  "ui.actions.edit": "Edit",
+  "ui.actions.refresh": "Refresh"
+}

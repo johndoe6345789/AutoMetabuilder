@@ -1,0 +1,24 @@
+{
+  "utils.reduce_list": {
+    "label": "meta.plugins.utils_reduce_list.label",
+    "inputs": {
+      "items": {
+        "label": "meta.plugins.utils_reduce_list.inputs.items.label",
+        "type": "text",
+        "default": "$mapped_list"
+      },
+      "separator": {
+        "label": "meta.plugins.utils_reduce_list.inputs.separator.label",
+        "type": "text",
+        "default": "\\n"
+      }
+    },
+    "outputs": {
+      "result": {
+        "label": "meta.plugins.utils_reduce_list.outputs.result.label",
+        "type": "text",
+        "default": "reduced_output"
+      }
+    }
+  }
+}

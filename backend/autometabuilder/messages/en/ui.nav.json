@@ -1,0 +1,7 @@
+{
+  "ui.nav.dashboard": "Dashboard",
+  "ui.nav.workflow": "Workflow",
+  "ui.nav.prompt": "Prompt",
+  "ui.nav.settings": "Settings",
+  "ui.nav.translations": "Translations"
+}

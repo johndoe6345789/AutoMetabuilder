@@ -1,0 +1,16 @@
+{
+  "ui.settings.title": "Instellingen",
+  "ui.settings.subtitle": "Configureer services, beveiliging en omgevingsvoorkeuren",
+  "ui.settings.callout.title": "Mensvriendelijke instellingen",
+  "ui.settings.callout.body": "Elk veld legt uit wat het doet. Voeg beschrijvingen toe in metadata.json om aangepaste instellingen leesbaar te houden.",
+  "ui.settings.api_keys": "API-sleutels",
+  "ui.settings.configuration": "Configuratie",
+  "ui.settings.web_access": "Toegang tot webinterface",
+  "ui.settings.other": "Andere instellingen",
+  "ui.settings.custom_default_desc": "Aangepaste omgevingsinstelling. Voeg een beschrijving toe in metadata.json om dit hier te tonen.",
+  "ui.settings.add.title": "Nieuwe instelling toevoegen",
+  "ui.settings.add.desc": "Gebruik hoofdletters met underscores, zoals API_TIMEOUT.",
+  "ui.settings.add.placeholder_key": "SLEUTEL",
+  "ui.settings.add.placeholder_value": "Waarde",
+  "ui.settings.save_all": "Alle instellingen opslaan"
+}

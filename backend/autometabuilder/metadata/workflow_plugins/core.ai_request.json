@@ -1,0 +1,29 @@
+{
+  "core.ai_request": {
+    "label": "meta.plugins.core_ai_request.label",
+    "inputs": {
+      "messages": {
+        "label": "meta.plugins.core_ai_request.inputs.messages.label",
+        "type": "text",
+        "default": "$messages"
+      }
+    },
+    "outputs": {
+      "response": {
+        "label": "meta.plugins.core_ai_request.outputs.response.label",
+        "type": "text",
+        "default": "llm_response"
+      },
+      "has_tool_calls": {
+        "label": "meta.plugins.core_ai_request.outputs.has_tool_calls.label",
+        "type": "text",
+        "default": "has_tool_calls"
+      },
+      "tool_calls_count": {
+        "label": "meta.plugins.core_ai_request.outputs.tool_calls_count.label",
+        "type": "text",
+        "default": "tool_calls_count"
+      }
+    }
+  }
+}

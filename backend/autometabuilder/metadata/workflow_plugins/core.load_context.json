@@ -1,0 +1,13 @@
+{
+  "core.load_context": {
+    "label": "meta.plugins.core_load_context.label",
+    "inputs": {},
+    "outputs": {
+      "context": {
+        "label": "meta.plugins.core_load_context.outputs.context.label",
+        "type": "text",
+        "default": "sdlc_context"
+      }
+    }
+  }
+}

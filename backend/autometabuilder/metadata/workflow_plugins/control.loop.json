@@ -1,0 +1,31 @@
+{
+  "control.loop": {
+    "label": "meta.plugins.control_loop.label",
+    "inputs": {
+      "max_iterations": {
+        "label": "meta.plugins.control_loop.inputs.max_iterations.label",
+        "type": "number",
+        "default": 10
+      },
+      "stop_when": {
+        "label": "meta.plugins.control_loop.inputs.stop_when.label",
+        "type": "text",
+        "default": "$no_tool_calls"
+      },
+      "stop_on": {
+        "label": "meta.plugins.control_loop.inputs.stop_on.label",
+        "type": "select",
+        "default": "true",
+        "options": [
+          "true",
+          "false"
+        ],
+        "option_labels": [
+          "meta.plugins.control_loop.inputs.stop_on.options.true",
+          "meta.plugins.control_loop.inputs.stop_on.options.false"
+        ]
+      }
+    },
+    "outputs": {}
+  }
+}

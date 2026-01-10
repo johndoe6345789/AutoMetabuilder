@@ -1,106 +1,71 @@
 import os
 import unittest
+
 from autometabuilder.roadmap_utils import is_mvp_reached, update_roadmap
+
 
 class TestRoadmap(unittest.TestCase):
     def setUp(self):
-        # Backup original ROADMAP.md if it exists
         self.original_content = None
         if os.path.exists("ROADMAP.md"):
             with open("ROADMAP.md", "r", encoding="utf-8") as f:
                 self.original_content = f.read()
 
     def tearDown(self):
-        # Restore original ROADMAP.md
         if self.original_content is not None:
             with open("ROADMAP.md", "w", encoding="utf-8") as f:
                 f.write(self.original_content)
         elif os.path.exists("ROADMAP.md"):
             os.remove("ROADMAP.md")
 
-    def test_is_mvp_reached_true(self):
-        content = """
-# Roadmap
-## Phase 3: Advanced Automation (MVP)
-- [x] Item 1
-- [x] Item 2
-"""
+    def assert_mvp(self, content: str, expected: bool) -> None:
         update_roadmap(content)
-        self.assertTrue(is_mvp_reached())
+        self.assertEqual(is_mvp_reached(), expected)
 
-    def test_is_mvp_reached_false_unchecked(self):
-        content = """
-# Roadmap
-## Phase 3: Advanced Automation (MVP)
-- [x] Item 1
-- [ ] Item 2
-"""
-        update_roadmap(content)
-        self.assertFalse(is_mvp_reached())
+    def test_is_mvp_reached_cases(self):
+        cases = [
+            (
+                "mvp_all_checked",
+                "# Roadmap\n## Phase 3: Advanced Automation (MVP)\n- [x] Item 1\n- [x] Item 2\n",
+                True,
+            ),
+            (
+                "mvp_unchecked",
+                "# Roadmap\n## Phase 3: Advanced Automation (MVP)\n- [x] Item 1\n- [ ] Item 2\n",
+                False,
+            ),
+            (
+                "mvp_no_items",
+                "# Roadmap\n## Phase 3: Advanced Automation (MVP)\nNo items here\n",
+                False,
+            ),
+            (
+                "mvp_case_insensitive",
+                "# Roadmap\n## Phase 3: (mvp)\n- [x] Done\n",
+                True,
+            ),
+            (
+                "mvp_with_other_sections",
+                "# Roadmap\n## Phase 1\n- [x] Done\n\n## Phase 3 (MVP)\n- [ ] Not done\n\n## Phase 4\n- [x] Done\n",
+                False,
+            ),
+            (
+                "mvp_no_section",
+                "# Roadmap\n## Phase 1\n- [x] Done\n",
+                False,
+            ),
+            (
+                "mvp_multiple_markers_first_true",
+                "# Roadmap\n## Phase 3 (MVP)\n- [x] Done\n\n## Phase 5 (MVP)\n- [ ] Not done\n",
+                True,
+            ),
+            (
+                "mvp_not_in_header",
+                "# Roadmap\n## Phase 1\nThis is not (MVP) but it mentions it.\n- [x] Done\n",
+                False,
+            ),
+        ]
 
-    def test_is_mvp_reached_false_no_items(self):
-        content = """
-# Roadmap
-## Phase 3: Advanced Automation (MVP)
-No items here
-"""
-        update_roadmap(content)
-        self.assertFalse(is_mvp_reached())
-
-    def test_is_mvp_reached_case_insensitive(self):
-        content = """
-# Roadmap
-## Phase 3: (mvp)
-- [x] Done
-"""
-        update_roadmap(content)
-        self.assertTrue(is_mvp_reached())
-
-    def test_is_mvp_reached_with_other_sections(self):
-        content = """
-# Roadmap
-## Phase 1
-- [x] Done
-
-## Phase 3 (MVP)
-- [ ] Not done
-
-## Phase 4
-- [x] Done
-"""
-        update_roadmap(content)
-        self.assertFalse(is_mvp_reached())
-
-    def test_is_mvp_reached_no_section(self):
-        content = """
-# Roadmap
-## Phase 1
-- [x] Done
-"""
-        update_roadmap(content)
-        self.assertFalse(is_mvp_reached())
-
-    def test_is_mvp_reached_multiple_mvp_markers(self):
-        # Should probably pick the first one or behave consistently
-        content = """
-# Roadmap
-## Phase 3 (MVP)
-- [x] Done
-
-## Phase 5 (MVP)
-- [ ] Not done
-"""
-        update_roadmap(content)
-        # Current logic picks the first match
-        self.assertTrue(is_mvp_reached())
-
-    def test_is_mvp_reached_not_in_header(self):
-        content = """
-# Roadmap
-## Phase 1
-This is not (MVP) but it mentions it.
-- [x] Done
-"""
-        update_roadmap(content)
-        # Should be False because (MVP) is not in a header
-        self.assertFalse(is_mvp_reached())
+        for name, content, expected in cases:
+            with self.subTest(name=name):
+                self.assert_mvp(content, expected)

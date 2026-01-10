@@ -1,0 +1,19 @@
+{
+  "tools.run_lint": {
+    "label": "meta.plugins.tools_run_lint.label",
+    "inputs": {
+      "path": {
+        "label": "meta.plugins.tools_run_lint.inputs.path.label",
+        "type": "text",
+        "default": "src"
+      }
+    },
+    "outputs": {
+      "results": {
+        "label": "meta.plugins.tools_run_lint.outputs.results.label",
+        "type": "text",
+        "default": "lint_results"
+      }
+    }
+  }
+}

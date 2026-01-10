@@ -1,18 +1,5 @@
-import { FormEvent, useEffect, useState } from "react";
-import {
-  Button,
-  Chip,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import {
-  createTranslation,
-  deleteTranslation,
-  fetchTranslation,
-  updateTranslation,
-} from "../../lib/api";
+import { Button, Chip, Paper, Stack, TextField, Typography } from "@mui/material";
+import useTranslationManager from "../../hooks/useTranslationManager";
 
 type TranslationsSectionProps = {
   languages: Record<string, string>;
@@ -21,58 +8,19 @@ type TranslationsSectionProps = {
 };
 
 export default function TranslationsSection({ languages, onRefresh, t }: TranslationsSectionProps) {
-  const [selected, setSelected] = useState<string | null>(null);
-  const [editorValue, setEditorValue] = useState("{}");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-  const [newLang, setNewLang] = useState("");
-
-  const loadContent = async (lang: string) => {
-    setError("");
-    const data = await fetchTranslation(lang);
-    setEditorValue(JSON.stringify(data.content, null, 2));
-  };
-
-  /* eslint-disable react-hooks/set-state-in-effect */
-  useEffect(() => {
-    if (!selected && Object.keys(languages).length) {
-      setSelected(Object.keys(languages)[0]);
-    }
-  }, [languages, selected]);
-
-  useEffect(() => {
-    if (selected) {
-      loadContent(selected);
-    }
-  }, [selected]);
-  /* eslint-enable react-hooks/set-state-in-effect */
-
-  const handleSave = async () => {
-    if (!selected) return;
-    try {
-      const payload = JSON.parse(editorValue);
-      await updateTranslation(selected, payload);
-      setMessage(t("ui.translations.notice.saved", "Translation saved!"));
-      onRefresh();
-    } catch (err) {
-      setError(String(err));
-    }
-  };
-
-  const handleCreate = async (event: FormEvent) => {
-    event.preventDefault();
-    if (!newLang.trim()) return;
-    await createTranslation(newLang.trim());
-    setNewLang("");
-    onRefresh();
-  };
-
-  const handleDelete = async () => {
-    if (!selected) return;
-    await deleteTranslation(selected);
-    setSelected(null);
-    onRefresh();
-  };
+  const {
+    selected,
+    editorValue,
+    message,
+    error,
+    newLang,
+    setSelected,
+    setEditorValue,
+    setNewLang,
+    handleSave,
+    handleCreate,
+    handleDelete,
+  } = useTranslationManager({ languages, onRefresh, t });
 
   return (
     <Paper id="translations" sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)" }}>

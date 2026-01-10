@@ -1,0 +1,24 @@
+{
+  "tools.create_branch": {
+    "label": "meta.plugins.tools_create_branch.label",
+    "inputs": {
+      "branch_name": {
+        "label": "meta.plugins.tools_create_branch.inputs.branch_name.label",
+        "type": "text",
+        "default": "feature/auto-change"
+      },
+      "base_branch": {
+        "label": "meta.plugins.tools_create_branch.inputs.base_branch.label",
+        "type": "text",
+        "default": "main"
+      }
+    },
+    "outputs": {
+      "result": {
+        "label": "meta.plugins.tools_create_branch.outputs.result.label",
+        "type": "text",
+        "default": "branch_result"
+      }
+    }
+  }
+}
