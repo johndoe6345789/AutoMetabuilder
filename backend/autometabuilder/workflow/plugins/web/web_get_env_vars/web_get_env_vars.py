@@ -1,5 +1,5 @@
 """Workflow plugin: get environment variables."""
-from ....web.data.env import get_env_vars
+from ....data.env import get_env_vars
 
 
 def run(_runtime, _inputs):

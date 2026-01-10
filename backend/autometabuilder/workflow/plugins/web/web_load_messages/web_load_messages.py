@@ -1,6 +1,6 @@
 """Workflow plugin: load messages."""
 from pathlib import Path
-from ....web.data.messages_io import load_messages
+from ....data.messages_io import load_messages
 
 
 def run(_runtime, inputs):

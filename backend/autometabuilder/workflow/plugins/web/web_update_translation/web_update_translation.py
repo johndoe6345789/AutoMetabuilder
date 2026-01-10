@@ -1,5 +1,5 @@
 """Workflow plugin: update translation."""
-from ....web.data.translations import update_translation
+from ....data.translations import update_translation
 
 
 def run(_runtime, inputs):

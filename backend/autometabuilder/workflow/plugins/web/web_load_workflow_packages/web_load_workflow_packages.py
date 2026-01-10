@@ -1,5 +1,5 @@
 """Workflow plugin: load workflow packages."""
-from ....web.data.workflow import load_workflow_packages
+from ....data.workflow import load_workflow_packages
 
 
 def run(_runtime, _inputs):

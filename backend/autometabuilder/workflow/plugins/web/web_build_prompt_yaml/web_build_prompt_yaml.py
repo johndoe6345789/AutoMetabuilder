@@ -1,5 +1,5 @@
 """Workflow plugin: build prompt YAML."""
-from ....web.data.prompt import build_prompt_yaml
+from ....data.prompt import build_prompt_yaml
 
 
 def run(_runtime, inputs):

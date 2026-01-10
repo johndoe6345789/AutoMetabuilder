@@ -1,5 +1,5 @@
 """Workflow plugin: write prompt."""
-from ....web.data.prompt import write_prompt
+from ....data.prompt import write_prompt
 
 
 def run(_runtime, inputs):

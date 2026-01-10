@@ -1,5 +1,5 @@
 """Workflow plugin: get UI messages."""
-from ....web.data.translations import get_ui_messages
+from ....data.translations import get_ui_messages
 
 
 def run(_runtime, inputs):

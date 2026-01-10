@@ -1,5 +1,5 @@
 """Workflow plugin: get recent logs."""
-from ....web.data.logs import get_recent_logs
+from ....data.logs import get_recent_logs
 
 
 def run(_runtime, inputs):

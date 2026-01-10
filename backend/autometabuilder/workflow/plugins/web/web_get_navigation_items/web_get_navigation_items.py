@@ -1,5 +1,5 @@
 """Workflow plugin: get navigation items."""
-from ....web.data.navigation import get_navigation_items
+from ....data.navigation import get_navigation_items
 
 
 def run(_runtime, _inputs):
