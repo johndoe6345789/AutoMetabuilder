@@ -1,5 +1,5 @@
 """Workflow plugin: update roadmap file."""
-from ....roadmap_utils import update_roadmap
+from ....utils.roadmap_utils import update_roadmap
 
 
 def run(_runtime, inputs):

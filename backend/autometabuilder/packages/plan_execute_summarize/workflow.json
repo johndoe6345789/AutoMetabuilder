@@ -170,5 +170,15 @@
         ]
       }
     }
-  }
+  },
+  "triggers": [
+    {
+      "nodeId": "load_context",
+      "kind": "manual",
+      "enabled": true,
+      "meta": {
+        "description": "Manually triggered meta.workflow_packages.plan_execute_summarize.label workflow execution"
+      }
+    }
+  ]
 }

@@ -143,5 +143,15 @@
         ]
       }
     }
-  }
+  },
+  "triggers": [
+    {
+      "nodeId": "lint",
+      "kind": "manual",
+      "enabled": true,
+      "meta": {
+        "description": "Manually triggered meta.workflow_packages.testing_triangle.label workflow execution"
+      }
+    }
+  ]
 }

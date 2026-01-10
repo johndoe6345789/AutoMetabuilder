@@ -1,7 +1,7 @@
 """Load SDLC context from repo and GitHub."""
 import os
 import logging
-from .github_integration import GitHubIntegration
+from ..services.github_integration import GitHubIntegration
 
 logger = logging.getLogger("autometabuilder")
 

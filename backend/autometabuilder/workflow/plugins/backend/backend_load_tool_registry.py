@@ -1,5 +1,5 @@
 """Workflow plugin: load tool registry."""
-from ....tool_registry_loader import load_tool_registry
+from ....loaders.tool_registry_loader import load_tool_registry
 
 
 def run(runtime, _inputs):

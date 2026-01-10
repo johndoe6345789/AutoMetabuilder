@@ -205,5 +205,15 @@
         ]
       }
     }
-  }
+  },
+  "triggers": [
+    {
+      "nodeId": "list_files",
+      "kind": "manual",
+      "enabled": true,
+      "meta": {
+        "description": "Manually triggered meta.workflow_packages.repo_scan_context.label workflow execution"
+      }
+    }
+  ]
 }

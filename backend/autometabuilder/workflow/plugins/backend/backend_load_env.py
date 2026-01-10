@@ -1,5 +1,5 @@
 """Workflow plugin: load environment variables."""
-from ....env_loader import load_env
+from ....loaders.env_loader import load_env
 
 
 def run(_runtime, _inputs):

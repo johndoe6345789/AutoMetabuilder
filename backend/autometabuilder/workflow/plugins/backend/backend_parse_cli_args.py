@@ -1,5 +1,5 @@
 """Workflow plugin: parse CLI arguments."""
-from ....cli_args import parse_args
+from ....utils.cli_args import parse_args
 
 
 def run(runtime, _inputs):

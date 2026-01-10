@@ -7,7 +7,7 @@ from github.Issue import Issue
 from github.PullRequest import PullRequest
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-from . import load_messages
+from .. import load_messages
 
 
 class GitHubIntegration:

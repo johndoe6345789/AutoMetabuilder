@@ -7,7 +7,10 @@
       "name": "Create User Data",
       "type": "var.set",
       "typeVersion": 1,
-      "position": [0, 100],
+      "position": [
+        0,
+        100
+      ],
       "parameters": {
         "key": "user",
         "value": {
@@ -23,7 +26,10 @@
       "name": "Extract Age",
       "type": "dict.get",
       "typeVersion": 1,
-      "position": [300, 50],
+      "position": [
+        300,
+        50
+      ],
       "parameters": {
         "object": "$user",
         "key": "age"
@@ -34,7 +40,10 @@
       "name": "Check If Adult",
       "type": "logic.gte",
       "typeVersion": 1,
-      "position": [600, 100],
+      "position": [
+        600,
+        100
+      ],
       "parameters": {
         "a": "$age",
         "b": 18
@@ -45,7 +54,10 @@
       "name": "Format Final Report",
       "type": "string.format",
       "typeVersion": 1,
-      "position": [900, 100],
+      "position": [
+        900,
+        100
+      ],
       "parameters": {
         "template": "User: {name}, Age: {age}, Adult: {is_adult}",
         "variables": {
@@ -90,5 +102,15 @@
         ]
       }
     }
-  }
+  },
+  "triggers": [
+    {
+      "nodeId": "create_user_data",
+      "kind": "manual",
+      "enabled": true,
+      "meta": {
+        "description": "Manually triggered Conditional Logic Demo workflow execution"
+      }
+    }
+  ]
 }

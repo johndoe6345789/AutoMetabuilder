@@ -1,6 +1,6 @@
 """Workflow plugin: build tool map."""
-from ....tool_map_builder import build_tool_map
-from ....tool_registry_loader import load_tool_registry
+from ....utils.tool_map_builder import build_tool_map
+from ....loaders.tool_registry_loader import load_tool_registry
 
 
 def run(runtime, _inputs):

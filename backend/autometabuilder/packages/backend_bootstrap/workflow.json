@@ -145,5 +145,15 @@
         ]
       }
     }
-  }
+  },
+  "triggers": [
+    {
+      "nodeId": "load_messages",
+      "kind": "manual",
+      "enabled": true,
+      "meta": {
+        "description": "Initialize backend services and dependencies"
+      }
+    }
+  ]
 }
