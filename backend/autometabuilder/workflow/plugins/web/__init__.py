@@ -75,5 +75,5 @@ Example Usage:
 }
 ```
 
-See WEB_PLUGIN_MIGRATION.md for migration details and examples.
+See docs/archive/WEB_PLUGIN_MIGRATION.md for migration details and examples.
 """

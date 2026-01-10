@@ -237,6 +237,6 @@ This ensures both workflow data flow and imperative access work correctly.
 
 ## See Also
 
-- [Workflow Architecture](../../WORKFLOW_ARCHITECTURE.md)
-- [Workflow Plugin Expansion](../../WORKFLOW_PLUGIN_EXPANSION.md)
+- [Workflow Architecture](../../../../docs/archive/WORKFLOW_ARCHITECTURE.md)
+- [Workflow Plugin Expansion](../../../../docs/archive/WORKFLOW_PLUGIN_EXPANSION.md)
 - [Workflow Plugins README](../../workflow/plugins/README.md)
