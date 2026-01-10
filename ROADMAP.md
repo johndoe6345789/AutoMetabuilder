@@ -41,28 +41,23 @@
 - [x] **Workflow Template Picker**: AJAX-loaded catalog with localized labels/descriptions.
 - [x] **Atomic Jinja Components**: Split dashboard/prompt/settings/translations/sidebar into single-macro files.
 - [x] **AJAX Navigation Data**: Render sidebar links from API payload with a client-side fallback.
-- [ ] **n8n-Style Visual Workflow Canvas (Breakdown)**:
-- [ ] **Canvas Layout Engine**: DAG layout, node positioning, zoom/pan, and fit-to-view.
 - [x] **Node Palette + Search**: Categorized plugin library with search and click-to-add.
-- [ ] **Palette Tags + Drag-to-Canvas**: Add tags, drag handles, and drag/drop placement.
-- [ ] **Atomic Node Cards**: Compact node tiles with status badge, type icon, and inline rename.
-- [ ] **Ports + Connectors**: Visual input/output ports with link creation + validation.
-- [ ] **Edge Routing**: Orthogonal edge routing with arrowheads, hover/selection state.
-- [ ] **Mini Map**: Overview map for large workflows with viewport control.
-- [ ] **Selection + Multi-Edit**: Multi-select nodes, bulk delete, and bulk edit fields.
-- [ ] **Inspector Panel**: Right-side inspector to edit node inputs/outputs/conditions.
-- [ ] **Inline Validation**: Missing input warnings, type mismatch hints, and disabled run cues.
-- [ ] **Execution Preview**: Simulate data flow highlights and show store bindings.
-- [ ] **Auto-Save Drafts**: Local draft save/restore with change markers.
-- [ ] **Template Import/Export**: Export current workflow and import to apply or merge.
-- [ ] **Keyboard Shortcuts**: Add node, delete, duplicate, undo/redo, and search.
-- [ ] **Undo/Redo Stack**: Reversible edits for canvas and inspector changes.
-- [ ] **Context Menu**: Right-click actions for node, edge, and canvas.
-- [ ] **Performance Tuning**: Virtualized node rendering for large graphs.
 
 ## Phase 8: Modern Frontend Platform
 - [x] **Flask + Next.js split**: Replace the Jinja-based FastAPI UI with a Flask REST backend and Next.js frontend consuming metadata, translations, workflows, logs, and nav via AJAX.
 - [x] **Atomic Next sections**: Compose dashboard, workflow builder, prompt editor, settings, and translation editor into dedicated components powered by localized strings.
 - [x] **Workflow templates & navigation JSON**: Serve workflow packages, nav items, and translation mappings from metadata-backed JSON endpoints.
 - [ ] **Document build constraints**: Record that `next build --webpack` fails in this sandbox because bundlers attempt to bind new ports, and continue iterating locally.
+- [x] **Storybook + Playwright**: Add a Storybook catalog for the Material UI sections and a Playwright suite (with `npm run test:e2e`) so the frontend gets visual regression/backstop coverage tied to the Flask API.
 - [x] **Material UI + webhooks**: Drive the dashboard with Material UI surfaces and a lightweight webhook emitter/listener so downstream components can react to run events without prop drilling.
+
+## Phase 9: Visual Workflow Canvas
+- [ ] **n8n-Style Visual Workflow Canvas (Breakdown)**: Capture node + edge details so the canvas understands the micro-plugin graphs.
+- [ ] **Canvas Layout Engine**: DAG layout, zoom/pan, and background grid to keep large graphs navigable.
+- [ ] **Palette Tags + Drag-to-Canvas**: Tag nodes, add drag handles, and allow drag/drop placement onto the canvas.
+- [ ] **Atomic Node Cards**: Compact tile UI with status badges, icons, and inline rename/edit actions.
+- [ ] **Ports + Connectors**: Visualize input/output ports with validation and JSON metadata.
+- [ ] **Edge Routing + Mini Map**: Orthogonal edges with hover/selection states plus a mini overview map.
+- [ ] **Selection + Inspector**: Multi-select, bulk edit, right-side inspector for node/edge properties.
+- [ ] **Inline Validation & Execution Preview**: Warn on missing inputs and simulate data flow + store bindings.
+- [ ] **Workspace Controls**: Auto-save drafts, template import/export, keyboard shortcuts, undo/redo stack, context menus, and performant rendering for big graphs.

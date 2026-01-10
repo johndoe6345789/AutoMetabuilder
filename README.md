@@ -48,6 +48,18 @@ PYTHONPATH=backend pytest backend/tests/test_main.py backend/tests/test_metadata
 PYTHONPATH=backend pytest backend/tests/ui           # Playwright UI tests; they skip when socket creation is blocked
 ```
 
+### Storybook & Playwright
+
+```bash
+cd frontend
+npx playwright install chromium
+npm run storybook           # launch the component catalog at http://localhost:6006
+npm run build:storybook     # compile the catalog to static files
+npm run test:e2e            # runs the Playwright tests defined under frontend/playwright/tests
+```
+
+Storybook renders the Material UI sections from `frontend/autometabuilder/components`, and Playwright now targets `http://localhost:3000` (override with `NEXT_PUBLIC_API_BASE` if your backend runs elsewhere).
+
 ### Frontend
 
 ```bash
