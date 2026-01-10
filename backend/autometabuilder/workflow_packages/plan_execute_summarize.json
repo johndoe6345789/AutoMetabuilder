@@ -7,88 +7,177 @@
     "summarize"
   ],
   "workflow": {
+    "name": "meta.workflow_packages.plan_execute_summarize.label",
+    "active": false,
     "nodes": [
       {
         "id": "load_context",
+        "name": "Load Context",
         "type": "core.load_context",
-        "outputs": {
-          "context": "sdlc_context"
-        }
+        "typeVersion": 1,
+        "position": [
+          0,
+          50
+        ],
+        "parameters": {}
       },
       {
         "id": "seed_messages",
+        "name": "Seed Messages",
         "type": "core.seed_messages",
-        "outputs": {
-          "messages": "messages"
-        }
+        "typeVersion": 1,
+        "position": [
+          300,
+          50
+        ],
+        "parameters": {}
       },
       {
         "id": "append_context",
+        "name": "Append Context",
         "type": "core.append_context_message",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          600,
+          50
+        ],
+        "parameters": {
           "messages": "$messages",
           "context": "$sdlc_context"
-        },
-        "outputs": {
-          "messages": "messages"
         }
       },
       {
         "id": "append_user_instruction",
+        "name": "Append User Instruction",
         "type": "core.append_user_instruction",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          900,
+          50
+        ],
+        "parameters": {
           "messages": "$messages"
-        },
-        "outputs": {
-          "messages": "messages"
         }
       },
       {
         "id": "planner_request",
+        "name": "Planner Request",
         "type": "core.ai_request",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          1200,
+          50
+        ],
+        "parameters": {
           "messages": "$messages"
-        },
-        "outputs": {
-          "response": "llm_response",
-          "has_tool_calls": "has_tool_calls",
-          "tool_calls_count": "tool_calls_count"
         }
       },
       {
         "id": "run_tool_calls",
+        "name": "Run Tool Calls",
         "type": "core.run_tool_calls",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          1500,
+          50
+        ],
+        "parameters": {
           "response": "$llm_response"
-        },
-        "outputs": {
-          "tool_results": "tool_results",
-          "no_tool_calls": "no_tool_calls"
         }
       },
       {
         "id": "append_tool_results",
+        "name": "Append Tool Results",
         "type": "core.append_tool_results",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          1800,
+          50
+        ],
+        "parameters": {
           "messages": "$messages",
           "tool_results": "$tool_results"
-        },
-        "outputs": {
-          "messages": "messages"
         }
       },
       {
         "id": "summary_request",
+        "name": "Summary Request",
         "type": "core.ai_request",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          2100,
+          50
+        ],
+        "parameters": {
           "messages": "$messages"
-        },
-        "outputs": {
-          "response": "final_response",
-          "has_tool_calls": "final_has_tool_calls",
-          "tool_calls_count": "final_tool_calls_count"
         }
       }
-    ]
+    ],
+    "connections": {
+      "Append Tool Results": {
+        "main": {
+          "0": [
+            {
+              "node": "Append Context",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Append User Instruction",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Planner Request",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Append Tool Results",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Summary Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        }
+      },
+      "Load Context": {
+        "main": {
+          "0": [
+            {
+              "node": "Append Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        }
+      },
+      "Planner Request": {
+        "main": {
+          "0": [
+            {
+              "node": "Run Tool Calls",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        }
+      },
+      "Run Tool Calls": {
+        "main": {
+          "0": [
+            {
+              "node": "Append Tool Results",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        }
+      }
+    }
   }
 }

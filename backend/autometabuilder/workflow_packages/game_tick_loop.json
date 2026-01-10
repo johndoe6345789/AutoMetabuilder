@@ -2,64 +2,122 @@
   "id": "game_tick_loop",
   "label": "meta.workflow_packages.game_tick_loop.label",
   "description": "meta.workflow_packages.game_tick_loop.description",
-  "tags": ["game", "loop", "ticks"],
+  "tags": [
+    "game",
+    "loop",
+    "ticks"
+  ],
   "workflow": {
+    "name": "meta.workflow_packages.game_tick_loop.label",
+    "active": false,
     "nodes": [
       {
         "id": "seed_messages",
+        "name": "Seed Messages",
         "type": "core.seed_messages",
-        "outputs": {"messages": "messages"}
+        "typeVersion": 1,
+        "position": [
+          0,
+          50
+        ],
+        "parameters": {}
       },
       {
         "id": "map_ticks",
+        "name": "Map Ticks",
         "type": "utils.map_list",
-        "inputs": {
-          "items": ["tick_start", "tick_update", "tick_render"],
+        "typeVersion": 1,
+        "position": [
+          300,
+          50
+        ],
+        "parameters": {
+          "items": [
+            "tick_start",
+            "tick_update",
+            "tick_render"
+          ],
           "template": "Tick: {item}"
-        },
-        "outputs": {"items": "tick_lines"}
+        }
       },
       {
         "id": "reduce_ticks",
+        "name": "Reduce Ticks",
         "type": "utils.reduce_list",
-        "inputs": {"items": "$tick_lines", "separator": "\\n"},
-        "outputs": {"result": "tick_context"}
+        "typeVersion": 1,
+        "position": [
+          600,
+          50
+        ],
+        "parameters": {
+          "items": "$tick_lines",
+          "separator": "\\n"
+        }
       },
       {
         "id": "append_tick_context",
+        "name": "Append Tick Context",
         "type": "core.append_context_message",
-        "inputs": {"messages": "$messages", "context": "$tick_context"},
-        "outputs": {"messages": "messages"}
+        "typeVersion": 1,
+        "position": [
+          900,
+          50
+        ],
+        "parameters": {
+          "messages": "$messages",
+          "context": "$tick_context"
+        }
       },
       {
         "id": "main_loop",
+        "name": "Main Loop",
         "type": "control.loop",
-        "inputs": {"max_iterations": 3, "stop_when": "$no_tool_calls", "stop_on": "true"},
-        "body": [
-          {
-            "id": "ai_request",
-            "type": "core.ai_request",
-            "inputs": {"messages": "$messages"},
-            "outputs": {
-              "response": "llm_response",
-              "has_tool_calls": "has_tool_calls",
-              "tool_calls_count": "tool_calls_count"
-            }
-          },
-          {
-            "id": "run_tool_calls",
-            "type": "core.run_tool_calls",
-            "inputs": {"response": "$llm_response"},
-            "outputs": {"tool_results": "tool_results", "no_tool_calls": "no_tool_calls"}
-          },
-          {
-            "id": "append_tool_results",
-            "type": "core.append_tool_results",
-            "inputs": {"messages": "$messages", "tool_results": "$tool_results"},
-            "outputs": {"messages": "messages"}
-          }
-        ]
+        "typeVersion": 1,
+        "position": [
+          1200,
+          50
+        ],
+        "parameters": {
+          "max_iterations": 3,
+          "stop_when": "$no_tool_calls",
+          "stop_on": "true"
+        }
       }
-    ]
+    ],
+    "connections": {
+      "Map Ticks": {
+        "main": {
+          "0": [
+            {
+              "node": "Reduce Ticks",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        }
+      },
+      "Append Tick Context": {
+        "main": {
+          "0": [
+            {
+              "node": "Append Tick Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        }
+      },
+      "Reduce Ticks": {
+        "main": {
+          "0": [
+            {
+              "node": "Append Tick Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        }
+      }
+    }
   }
 }

@@ -2,87 +2,156 @@
   "id": "testing_triangle",
   "label": "meta.workflow_packages.testing_triangle.label",
   "description": "meta.workflow_packages.testing_triangle.description",
-  "tags": ["testing", "lint", "e2e"],
+  "tags": [
+    "testing",
+    "lint",
+    "e2e"
+  ],
   "workflow": {
+    "name": "meta.workflow_packages.testing_triangle.label",
+    "active": false,
     "nodes": [
       {
         "id": "lint",
+        "name": "Lint",
         "type": "tools.run_lint",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          0,
+          50
+        ],
+        "parameters": {
           "path": "src"
-        },
-        "outputs": {
-          "results": "lint_results"
         }
       },
       {
         "id": "lint_failed",
+        "name": "Lint Failed",
         "type": "utils.branch_condition",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          300,
+          50
+        ],
+        "parameters": {
           "value": "$lint_results",
           "mode": "regex",
           "compare": "(FAILED|ERROR)"
-        },
-        "outputs": {
-          "result": "lint_failed"
         }
       },
       {
         "id": "lint_ok",
+        "name": "Lint Ok",
         "type": "utils.not",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          600,
+          50
+        ],
+        "parameters": {
           "value": "$lint_failed"
-        },
-        "outputs": {
-          "result": "lint_ok"
         }
       },
       {
         "id": "unit_tests",
+        "name": "Unit Tests",
         "type": "tools.run_tests",
-        "when": "$lint_ok",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          900,
+          50
+        ],
+        "parameters": {
           "path": "tests"
-        },
-        "outputs": {
-          "results": "unit_results"
         }
       },
       {
         "id": "unit_failed",
+        "name": "Unit Failed",
         "type": "utils.branch_condition",
-        "when": "$lint_ok",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          1200,
+          50
+        ],
+        "parameters": {
           "value": "$unit_results",
           "mode": "regex",
           "compare": "(FAILED|ERROR)"
-        },
-        "outputs": {
-          "result": "unit_failed"
         }
       },
       {
         "id": "unit_ok",
+        "name": "Unit Ok",
         "type": "utils.not",
-        "when": "$lint_ok",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          1500,
+          50
+        ],
+        "parameters": {
           "value": "$unit_failed"
-        },
-        "outputs": {
-          "result": "unit_ok"
         }
       },
       {
         "id": "ui_tests",
+        "name": "Ui Tests",
         "type": "tools.run_tests",
-        "when": "$unit_ok",
-        "inputs": {
+        "typeVersion": 1,
+        "position": [
+          1800,
+          50
+        ],
+        "parameters": {
           "path": "tests/ui"
-        },
-        "outputs": {
-          "results": "ui_results"
         }
       }
-    ]
+    ],
+    "connections": {
+      "Lint": {
+        "main": {
+          "0": [
+            {
+              "node": "Lint Failed",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        }
+      },
+      "Lint Failed": {
+        "main": {
+          "0": [
+            {
+              "node": "Lint Ok",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        }
+      },
+      "Unit Tests": {
+        "main": {
+          "0": [
+            {
+              "node": "Unit Failed",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        }
+      },
+      "Unit Failed": {
+        "main": {
+          "0": [
+            {
+              "node": "Unit Ok",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        }
+      }
+    }
   }
 }

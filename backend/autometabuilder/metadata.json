@@ -1,7 +1,7 @@
 {
   "tools_path": "tools",
   "workflow_path": "workflow.json",
-  "workflow_packages_path": "workflow_packages",
+  "workflow_packages_path": "packages",
   "messages": {
     "en": "messages/en",
     "es": "messages/es",
