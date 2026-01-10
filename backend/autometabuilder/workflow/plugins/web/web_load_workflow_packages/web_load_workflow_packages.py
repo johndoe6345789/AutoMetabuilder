@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 def run(_runtime, _inputs):
     """Load all workflow packages."""
-    package_root = Path(__file__).resolve().parents[5]  # backend/autometabuilder
+    package_root = Path(__file__).resolve().parents[4]  # backend/autometabuilder
     metadata = load_metadata()
     packages_name = metadata.get("workflow_packages_path", "packages")
     packages_dir = package_root / packages_name
