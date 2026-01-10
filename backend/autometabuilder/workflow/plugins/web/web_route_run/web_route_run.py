@@ -2,13 +2,19 @@
 from flask import Blueprint, jsonify, request
 from autometabuilder.workflow.plugin_loader import load_plugin_callable
 
+# Cache the start_bot plugin callable to avoid repeated loading
+_start_bot_plugin = None
+
 
 def run(runtime, _inputs):
     """Create and return the run routes blueprint."""
-    # Load the control.start_bot plugin
-    start_bot_plugin = load_plugin_callable(
-        "autometabuilder.workflow.plugins.control.control_start_bot.control_start_bot.run"
-    )
+    global _start_bot_plugin
+    
+    # Load the control.start_bot plugin once
+    if _start_bot_plugin is None:
+        _start_bot_plugin = load_plugin_callable(
+            "autometabuilder.workflow.plugins.control.control_start_bot.control_start_bot.run"
+        )
     
     run_bp = Blueprint("run", __name__)
     
@@ -21,7 +27,7 @@ def run(runtime, _inputs):
         stop_at_mvp = payload.get("stop_at_mvp", False)
         
         # Call the control.start_bot plugin
-        result = start_bot_plugin(runtime, {
+        result = _start_bot_plugin(runtime, {
             "mode": mode,
             "iterations": iterations,
             "yolo": yolo,

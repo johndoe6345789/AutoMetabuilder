@@ -15,9 +15,29 @@ _current_run_config = {}
 
 def _reset_run_state() -> None:
     """Reset the bot run state."""
-    global _bot_process, _current_run_config
+    global _bot_process, _current_run_config, _mock_running
     _bot_process = None
     _current_run_config = {}
+    _mock_running = False
+
+
+def get_bot_state():
+    """Get the current bot state (public interface).
+    
+    Returns:
+        dict: Bot state with keys: is_running, config, process
+    """
+    return {
+        "is_running": _bot_process is not None or _mock_running,
+        "config": _current_run_config,
+        "process": _bot_process,
+    }
+
+
+def reset_bot_state():
+    """Reset the bot state (public interface)."""
+    _reset_run_state()
+
 
 
 def _run_bot_task(mode: str, iterations: int, yolo: bool, stop_at_mvp: bool) -> None:
