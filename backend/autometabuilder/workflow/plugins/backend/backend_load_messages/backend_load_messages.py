@@ -1,5 +1,5 @@
 """Workflow plugin: load translation messages."""
-from .... import load_messages
+from autometabuilder import load_messages
 
 
 def run(runtime, _inputs):

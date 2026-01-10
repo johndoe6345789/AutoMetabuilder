@@ -28,5 +28,19 @@ Utilities:
     value_helpers.py - Value type checking and conversion helpers
     tool_runner.py - Tool execution wrapper
     tool_calls_handler.py - AI tool calls processing
+
+Workflow Engine Building:
+    workflow_config_loader.py - Load workflow configuration JSON
+    workflow_context_builder.py - Build workflow runtime context
+    workflow_engine_builder.py - Assemble workflow engine with dependencies
 """
 
+from .workflow_config_loader import load_workflow_config
+from .workflow_context_builder import build_workflow_context
+from .workflow_engine_builder import build_workflow_engine
+
+__all__ = [
+    "load_workflow_config",
+    "build_workflow_context",
+    "build_workflow_engine",
+]
