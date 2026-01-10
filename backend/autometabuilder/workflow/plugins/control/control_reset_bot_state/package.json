@@ -1,0 +1,13 @@
+{
+  "name": "@autometabuilder/control_reset_bot_state",
+  "version": "1.0.0",
+  "description": "Reset bot execution state",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": ["control", "workflow", "plugin", "bot", "reset"],
+  "main": "control_reset_bot_state.py",
+  "metadata": {
+    "plugin_type": "control.reset_bot_state",
+    "category": "control"
+  }
+}
