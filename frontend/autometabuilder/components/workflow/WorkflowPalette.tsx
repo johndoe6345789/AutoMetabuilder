@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { Box, Chip, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Divider, Paper, Stack, TextField, Typography } from "@mui/material";
 import { fetchWorkflowPlugins } from "../../lib/api";
-import { WorkflowPluginDefinition, WorkflowPluginMap, WorkflowPluginPort } from "../../lib/types";
+import { WorkflowPluginMap } from "../../lib/types";
+import WorkflowPaletteCard from "./WorkflowPaletteCard";
 
 type WorkflowPaletteProps = {
   t: (key: string, fallback?: string) => string;
@@ -62,48 +63,15 @@ export default function WorkflowPalette({ t }: WorkflowPaletteProps) {
         </Typography>
       ) : entries.length === 0 && hasQuery ? (
         <Typography variant="caption" color="text.secondary">
-          {t("ui.workflow.palette.missing", "No nodes match \"{query}\"").replace("{query}", search.trim())}
+          {`${t("ui.workflow.palette.empty", "No matching nodes.")} "${search.trim()}"`}
         </Typography>
       ) : (
         <Stack spacing={1} divider={<Divider sx={{ borderColor: "rgba(255,255,255,0.08)" }} />}>
           {entries.map(([id, plugin]) => (
-            <Box key={id} sx={{ display: "flex", flexDirection: "column" }}>
-              <Typography variant="subtitle2">
-                {plugin.label ? t(plugin.label, id) : id}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {t("ui.workflow.palette.node_id", "Node ID")}: {id}
-              </Typography>
-              <Stack direction="row" spacing={1} flexWrap="wrap" mt={1}>
-                {renderPortTags(t, "in", plugin.inputs)}
-                {renderPortTags(t, "out", plugin.outputs)}
-              </Stack>
-            </Box>
+            <WorkflowPaletteCard key={id} id={id} plugin={plugin} t={t} />
           ))}
         </Stack>
       )}
     </Paper>
   );
-}
-
-function renderPortTags(
-  t: (key: string, fallback?: string) => string,
-  direction: "in" | "out",
-  ports?: Record<string, WorkflowPluginPort>
-) {
-  if (!ports) {
-    return null;
-  }
-  return Object.keys(ports).map((name) => {
-    const port = ports[name];
-    const label = port?.label ? t(port.label, name) : name;
-    return (
-      <Chip
-        key={`${direction}-${name}`}
-        label={`${direction === "in" ? "⮂" : "⮀"} ${label}`}
-        size="small"
-        sx={{ backgroundColor: "rgba(255,255,255,0.08)", color: "white" }}
-      />
-    );
-  });
 }
