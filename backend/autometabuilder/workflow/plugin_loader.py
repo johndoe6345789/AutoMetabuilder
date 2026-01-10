@@ -1,5 +1,5 @@
 """Load workflow plugins by dotted path."""
-from ..callable_loader import load_callable
+from ..loaders.callable_loader import load_callable
 
 
 def load_plugin_callable(path: str):

@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from autometabuilder.metadata_loader import load_metadata as load_metadata_full
+from autometabuilder.loaders.metadata_loader import load_metadata as load_metadata_full
 from .json_utils import read_json
 from .paths import PACKAGE_ROOT
 

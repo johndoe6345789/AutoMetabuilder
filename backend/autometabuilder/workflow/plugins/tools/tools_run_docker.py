@@ -1,5 +1,5 @@
 """Workflow plugin: run command in Docker container."""
-from ....docker_utils import run_command_in_docker
+from ....utils.docker_utils import run_command_in_docker
 
 
 def run(_runtime, inputs):

@@ -1,6 +1,6 @@
 """Run a task inside Docker."""
 import os
-from ..docker_utils import run_command_in_docker
+from ..utils.docker_utils import run_command_in_docker
 
 
 def run_docker_task(image: str, command: str, workdir: str = "/workspace") -> str:

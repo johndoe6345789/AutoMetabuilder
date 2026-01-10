@@ -1,5 +1,5 @@
 """Workflow plugin: load tool policies."""
-from ....tool_policy_loader import load_tool_policies
+from ....loaders.tool_policy_loader import load_tool_policies
 
 
 def run(runtime, _inputs):

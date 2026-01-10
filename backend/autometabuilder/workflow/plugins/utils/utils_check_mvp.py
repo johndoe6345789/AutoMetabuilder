@@ -1,5 +1,5 @@
 """Workflow plugin: check if MVP is reached."""
-from ....roadmap_utils import is_mvp_reached
+from ....utils.roadmap_utils import is_mvp_reached
 
 
 def run(_runtime, _inputs):

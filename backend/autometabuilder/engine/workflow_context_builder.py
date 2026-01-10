@@ -1,5 +1,5 @@
 """Build workflow runtime context."""
-from .model_resolver import resolve_model_name
+from ..utils.model_resolver import resolve_model_name
 
 
 def build_workflow_context(parts: dict) -> dict:

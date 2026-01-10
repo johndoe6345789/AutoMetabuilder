@@ -1,5 +1,5 @@
 """Build tool map from registry entries."""
-from .callable_loader import load_callable
+from ..loaders.callable_loader import load_callable
 
 
 def build_tool_map(gh, registry_entries: list) -> dict:
