@@ -8,4 +8,6 @@ def run(runtime, _inputs):
     gh = runtime.context.get("gh")
     registry = load_tool_registry()
     tool_map = build_tool_map(gh, registry)
+    # Store in both store (for workflow) and context (for other plugins)
+    runtime.context["tool_map"] = tool_map
     return {"result": tool_map}

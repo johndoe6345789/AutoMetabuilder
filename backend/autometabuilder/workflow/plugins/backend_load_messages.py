@@ -2,7 +2,9 @@
 from ... import load_messages
 
 
-def run(_runtime, _inputs):
+def run(runtime, _inputs):
     """Load translation messages."""
     messages = load_messages()
+    # Store in both store (for workflow) and context (for other plugins)
+    runtime.context["msgs"] = messages
     return {"result": messages}

@@ -8,4 +8,6 @@ def run(runtime, _inputs):
     msgs = runtime.context.get("msgs", {})
     
     gh = create_github_integration(token, msgs)
+    # Store in both store (for workflow) and context (for other plugins)
+    runtime.context["gh"] = gh
     return {"result": gh, "initialized": gh is not None}

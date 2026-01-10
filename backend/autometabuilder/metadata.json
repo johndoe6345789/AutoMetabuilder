@@ -1,6 +1,6 @@
 {
   "tools_path": "tools",
-  "workflow_path": "workflow.json",
+  "workflow_path": "packages/default_app_workflow/workflow.json",
   "workflow_packages_path": "packages",
   "messages": {
     "en": "messages/en",
