@@ -31,6 +31,7 @@ from .data import (
     write_prompt,
     write_workflow,
 )
+from .workflow_graph import build_workflow_graph
 
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
@@ -231,6 +232,11 @@ def api_get_workflow_package(package_id: str) -> tuple[Dict[str, object], int]:
         if pkg.get("id") == package_id:
             return pkg, 200
     return {"error": "package not found"}, 404
+
+
+@app.route("/api/workflow/graph")
+def api_workflow_graph() -> tuple[Dict[str, object], int]:
+    return build_workflow_graph(), 200
 
 
 def start_web_ui(host: str = "0.0.0.0", port: int = 8000) -> None:

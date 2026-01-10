@@ -55,3 +55,5 @@ React component logic (just above the bottom jsx) can be converted to one or mor
 Use atomic React components.
 
 Don't hardcode strings, use a translation file or some sort of external JSON mapping.
+
+Don't hardcode React Styling - MUI themes or SASS.

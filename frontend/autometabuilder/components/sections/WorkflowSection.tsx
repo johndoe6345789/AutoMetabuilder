@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { WorkflowPackageSummary } from "../../lib/types";
+import WorkflowGraphPanel from "../workflow/WorkflowGraphPanel";
+import WorkflowPalette from "../workflow/WorkflowPalette";
 
 type WorkflowSectionProps = {
   content: string;
@@ -59,23 +61,29 @@ export default function WorkflowSection({ content, packages, onSave, onTemplateS
           </Stack>
         </Box>
         <Paper sx={{ flex: 1, p: 2, backgroundColor: "#0b1221" }}>
-          <Typography variant="subtitle1" gutterBottom>
-            {t("ui.workflow.templates.title", "Workflow Templates")}
-          </Typography>
-          <Stack spacing={1}>
-            {packages.map((pkg) => (
-              <Paper key={pkg.id} variant="outlined" sx={{ p: 1 }}>
-                <Stack spacing={1}>
-                  <Typography variant="subtitle2">{pkg.label}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {pkg.description}
-                  </Typography>
-                  <Button size="small" variant="text" onClick={() => onTemplateSelect(pkg.id)}>
-                    {t("ui.workflow.templates.apply", "Apply Template")}
-                  </Button>
-                </Stack>
-              </Paper>
-            ))}
+          <Stack spacing={2}>
+            <Box>
+              <Typography variant="subtitle1" gutterBottom>
+                {t("ui.workflow.templates.title", "Workflow Templates")}
+              </Typography>
+              <Stack spacing={1}>
+                {packages.map((pkg) => (
+                  <Paper key={pkg.id} variant="outlined" sx={{ p: 1 }}>
+                    <Stack spacing={1}>
+                      <Typography variant="subtitle2">{pkg.label}</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {pkg.description}
+                      </Typography>
+                      <Button size="small" variant="text" onClick={() => onTemplateSelect(pkg.id)}>
+                        {t("ui.workflow.templates.apply", "Apply Template")}
+                      </Button>
+                    </Stack>
+                  </Paper>
+                ))}
+              </Stack>
+            </Box>
+            <WorkflowGraphPanel t={t} />
+            <WorkflowPalette t={t} />
           </Stack>
         </Paper>
       </Stack>
