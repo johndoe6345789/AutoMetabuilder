@@ -1,0 +1,301 @@
+@import "./_variables";
+
+:root {
+  color: $text;
+  background: $body-bg;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, sans-serif;
+  background: $body-bg;
+  color: $text;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  background: linear-gradient(180deg, #111827, #0f172a);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid $border-color;
+}
+
+.sidebar__brand {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.9rem;
+}
+
+.sidebar__item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: $muted;
+  text-align: left;
+  padding: 0.65rem 0;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border-bottom: 1px solid rgba($border-color, 0.4);
+}
+
+.sidebar__item.active,
+.sidebar__item:hover {
+  color: $text;
+}
+
+.content-shell {
+  flex: 1;
+  padding: 2rem;
+  background: linear-gradient(135deg, #04070f, #101828);
+}
+
+.content-shell__header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.content-shell__header p {
+  margin-top: 0.25rem;
+  color: $muted;
+}
+
+.section-card {
+  margin-bottom: 2rem;
+}
+
+.section-card__header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.section-card__header p {
+  margin: 0.35rem 0 1rem;
+  color: $muted;
+}
+
+.dashboard-grid,
+.workflow-grid,
+.settings-grid,
+.translations-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.dashboard-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.dashboard-panel {
+  @include panel;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dashboard-panel__strategy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.dashboard-panel .field-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.primary {
+  border: none;
+  background: linear-gradient(135deg, $accent, $accent-strong);
+  color: white;
+  border-radius: $radius;
+  padding: 0.75rem 1.2rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.status-text {
+  color: $muted;
+  font-size: 0.9rem;
+}
+
+.status-feedback {
+  color: $accent;
+  font-size: 0.85rem;
+}
+
+.log-output {
+  background: #05060a;
+  border: 1px solid $border-color;
+  border-radius: $radius;
+  padding: 1rem;
+  max-height: 240px;
+  overflow: auto;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: $text;
+}
+
+.workflow-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.workflow-editor {
+  @include panel;
+}
+
+.workflow-editor textarea,
+.prompt-editor,
+.translations-layout textarea {
+  width: 100%;
+  border-radius: $radius;
+  border: 1px solid $border-color;
+  background: #02040a;
+  color: $text;
+  padding: 1rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9rem;
+}
+
+.workflow-actions,
+.translations-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.workflow-message {
+  font-size: 0.85rem;
+  color: $accent;
+}
+
+.workflow-error {
+  font-size: 0.85rem;
+  color: #f87171;
+}
+
+.workflow-templates {
+  @include panel;
+}
+
+.template-palette {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.template-card {
+  border: 1px dashed rgba($border-color, 0.7);
+  border-radius: $radius;
+  padding: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.template-card button {
+  border: none;
+  background: transparent;
+  color: $accent;
+  cursor: pointer;
+}
+
+.prompt-editor {
+  @include panel;
+}
+
+.settings-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.settings-grid .field-group {
+  @include panel;
+}
+
+.settings-grid--new {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.translations-layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.language-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.language-chip {
+  border-radius: 999px;
+  border: 1px solid $border-color;
+  padding: 0.35rem 0.75rem;
+  background: transparent;
+  color: $muted;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.language-chip.active {
+  background: rgba($accent, 0.15);
+  color: white;
+}
+
+.language-chip span {
+  display: block;
+  font-size: 0.7rem;
+  color: $muted;
+}
+
+.translations-actions button {
+  background: none;
+  border: 1px solid $border-color;
+  border-radius: $radius;
+  color: $text;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+}
+
+.language-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.language-form input {
+  flex: 1;
+  border-radius: $radius;
+  border: 1px solid $border-color;
+  padding: 0.5rem;
+  background: #02040a;
+  color: $text;
+}
+
+.app-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: $text;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

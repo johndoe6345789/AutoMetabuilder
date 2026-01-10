@@ -1,0 +1,9 @@
+services:
+  autometabuilder:
+    build: ..
+    env_file:
+      - ../backend/.env
+    volumes:
+      - .:/app
+    stdin_open: true
+    tty: true

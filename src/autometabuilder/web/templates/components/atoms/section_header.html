@@ -1,9 +1,0 @@
-{# Section header macro. #}
-{% macro section_header(title, subtitle='') -%}
-<div class="amb-section-header">
-    <h1>{{ title }}</h1>
-    {% if subtitle %}
-    <p>{{ subtitle }}</p>
-    {% endif %}
-</div>
-{%- endmacro %}

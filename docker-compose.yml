@@ -1,9 +1,0 @@
-services:
-  autometabuilder:
-    build: .
-    env_file:
-      - .env
-    volumes:
-      - .:/app
-    stdin_open: true
-    tty: true
