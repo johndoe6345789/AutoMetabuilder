@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_delete_translation",
+  "version": "1.0.0",
+  "description": "delete translation.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_delete_translation.py",
+  "metadata": {
+    "plugin_type": "web.delete_translation",
+    "category": "web"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/list_concat",
+  "version": "1.0.0",
+  "description": "concatenate lists.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "list",
+    "workflow",
+    "plugin"
+  ],
+  "main": "list_concat.py",
+  "metadata": {
+    "plugin_type": "list.concat",
+    "category": "list"
+  }
+}

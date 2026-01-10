@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/string_upper",
+  "version": "1.0.0",
+  "description": "convert string to uppercase.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "string",
+    "workflow",
+    "plugin"
+  ],
+  "main": "string_upper.py",
+  "metadata": {
+    "plugin_type": "string.upper",
+    "category": "string"
+  }
+}

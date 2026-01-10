@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-test",
+  "version": "1.0.0",
+  "description": "Unit testing and assertion plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "test",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "test",
+    "plugin_count": 5
+  }
+}

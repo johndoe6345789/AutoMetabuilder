@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-dict",
+  "version": "1.0.0",
+  "description": "Dictionary/object operation plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "dict",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "dict",
+    "plugin_count": 6
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/convert_to_string",
+  "version": "1.0.0",
+  "description": "convert to string.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "convert",
+    "workflow",
+    "plugin"
+  ],
+  "main": "convert_to_string.py",
+  "metadata": {
+    "plugin_type": "convert.to_string",
+    "category": "convert"
+  }
+}

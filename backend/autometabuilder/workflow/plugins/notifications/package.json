@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-notifications",
+  "version": "1.0.0",
+  "description": "External notification integration plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "notifications",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "notifications",
+    "plugin_count": 3
+  }
+}

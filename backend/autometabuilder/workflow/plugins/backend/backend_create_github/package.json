@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/backend_create_github",
+  "version": "1.0.0",
+  "description": "create GitHub integration.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "backend",
+    "workflow",
+    "plugin"
+  ],
+  "main": "backend_create_github.py",
+  "metadata": {
+    "plugin_type": "backend.create_github",
+    "category": "backend"
+  }
+}

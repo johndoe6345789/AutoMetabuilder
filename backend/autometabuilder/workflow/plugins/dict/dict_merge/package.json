@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/dict_merge",
+  "version": "1.0.0",
+  "description": "merge dictionaries.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "dict",
+    "workflow",
+    "plugin"
+  ],
+  "main": "dict_merge.py",
+  "metadata": {
+    "plugin_type": "dict.merge",
+    "category": "dict"
+  }
+}

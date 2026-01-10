@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/logic_lt",
+  "version": "1.0.0",
+  "description": "less than comparison.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "logic",
+    "workflow",
+    "plugin"
+  ],
+  "main": "logic_lt.py",
+  "metadata": {
+    "plugin_type": "logic.lt",
+    "category": "logic"
+  }
+}

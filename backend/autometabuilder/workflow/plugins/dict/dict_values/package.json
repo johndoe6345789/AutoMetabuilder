@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/dict_values",
+  "version": "1.0.0",
+  "description": "get dictionary values.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "dict",
+    "workflow",
+    "plugin"
+  ],
+  "main": "dict_values.py",
+  "metadata": {
+    "plugin_type": "dict.values",
+    "category": "dict"
+  }
+}

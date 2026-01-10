@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/tools_read_file",
+  "version": "1.0.0",
+  "description": "read file.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "tools",
+    "workflow",
+    "plugin"
+  ],
+  "main": "tools_read_file.py",
+  "metadata": {
+    "plugin_type": "tools.read_file",
+    "category": "tools"
+  }
+}

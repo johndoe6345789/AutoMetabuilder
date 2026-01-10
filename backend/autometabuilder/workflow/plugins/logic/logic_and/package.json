@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/logic_and",
+  "version": "1.0.0",
+  "description": "logical AND.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "logic",
+    "workflow",
+    "plugin"
+  ],
+  "main": "logic_and.py",
+  "metadata": {
+    "plugin_type": "logic.and",
+    "category": "logic"
+  }
+}

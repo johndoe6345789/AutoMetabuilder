@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/logic_gte",
+  "version": "1.0.0",
+  "description": "greater than or equal comparison.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "logic",
+    "workflow",
+    "plugin"
+  ],
+  "main": "logic_gte.py",
+  "metadata": {
+    "plugin_type": "logic.gte",
+    "category": "logic"
+  }
+}

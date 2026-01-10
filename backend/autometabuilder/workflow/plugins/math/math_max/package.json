@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/math_max",
+  "version": "1.0.0",
+  "description": "maximum value.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "math",
+    "workflow",
+    "plugin"
+  ],
+  "main": "math_max.py",
+  "metadata": {
+    "plugin_type": "math.max",
+    "category": "math"
+  }
+}

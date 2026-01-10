@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/backend_load_tool_registry",
+  "version": "1.0.0",
+  "description": "load tool registry.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "backend",
+    "workflow",
+    "plugin"
+  ],
+  "main": "backend_load_tool_registry.py",
+  "metadata": {
+    "plugin_type": "backend.load_tool_registry",
+    "category": "backend"
+  }
+}

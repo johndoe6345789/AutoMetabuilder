@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-backend",
+  "version": "1.0.0",
+  "description": "Backend infrastructure and initialization plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "backend",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "backend",
+    "plugin_count": 15
+  }
+}

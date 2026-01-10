@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/utils_branch_condition",
+  "version": "1.0.0",
+  "description": "branch condition.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "utils",
+    "workflow",
+    "plugin"
+  ],
+  "main": "utils_branch_condition.py",
+  "metadata": {
+    "plugin_type": "utils.branch_condition",
+    "category": "utils"
+  }
+}

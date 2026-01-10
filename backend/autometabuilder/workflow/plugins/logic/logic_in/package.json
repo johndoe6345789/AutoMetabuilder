@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/logic_in",
+  "version": "1.0.0",
+  "description": "membership test.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "logic",
+    "workflow",
+    "plugin"
+  ],
+  "main": "logic_in.py",
+  "metadata": {
+    "plugin_type": "logic.in",
+    "category": "logic"
+  }
+}

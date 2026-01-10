@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/backend_create_slack",
+  "version": "1.0.0",
+  "description": "create Slack client.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "backend",
+    "workflow",
+    "plugin"
+  ],
+  "main": "backend_create_slack.py",
+  "metadata": {
+    "plugin_type": "backend.create_slack",
+    "category": "backend"
+  }
+}

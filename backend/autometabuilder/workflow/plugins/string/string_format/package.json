@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/string_format",
+  "version": "1.0.0",
+  "description": "format string with variables.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "string",
+    "workflow",
+    "plugin"
+  ],
+  "main": "string_format.py",
+  "metadata": {
+    "plugin_type": "string.format",
+    "category": "string"
+  }
+}

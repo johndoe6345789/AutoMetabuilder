@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_get_navigation_items",
+  "version": "1.0.0",
+  "description": "get navigation items.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_get_navigation_items.py",
+  "metadata": {
+    "plugin_type": "web.get_navigation_items",
+    "category": "web"
+  }
+}

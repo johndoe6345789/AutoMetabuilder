@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/test_assert_equals",
+  "version": "1.0.0",
+  "description": "assert two values are equal.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "test",
+    "workflow",
+    "plugin"
+  ],
+  "main": "test_assert_equals.py",
+  "metadata": {
+    "plugin_type": "test.assert_equals",
+    "category": "test"
+  }
+}

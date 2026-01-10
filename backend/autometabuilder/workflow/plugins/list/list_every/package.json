@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/list_every",
+  "version": "1.0.0",
+  "description": "check if all items match condition.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "list",
+    "workflow",
+    "plugin"
+  ],
+  "main": "list_every.py",
+  "metadata": {
+    "plugin_type": "list.every",
+    "category": "list"
+  }
+}

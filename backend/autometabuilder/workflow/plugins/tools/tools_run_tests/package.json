@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/tools_run_tests",
+  "version": "1.0.0",
+  "description": "run tests.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "tools",
+    "workflow",
+    "plugin"
+  ],
+  "main": "tools_run_tests.py",
+  "metadata": {
+    "plugin_type": "tools.run_tests",
+    "category": "tools"
+  }
+}

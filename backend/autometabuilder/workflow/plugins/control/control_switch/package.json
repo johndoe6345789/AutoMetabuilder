@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/control_switch",
+  "version": "1.0.0",
+  "description": "switch/case control flow.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "control",
+    "workflow",
+    "plugin"
+  ],
+  "main": "control_switch.py",
+  "metadata": {
+    "plugin_type": "control.switch",
+    "category": "control"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/logic_xor",
+  "version": "1.0.0",
+  "description": "logical XOR.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "logic",
+    "workflow",
+    "plugin"
+  ],
+  "main": "logic_xor.py",
+  "metadata": {
+    "plugin_type": "logic.xor",
+    "category": "logic"
+  }
+}

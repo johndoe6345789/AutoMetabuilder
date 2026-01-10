@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/convert_to_boolean",
+  "version": "1.0.0",
+  "description": "convert to boolean.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "convert",
+    "workflow",
+    "plugin"
+  ],
+  "main": "convert_to_boolean.py",
+  "metadata": {
+    "plugin_type": "convert.to_boolean",
+    "category": "convert"
+  }
+}

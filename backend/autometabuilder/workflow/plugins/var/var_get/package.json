@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/var_get",
+  "version": "1.0.0",
+  "description": "get variable from workflow store.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "var",
+    "workflow",
+    "plugin"
+  ],
+  "main": "var_get.py",
+  "metadata": {
+    "plugin_type": "var.get",
+    "category": "var"
+  }
+}

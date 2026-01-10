@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/logic_gt",
+  "version": "1.0.0",
+  "description": "greater than comparison.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "logic",
+    "workflow",
+    "plugin"
+  ],
+  "main": "logic_gt.py",
+  "metadata": {
+    "plugin_type": "logic.gt",
+    "category": "logic"
+  }
+}

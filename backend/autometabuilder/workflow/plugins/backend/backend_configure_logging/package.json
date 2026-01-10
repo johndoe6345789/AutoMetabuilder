@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/backend_configure_logging",
+  "version": "1.0.0",
+  "description": "configure logging.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "backend",
+    "workflow",
+    "plugin"
+  ],
+  "main": "backend_configure_logging.py",
+  "metadata": {
+    "plugin_type": "backend.configure_logging",
+    "category": "backend"
+  }
+}

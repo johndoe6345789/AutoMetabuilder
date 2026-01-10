@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_read_json",
+  "version": "1.0.0",
+  "description": "read JSON file.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_read_json.py",
+  "metadata": {
+    "plugin_type": "web.read_json",
+    "category": "web"
+  }
+}

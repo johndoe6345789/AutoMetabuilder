@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_load_workflow_packages",
+  "version": "1.0.0",
+  "description": "load workflow packages.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_load_workflow_packages.py",
+  "metadata": {
+    "plugin_type": "web.load_workflow_packages",
+    "category": "web"
+  }
+}

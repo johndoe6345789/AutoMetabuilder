@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-math",
+  "version": "1.0.0",
+  "description": "Mathematical operation plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "math",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "math",
+    "plugin_count": 10
+  }
+}

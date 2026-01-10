@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/string_length",
+  "version": "1.0.0",
+  "description": "get string length.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "string",
+    "workflow",
+    "plugin"
+  ],
+  "main": "string_length.py",
+  "metadata": {
+    "plugin_type": "string.length",
+    "category": "string"
+  }
+}

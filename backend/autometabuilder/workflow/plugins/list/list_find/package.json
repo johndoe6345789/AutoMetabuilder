@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/list_find",
+  "version": "1.0.0",
+  "description": "find item in list.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "list",
+    "workflow",
+    "plugin"
+  ],
+  "main": "list_find.py",
+  "metadata": {
+    "plugin_type": "list.find",
+    "category": "list"
+  }
+}
