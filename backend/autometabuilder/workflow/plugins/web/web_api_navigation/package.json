@@ -1,0 +1,8 @@
+{
+  "name": "web.api_navigation",
+  "version": "1.0.0",
+  "description": "Handle /api/navigation endpoint",
+  "main": "web_api_navigation.py",
+  "author": "AutoMetabuilder",
+  "category": "web"
+}

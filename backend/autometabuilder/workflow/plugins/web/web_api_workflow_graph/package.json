@@ -1,0 +1,8 @@
+{
+  "name": "web.api_workflow_graph",
+  "version": "1.0.0",
+  "description": "Handle /api/workflow/graph endpoint",
+  "main": "web_api_workflow_graph.py",
+  "author": "AutoMetabuilder",
+  "category": "web"
+}

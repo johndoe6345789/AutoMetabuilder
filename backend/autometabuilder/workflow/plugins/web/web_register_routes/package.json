@@ -1,0 +1,8 @@
+{
+  "name": "web.register_routes",
+  "version": "1.0.0",
+  "description": "Register Flask routes from JSON configuration",
+  "main": "web_register_routes.py",
+  "author": "AutoMetabuilder",
+  "category": "web"
+}

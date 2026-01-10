@@ -122,5 +122,11 @@
   "web.update_translation": "autometabuilder.workflow.plugins.web.web_update_translation.web_update_translation.run",
   "web.write_messages_dir": "autometabuilder.workflow.plugins.web.web_write_messages_dir.web_write_messages_dir.run",
   "web.write_prompt": "autometabuilder.workflow.plugins.web.web_write_prompt.web_write_prompt.run",
-  "web.write_workflow": "autometabuilder.workflow.plugins.web.web_write_workflow.web_write_workflow.run"
+  "web.write_workflow": "autometabuilder.workflow.plugins.web.web_write_workflow.web_write_workflow.run",
+  "web.register_routes": "autometabuilder.workflow.plugins.web.web_register_routes.web_register_routes.run",
+  "web.api_navigation": "autometabuilder.workflow.plugins.web.web_api_navigation.web_api_navigation.run",
+  "web.api_workflow_packages": "autometabuilder.workflow.plugins.web.web_api_workflow_packages.web_api_workflow_packages.run",
+  "web.api_workflow_plugins": "autometabuilder.workflow.plugins.web.web_api_workflow_plugins.web_api_workflow_plugins.run",
+  "web.api_workflow_graph": "autometabuilder.workflow.plugins.web.web_api_workflow_graph.web_api_workflow_graph.run",
+  "web.api_translation_options": "autometabuilder.workflow.plugins.web.web_api_translation_options.web_api_translation_options.run"
 }
