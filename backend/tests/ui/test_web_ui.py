@@ -8,7 +8,7 @@ from playwright.sync_api import Page, expect
 def wait_for_nav(page: Page):
     page.wait_for_selector("[data-section='dashboard']")
 
-UI_MESSAGES_PATH = os.path.join(os.path.dirname(__file__), "../../src/autometabuilder/messages_en.json")
+UI_MESSAGES_PATH = os.path.join(os.path.dirname(__file__), "../../autometabuilder/messages_en.json")
 with open(UI_MESSAGES_PATH, "r", encoding="utf-8") as f:
     UI_MESSAGES = json.load(f)
 
@@ -153,7 +153,7 @@ def test_choices_dropdowns_exist(page: Page, server: str):
 def test_autocomplete_values_from_json(page: Page, server: str):
     """Test that dropdown options are populated from metadata.json"""
     # Load metadata.json
-    metadata_path = os.path.join(os.path.dirname(__file__), "../../src/autometabuilder/metadata.json")
+    metadata_path = os.path.join(os.path.dirname(__file__), "../../autometabuilder/metadata.json")
     with open(metadata_path, 'r') as f:
         metadata = json.load(f)
 

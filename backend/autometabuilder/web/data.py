@@ -30,7 +30,7 @@ def build_prompt_yaml(system_content: str | None, user_content: str | None, mode
     model_value = model or "openai/gpt-4o"
     system_block = indent_block(system_content)
     user_block = indent_block(user_content)
-    return f\"\"\"messages:
+    return f"""messages:
   - role: system
     content: >-
       {system_block}
@@ -38,7 +38,7 @@ def build_prompt_yaml(system_content: str | None, user_content: str | None, mode
     content: >-
       {user_block}
 model: {model_value}
-\"\"\"
+"""
 
 
 def load_metadata() -> Dict[str, Any]:

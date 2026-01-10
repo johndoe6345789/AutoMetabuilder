@@ -5,7 +5,7 @@ from autometabuilder import load_messages
 
 class TestMetadata(unittest.TestCase):
     def test_metadata_exists(self):
-        metadata_path = os.path.join("src", "autometabuilder", "metadata.json")
+        metadata_path = os.path.join("backend", "autometabuilder", "metadata.json")
         self.assertTrue(os.path.exists(metadata_path))
         
         with open(metadata_path, "r") as f:
