@@ -5,11 +5,14 @@ import sys
 from pathlib import Path
 from typing import List, Tuple
 
-# Add the backend directory to the path to import the schema module
-backend_dir = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(backend_dir))
-
-from autometabuilder.workflow.n8n_schema import N8NWorkflow
+# Import the schema module - try direct import first (when installed via poetry)
+# If that fails, add parent directory to path (for direct script execution)
+try:
+    from autometabuilder.workflow.n8n_schema import N8NWorkflow
+except ImportError:
+    backend_dir = Path(__file__).resolve().parent.parent.parent
+    sys.path.insert(0, str(backend_dir))
+    from autometabuilder.workflow.n8n_schema import N8NWorkflow
 
 
 def find_workflow_files(base_path: Path) -> List[Path]:
@@ -75,8 +78,14 @@ def validate_workflow_file(workflow_path: Path) -> Tuple[bool, str]:
 
 def main():
     """Main function to validate all workflow files."""
-    # Find the backend directory
-    script_dir = Path(__file__).parent.parent.parent / "autometabuilder"
+    # Find the autometabuilder directory by looking for the packages subdirectory
+    # This works whether run as a script or via poetry command
+    script_dir = Path(__file__).resolve().parent.parent
+    
+    # Verify we found the right directory
+    if not (script_dir / "packages").exists():
+        print("Error: Could not locate autometabuilder/packages directory")
+        return 1
     
     # Find all workflow files
     workflow_files = find_workflow_files(script_dir)

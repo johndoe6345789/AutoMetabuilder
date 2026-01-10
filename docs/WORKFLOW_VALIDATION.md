@@ -4,7 +4,7 @@ This repository includes a validation tool for workflow JSON files based on the 
 
 ## Schema Definition
 
-The workflow JSON schema is defined in [ROADMAP.md](ROADMAP.md) (lines 84-430). It defines the structure for N8N-style workflows with the following key requirements:
+The workflow JSON schema is defined in [ROADMAP.md](../ROADMAP.md) (lines 84-430). It defines the structure for N8N-style workflows with the following key requirements:
 
 - **Required fields**: `name`, `nodes`, `connections`
 - **Nodes**: Must contain at least 1 node with `id`, `name`, `type`, `typeVersion`, and `position`
