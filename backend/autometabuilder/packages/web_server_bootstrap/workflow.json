@@ -1,6 +1,6 @@
 {
   "name": "Web Server Bootstrap",
-  "active": false,
+  "active": true,
   "nodes": [
     {
       "id": "configure_logging",
