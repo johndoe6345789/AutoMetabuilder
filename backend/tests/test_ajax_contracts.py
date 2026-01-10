@@ -17,22 +17,36 @@ def client():
     
     # Build workflow context and engine
     workflow_config = web_server_package.get("workflow", {})
+    
+    # Remove the start_server node to prevent blocking
+    workflow_config["nodes"] = [
+        node for node in workflow_config.get("nodes", [])
+        if node.get("type") != "web.start_server"
+    ]
+    
+    # Remove connections to start_server
+    connections = workflow_config.get("connections", {})
+    for node_name, node_connections in connections.items():
+        for conn_type, conn_list in node_connections.items():
+            if isinstance(conn_list, dict):
+                for idx, targets in conn_list.items():
+                    if isinstance(targets, list):
+                        conn_list[idx] = [
+                            t for t in targets
+                            if t.get("node") != "Start Web Server"
+                        ]
+    
     workflow_context = build_workflow_context({})
     
     logger = logging.getLogger("test")
     logger.setLevel(logging.ERROR)  # Suppress logs during tests
     
-    # Execute workflow to build the Flask app (but don't start the server)
-    # We need to execute the workflow up to the point where the app is created
-    # but not start the server
+    # Execute workflow to build the Flask app (but not start the server)
     engine = build_workflow_engine(workflow_config, workflow_context, logger)
     
     # Get the Flask app from the workflow execution
     # The workflow stores the app in the runtime context
-    try:
-        engine.execute()
-    except SystemExit:
-        pass  # Workflow tries to start server, which we don't want in tests
+    engine.execute()
     
     # Get the app from the runtime
     app = engine.node_executor.runtime.context.get("flask_app")

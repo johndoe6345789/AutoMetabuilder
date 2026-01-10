@@ -1,0 +1,19 @@
+{
+  "name": "@autometabuilder/web_api_workflow_packages",
+  "version": "1.0.0",
+  "description": "Handle /api/workflow/packages endpoint",
+  "main": "web_api_workflow_packages.py",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "api",
+    "workflow",
+    "packages",
+    "plugin"
+  ],
+  "metadata": {
+    "plugin_type": "web.api_workflow_packages",
+    "category": "web"
+  }
+}

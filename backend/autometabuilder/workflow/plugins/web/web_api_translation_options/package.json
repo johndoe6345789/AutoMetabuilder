@@ -1,0 +1,19 @@
+{
+  "name": "@autometabuilder/web_api_translation_options",
+  "version": "1.0.0",
+  "description": "Handle /api/translation-options endpoint",
+  "main": "web_api_translation_options.py",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "api",
+    "translation",
+    "i18n",
+    "plugin"
+  ],
+  "metadata": {
+    "plugin_type": "web.api_translation_options",
+    "category": "web"
+  }
+}
