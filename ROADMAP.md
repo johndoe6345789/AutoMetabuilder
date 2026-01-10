@@ -76,3 +76,7 @@
 - [x] **Structured workflow logging**: Add debug/trace warnings when parsing workflow definitions so graph builders surface malformed JSON and unbound bindings.
 - [x] **Route modularization**: Split `backend/autometabuilder/web/server.py` into focused route modules or blueprints so each file stays under 100 LOC and supports DI of helpers.
 - [x] **AJAX contract tests**: Expand the backend test suite to cover `/api/workflow/graph`, `/api/workflow/plugins`, and nav/translation payloads with mocked metadata so API drift is caught early.
+- [x] **Metadata modularization**: Split `metadata.json` into focused include files (settings, suggestions, workflow plugin defs) and support directory-based loads.
+- [x] **Tool spec modularization**: Break `tools.json` into category files and load them as a directory.
+- [x] **Translation assets modularization**: Store messages per language in grouped JSON directories and update loaders/writers accordingly.
+- [x] **UI test decomposition**: Split Playwright UI tests into focused modules with shared helpers.
