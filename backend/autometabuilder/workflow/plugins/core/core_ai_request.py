@@ -1,5 +1,5 @@
 """Workflow plugin: AI request."""
-from ...openai_client import get_completion
+from ....openai_client import get_completion
 
 
 def run(runtime, inputs):

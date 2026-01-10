@@ -1,5 +1,5 @@
 """Workflow plugin: load metadata."""
-from ...metadata_loader import load_metadata
+from ....metadata_loader import load_metadata
 
 
 def run(runtime, _inputs):

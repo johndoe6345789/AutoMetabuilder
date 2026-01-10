@@ -1,5 +1,5 @@
 """Workflow plugin: load SDLC context."""
-from ...context_loader import get_sdlc_context
+from ....context_loader import get_sdlc_context
 
 
 def run(runtime, _inputs):

@@ -1,6 +1,6 @@
 """Workflow plugin: load prompt configuration."""
-from ...prompt_loader import load_prompt_yaml
-from ...model_resolver import resolve_model_name
+from ....prompt_loader import load_prompt_yaml
+from ....model_resolver import resolve_model_name
 
 
 def run(runtime, _inputs):

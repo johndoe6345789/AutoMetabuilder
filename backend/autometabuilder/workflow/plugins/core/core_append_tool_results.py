@@ -1,6 +1,6 @@
 """Workflow plugin: append tool results."""
-from ...integrations.notifications import notify_all
-from ...roadmap_utils import is_mvp_reached
+from ....integrations.notifications import notify_all
+from ....roadmap_utils import is_mvp_reached
 
 
 def run(runtime, inputs):

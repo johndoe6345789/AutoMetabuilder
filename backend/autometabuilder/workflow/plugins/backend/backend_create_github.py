@@ -1,5 +1,5 @@
 """Workflow plugin: create GitHub integration."""
-from ...github_service import create_github_integration
+from ....github_service import create_github_integration
 
 
 def run(runtime, _inputs):

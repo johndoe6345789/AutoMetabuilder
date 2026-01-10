@@ -1,5 +1,5 @@
 """Workflow plugin: create OpenAI client."""
-from ...openai_factory import create_openai_client
+from ....openai_factory import create_openai_client
 
 
 def run(runtime, _inputs):

@@ -1,5 +1,5 @@
 """Workflow plugin: load tools."""
-from ...tools_loader import load_tools
+from ....tools_loader import load_tools
 
 
 def run(runtime, _inputs):
