@@ -7,6 +7,7 @@ Keep files small and focused.
 Target <100 LOC per file unless there is a clear and 
 documented reason otherwise. 
 Enforce one responsibility per file.
+Lockfiles are excluded from the LOC target.
 
 Decompose aggressively. 
 Break up large blobs of logic into composable units. 
