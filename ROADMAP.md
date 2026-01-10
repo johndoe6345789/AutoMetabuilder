@@ -59,3 +59,9 @@
 - [ ] **Undo/Redo Stack**: Reversible edits for canvas and inspector changes.
 - [ ] **Context Menu**: Right-click actions for node, edge, and canvas.
 - [ ] **Performance Tuning**: Virtualized node rendering for large graphs.
+
+## Phase 8: Modern Frontend Platform
+- [x] **Flask + Next.js split**: Replace the Jinja-based FastAPI UI with a Flask REST backend and Next.js frontend consuming metadata, translations, workflows, logs, and nav via AJAX.
+- [x] **Atomic Next sections**: Compose dashboard, workflow builder, prompt editor, settings, and translation editor into dedicated components powered by localized strings.
+- [x] **Workflow templates & navigation JSON**: Serve workflow packages, nav items, and translation mappings from metadata-backed JSON endpoints.
+- [ ] **Document build constraints**: Record that `next build --webpack` fails in this sandbox because bundlers attempt to bind new ports, and continue iterating locally.

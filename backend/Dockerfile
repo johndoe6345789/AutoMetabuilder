@@ -20,4 +20,4 @@ RUN poetry config virtualenvs.create false \
   && poetry install --no-interaction --no-ansi
 
 # Run the application
-CMD ["python", "src/autometabuilder/main.py"]
+CMD ["python", "-m", "autometabuilder"]

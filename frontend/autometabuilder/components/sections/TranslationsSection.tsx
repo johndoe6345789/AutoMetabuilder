@@ -19,6 +19,13 @@ export default function TranslationsSection({ languages, onRefresh, t }: Transla
   const [error, setError] = useState("");
   const [newLang, setNewLang] = useState("");
 
+  const loadContent = async (lang: string) => {
+    setError("");
+    const data = await fetchTranslation(lang);
+    setEditorValue(JSON.stringify(data.content, null, 2));
+  };
+
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!selected && Object.keys(languages).length) {
       setSelected(Object.keys(languages)[0]);
@@ -30,12 +37,7 @@ export default function TranslationsSection({ languages, onRefresh, t }: Transla
       loadContent(selected);
     }
   }, [selected]);
-
-  const loadContent = async (lang: string) => {
-    setError("");
-    const data = await fetchTranslation(lang);
-    setEditorValue(JSON.stringify(data.content, null, 2));
-  };
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleSave = async () => {
     if (!selected) return;

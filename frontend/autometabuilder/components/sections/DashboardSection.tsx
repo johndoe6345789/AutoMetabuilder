@@ -11,14 +11,14 @@ type DashboardSectionProps = {
 export default function DashboardSection({ status, logs, onRun, t }: DashboardSectionProps) {
   const [mode, setMode] = useState("once");
   const [iterations, setIterations] = useState(1);
-  const [yolo, setYolo] = useState(true);
   const [stopAtMvp, setStopAtMvp] = useState(false);
   const [feedback, setFeedback] = useState("");
 
   const handleRun = async () => {
+    const isYolo = mode === "yolo";
     setFeedback(t("ui.dashboard.status.bot_label", "Bot Status") + " — submitting");
     try {
-      await onRun({ mode, iterations, yolo, stop_at_mvp: stopAtMvp });
+      await onRun({ mode, iterations, yolo: isYolo, stop_at_mvp: stopAtMvp });
       setFeedback(t("ui.dashboard.start_bot", "Start Bot") + " " + t("ui.dashboard.status.running", "Running"));
     } catch (error) {
       console.error(error);
