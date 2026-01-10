@@ -48,7 +48,7 @@ export default function HomePage() {
     await loadContext();
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <main className="app-loading">
         <p>Loading dashboard…</p>
