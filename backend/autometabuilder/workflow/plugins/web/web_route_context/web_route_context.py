@@ -1,7 +1,7 @@
 """Workflow plugin: context API routes blueprint."""
 import os
 from flask import Blueprint, jsonify
-from autometabuilder.loaders.metadata_loader import load_metadata
+from autometabuilder.utils import load_metadata
 from autometabuilder.workflow.plugin_loader import load_plugin_callable
 from autometabuilder.roadmap_utils import is_mvp_reached
 

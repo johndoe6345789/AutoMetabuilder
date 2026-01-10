@@ -1,7 +1,9 @@
 """Load workflow plugins by dotted path."""
-from ..loaders.callable_loader import load_callable
+import importlib
 
 
 def load_plugin_callable(path: str):
     """Load a workflow plugin callable."""
-    return load_callable(path)
+    module_path, attr = path.rsplit(".", 1)
+    module = importlib.import_module(module_path)
+    return getattr(module, attr)

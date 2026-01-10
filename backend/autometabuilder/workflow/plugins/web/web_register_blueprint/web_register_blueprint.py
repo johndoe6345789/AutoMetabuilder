@@ -1,4 +1,12 @@
 """Workflow plugin: register Flask blueprint."""
+import importlib
+
+
+def _load_callable(path: str):
+    """Import and return a callable."""
+    module_path, attr = path.rsplit(".", 1)
+    module = importlib.import_module(module_path)
+    return getattr(module, attr)
 
 
 def run(runtime, inputs):
@@ -25,9 +33,8 @@ def run(runtime, inputs):
         if not blueprint_path:
             return {"error": "blueprint or blueprint_path is required"}
         
-        from ....loaders.callable_loader import load_callable
         try:
-            blueprint = load_callable(blueprint_path)
+            blueprint = _load_callable(blueprint_path)
         except Exception as e:
             return {"error": f"Failed to load blueprint: {str(e)}"}
     

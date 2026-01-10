@@ -1,6 +1,6 @@
 """Workflow plugin: translation API routes blueprint."""
 from flask import Blueprint, jsonify, request
-from autometabuilder.loaders.metadata_loader import load_metadata
+from autometabuilder.utils import load_metadata
 
 
 def run(runtime, _inputs):

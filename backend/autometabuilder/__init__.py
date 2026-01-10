@@ -5,7 +5,7 @@ import json
 import os
 from pathlib import Path
 
-from .loaders.metadata_loader import load_metadata
+from .utils import load_metadata
 
 
 def _load_messages_path(path: Path) -> dict:

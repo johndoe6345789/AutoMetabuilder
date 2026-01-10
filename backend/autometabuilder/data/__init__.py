@@ -138,5 +138,5 @@ def get_ui_messages(lang):
     return _run_plugin("web.get_ui_messages", {"lang": lang})
 
 
-# Metadata - still using loaders directly
-from autometabuilder.loaders.metadata_loader import load_metadata
+# Metadata - utility function
+from autometabuilder.utils import load_metadata
