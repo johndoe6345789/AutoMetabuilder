@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Box, Button, Paper, Stack, TextField, Typography } from "@mui/material";
 
 type SettingsSectionProps = {
   envVars: Record<string, string>;
@@ -34,32 +35,55 @@ export default function SettingsSection({ envVars, onSave, t }: SettingsSectionP
   };
 
   return (
-    <section className="section-card" id="settings">
-      <div className="section-card__header">
-        <h2>{t("ui.settings.title", "Settings")}</h2>
-        <p>{t("ui.settings.subtitle", "Configure services, security, and environment preferences")}</p>
-      </div>
-      <div className="settings-grid">
+    <Paper id="settings" sx={{ p: 3, mb: 3, backgroundColor: "#0d111b" }}>
+      <Typography variant="h5" gutterBottom>
+        {t("ui.settings.title", "Settings")}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" gutterBottom>
+        {t("ui.settings.subtitle", "Configure services, security, and environment preferences")}
+      </Typography>
+      <Stack spacing={2} mt={2}>
         {Object.entries(values).map(([key, value]) => (
-          <label key={key} className="field-group">
-            <span>{key}</span>
-            <input value={value} onChange={(event) => updateField(key, event.target.value)} />
-          </label>
+          <TextField
+            key={key}
+            label={key}
+            value={value}
+            onChange={(event) => updateField(key, event.target.value)}
+            InputProps={{
+              sx: {
+                backgroundColor: "#030712",
+                borderRadius: 1,
+                color: "white",
+              },
+            }}
+          />
         ))}
-      </div>
-      <div className="settings-grid settings-grid--new">
-        <input placeholder={t("ui.settings.add.placeholder_key", "KEY")} value={newKey} onChange={(event) => setNewKey(event.target.value)} />
-        <input placeholder={t("ui.settings.add.placeholder_value", "Value")} value={newValue} onChange={(event) => setNewValue(event.target.value)} />
-        <button type="button" onClick={handleAdd}>
+      </Stack>
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mt: 2 }}>
+        <TextField
+          label={t("ui.settings.add.placeholder_key", "KEY")}
+          value={newKey}
+          onChange={(event) => setNewKey(event.target.value)}
+          fullWidth
+        />
+        <TextField
+          label={t("ui.settings.add.placeholder_value", "Value")}
+          value={newValue}
+          onChange={(event) => setNewValue(event.target.value)}
+          fullWidth
+        />
+        <Button variant="outlined" onClick={handleAdd}>
           {t("ui.actions.add", "Add")}
-        </button>
-      </div>
-      <div className="workflow-actions">
-        <button className="primary" type="button" onClick={handleSave}>
+        </Button>
+      </Stack>
+      <Stack direction="row" spacing={2} alignItems="center" mt={3}>
+        <Button variant="contained" onClick={handleSave}>
           {t("ui.settings.save_all", "Save All Settings")}
-        </button>
-        <span className="workflow-message">{message}</span>
-      </div>
-    </section>
+        </Button>
+        <Typography variant="body2" color="success.main">
+          {message}
+        </Typography>
+      </Stack>
+    </Paper>
   );
 }

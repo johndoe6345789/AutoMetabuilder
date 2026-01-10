@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Box, Toolbar, Typography } from "@mui/material";
 import { NavigationItem } from "../../lib/types";
 import Sidebar from "./Sidebar";
 
@@ -12,15 +13,21 @@ type PageLayoutProps = {
 
 export default function PageLayout({ navItems, section, onSectionChange, t, children }: PageLayoutProps) {
   return (
-    <div className="app-shell">
+    <Box sx={{ display: "flex" }}>
       <Sidebar items={navItems} selected={section} onSelect={onSectionChange} t={t} />
-      <div className="content-shell">
-        <header className="content-shell__header">
-          <h1>{t("ui.app.title", "AutoMetabuilder Dashboard")}</h1>
-          <p>{t("ui.dashboard.subtitle", "Control the bot and monitor system activity")}</p>
-        </header>
-        <div className="content-shell__body">{children}</div>
-      </div>
-    </div>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, bgcolor: "#04070f", minHeight: "100vh" }}>
+        <Toolbar disableGutters>
+          <div>
+            <Typography variant="h4" color="text.primary" gutterBottom>
+              {t("ui.app.title", "AutoMetabuilder Dashboard")}
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              {t("ui.dashboard.subtitle", "Control the bot and monitor system activity")}
+            </Typography>
+          </div>
+        </Toolbar>
+        <Box>{children}</Box>
+      </Box>
+    </Box>
   );
 }

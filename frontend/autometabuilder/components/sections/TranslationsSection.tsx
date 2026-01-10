@@ -1,5 +1,13 @@
 import { FormEvent, useEffect, useState } from "react";
 import {
+  Button,
+  Chip,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import {
   createTranslation,
   deleteTranslation,
   fetchTranslation,
@@ -25,7 +33,6 @@ export default function TranslationsSection({ languages, onRefresh, t }: Transla
     setEditorValue(JSON.stringify(data.content, null, 2));
   };
 
-  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!selected && Object.keys(languages).length) {
       setSelected(Object.keys(languages)[0]);
@@ -37,7 +44,6 @@ export default function TranslationsSection({ languages, onRefresh, t }: Transla
       loadContent(selected);
     }
   }, [selected]);
-  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleSave = async () => {
     if (!selected) return;
@@ -67,41 +73,64 @@ export default function TranslationsSection({ languages, onRefresh, t }: Transla
   };
 
   return (
-    <section className="section-card" id="translations">
-      <div className="section-card__header">
-        <h2>{t("ui.translations.title", "Translations")}</h2>
-        <p>{t("ui.translations.subtitle", "Create, edit, and maintain language files for bot messages")}</p>
-      </div>
-      <div className="translations-layout">
-        <div className="language-list">
+    <Paper id="translations" sx={{ p: 3, mb: 3, backgroundColor: "#0d111b" }}>
+      <Typography variant="h5" gutterBottom>
+        {t("ui.translations.title", "Translations")}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" gutterBottom>
+        {t("ui.translations.subtitle", "Create, edit, and maintain language files for bot messages")}
+      </Typography>
+      <Stack spacing={2} sx={{ mt: 2 }}>
+        <Stack direction="row" spacing={1} flexWrap="wrap">
           {Object.entries(languages).map(([lang, label]) => (
-            <button
+            <Chip
+              label={`${lang} (${label})`}
               key={lang}
-              type="button"
-              className={`language-chip ${selected === lang ? "active" : ""}`}
+              variant={selected === lang ? "filled" : "outlined"}
               onClick={() => setSelected(lang)}
-            >
-              {lang}
-              <span>{`(${label})`}</span>
-            </button>
+              clickable
+            />
           ))}
-        </div>
-        <textarea value={editorValue} onChange={(event) => setEditorValue(event.target.value)} rows={12} />
-      </div>
-      <div className="translations-actions">
-        <button className="primary" type="button" onClick={handleSave} disabled={!selected}>
+        </Stack>
+        <TextField
+          multiline
+          minRows={12}
+          value={editorValue}
+          onChange={(event) => setEditorValue(event.target.value)}
+          InputProps={{
+            sx: {
+              backgroundColor: "#030712",
+              borderRadius: 2,
+              color: "white",
+              fontFamily: "JetBrains Mono, monospace",
+            },
+          }}
+        />
+      </Stack>
+      <Stack direction="row" spacing={2} mt={2}>
+        <Button variant="contained" onClick={handleSave} disabled={!selected}>
           {t("ui.actions.save", "Save")}
-        </button>
-        <button type="button" onClick={handleDelete} disabled={!selected}>
+        </Button>
+        <Button variant="outlined" onClick={handleDelete} disabled={!selected}>
           {t("ui.actions.delete", "Delete")}
-        </button>
-        <form onSubmit={handleCreate} className="language-form">
-          <input placeholder={t("ui.translations.add_language_placeholder", "Add language...")} value={newLang} onChange={(event) => setNewLang(event.target.value)} />
-          <button type="submit">{t("ui.actions.add", "Add")}</button>
-        </form>
-      </div>
-      {message && <p className="workflow-message">{message}</p>}
-      {error && <p className="workflow-error">{error}</p>}
-    </section>
+        </Button>
+        <Stack component="form" onSubmit={handleCreate} direction="row" spacing={1} flex={1}>
+          <TextField
+            placeholder={t("ui.translations.add_language_placeholder", "Add language...")}
+            value={newLang}
+            onChange={(event) => setNewLang(event.target.value)}
+            fullWidth
+          />
+          <Button type="submit" variant="contained">
+            {t("ui.actions.add", "Add")}
+          </Button>
+        </Stack>
+      </Stack>
+      {(message || error) && (
+        <Typography variant="body2" color={error ? "error.main" : "success.main"} mt={2}>
+          {message || error}
+        </Typography>
+      )}
+    </Paper>
   );
 }

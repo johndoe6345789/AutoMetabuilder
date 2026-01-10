@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { Alert, Snackbar } from "@mui/material";
 import DashboardSection from "../components/sections/DashboardSection";
 import PromptSection from "../components/sections/PromptSection";
 import SettingsSection from "../components/sections/SettingsSection";
 import TranslationsSection from "../components/sections/TranslationsSection";
 import WorkflowSection from "../components/sections/WorkflowSection";
 import PageLayout from "../components/layout/PageLayout";
+import useWebhook, { emitWebhook } from "../hooks/useWebhook";
 import {
   fetchContext,
   fetchWorkflowPackage,
@@ -22,6 +24,8 @@ export default function HomePage() {
   const [selectedSection, setSelectedSection] = useState("dashboard");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [snack, setSnack] = useState("");
+  const [snackOpen, setSnackOpen] = useState(false);
 
   const loadContext = async () => {
     setLoading(true);
@@ -41,6 +45,16 @@ export default function HomePage() {
     void loadContext();
   }, []);
 
+  useWebhook(
+    "botRunComplete",
+    (detail) => {
+      const mode = (detail as { mode?: string })?.mode ?? "once";
+      setSnack(`Run finished: ${mode}`);
+      setSnackOpen(true);
+    },
+    []
+  );
+
   const t = useMemo(
     () => (key: string, fallback?: string) => context?.messages[key] ?? fallback ?? key,
     [context]
@@ -49,6 +63,7 @@ export default function HomePage() {
   const handleRun = async (payload: Parameters<typeof runBot>[0]) => {
     await runBot(payload);
     await loadContext();
+    emitWebhook("runRequested", payload);
   };
 
   const handleWorkflowSave = async (content: string) => {
@@ -92,8 +107,9 @@ export default function HomePage() {
   }
 
   return (
-    <PageLayout
-      navItems={context.navigation}
+    <>
+      <PageLayout
+        navItems={context.navigation}
       section={selectedSection}
       onSectionChange={setSelectedSection}
       t={t}
@@ -117,6 +133,12 @@ export default function HomePage() {
       {selectedSection === "translations" && (
         <TranslationsSection languages={context.translations} onRefresh={loadContext} t={t} />
       )}
-    </PageLayout>
+      </PageLayout>
+      <Snackbar open={snackOpen} autoHideDuration={4000} onClose={() => setSnackOpen(false)}>
+        <Alert onClose={() => setSnackOpen(false)} severity="info" sx={{ width: "100%" }}>
+          {snack}
+        </Alert>
+      </Snackbar>
+    </>
   );
 }

@@ -1,5 +1,19 @@
 import { useState } from "react";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { UIStatus } from "../../lib/types";
+import { emitWebhook } from "../../hooks/useWebhook";
 
 type DashboardSectionProps = {
   status: UIStatus;
@@ -20,6 +34,7 @@ export default function DashboardSection({ status, logs, onRun, t }: DashboardSe
     try {
       await onRun({ mode, iterations, yolo: isYolo, stop_at_mvp: stopAtMvp });
       setFeedback(t("ui.dashboard.start_bot", "Start Bot") + " " + t("ui.dashboard.status.running", "Running"));
+      emitWebhook("botRunComplete", { mode, iterations });
     } catch (error) {
       console.error(error);
       setFeedback(t("ui.dashboard.status.idle", "Idle"));
@@ -27,52 +42,72 @@ export default function DashboardSection({ status, logs, onRun, t }: DashboardSe
   };
 
   return (
-    <section className="section-card" id="dashboard">
-      <div className="section-card__header">
-        <h2>{t("ui.dashboard.title", "Dashboard")}</h2>
-        <p>{t("ui.dashboard.subtitle", "Control the bot and monitor system activity")}</p>
-      </div>
-      <div className="dashboard-grid">
-        <div className="dashboard-panel">
-          <h3>{t("ui.dashboard.bot_control", "Bot Control")}</h3>
-          <div className="dashboard-panel__strategy">
-            <label>
-              <input type="radio" name="mode" value="once" checked={mode === "once"} onChange={() => setMode("once")} />
-              <span>{t("ui.dashboard.run.single.title", "Single Iteration")}</span>
-            </label>
-            <label>
-              <input type="radio" name="mode" value="iterations" checked={mode === "iterations"} onChange={() => setMode("iterations")} />
-              <span>{t("ui.dashboard.run.repeat.title", "Repeat")}</span>
-            </label>
-            <label>
-              <input type="radio" name="mode" value="yolo" checked={mode === "yolo"} onChange={() => setMode("yolo")} />
-              <span>{t("ui.dashboard.run.yolo.title", "YOLO")}</span>
-            </label>
-          </div>
+    <Paper id="dashboard" sx={{ p: 3, mb: 3, backgroundColor: "#0d111b" }}>
+      <Typography variant="h5" gutterBottom>
+        {t("ui.dashboard.title", "Dashboard")}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" gutterBottom>
+        {t("ui.dashboard.subtitle", "Control the bot and monitor system activity")}
+      </Typography>
+      <Stack direction={{ xs: "column", md: "row" }} spacing={3} mt={2}>
+        <Paper sx={{ flex: 1, p: 2, backgroundColor: "#0b1221" }}>
+          <Typography variant="subtitle1" gutterBottom>
+            {t("ui.dashboard.bot_control", "Bot Control")}
+          </Typography>
+          <FormControl component="fieldset">
+            <RadioGroup row value={mode} onChange={(event) => setMode(event.target.value)} name="run-mode">
+              {["once", "iterations", "yolo"].map((value) => (
+                <FormControlLabel
+                  key={value}
+                  value={value}
+                  control={<Radio size="small" />}
+                  label={t(`ui.dashboard.run.${value}.title`, value === "iterations" ? "Repeat" : value.charAt(0).toUpperCase() + value.slice(1))}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
           {mode === "iterations" && (
-            <label className="field-group">
-              <span>{t("ui.dashboard.run.repeat.label", "Iterations")}</span>
-              <input type="number" min={1} value={iterations} onChange={(event) => setIterations(Number(event.target.value) || 1)} />
-            </label>
+            <TextField
+              type="number"
+              size="small"
+              label={t("ui.dashboard.run.repeat.label", "Iterations")}
+              value={iterations}
+              onChange={(event) => setIterations(Number(event.target.value) || 1)}
+              sx={{ mt: 1, width: 140 }}
+            />
           )}
-          <label className="field-group">
-            <input type="checkbox" checked={stopAtMvp} onChange={(event) => setStopAtMvp(event.target.checked)} />
-            <span>{t("ui.dashboard.stop_mvp.title", "Stop at MVP")}</span>
-          </label>
-          <button className="primary" type="button" onClick={handleRun} disabled={status.is_running}>
+          <FormControlLabel
+            control={<Checkbox checked={stopAtMvp} onChange={(event) => setStopAtMvp(event.target.checked)} />}
+            label={t("ui.dashboard.stop_mvp.title", "Stop at MVP")}
+            sx={{ mt: 1 }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleRun}
+            disabled={status.is_running}
+            sx={{ mt: 2 }}
+          >
             {t("ui.dashboard.start_bot", "Start Bot")}
-          </button>
-          <p className="status-text">
-            {status.is_running ? t("ui.dashboard.status.running", "Running") : t("ui.dashboard.status.idle", "Idle")} •{" "}
+          </Button>
+          <Typography variant="caption" color="text.secondary" display="block" mt={1}>
+            {status.is_running ? t("ui.dashboard.status.running", "Running") : t("ui.dashboard.status.idle", "Idle")} •
+            {" "}
             {status.mvp_reached ? t("ui.dashboard.status.mvp_reached", "Reached") : t("ui.dashboard.status.mvp_progress", "In Progress")}
-          </p>
-          <p className="status-feedback">{feedback}</p>
-        </div>
-        <div className="dashboard-panel">
-          <h3>{t("ui.dashboard.logs.title", "Recent Logs")}</h3>
-          <pre className="log-output">{logs.slice(-1200) || t("ui.dashboard.status.idle", "Idle")}</pre>
-        </div>
-      </div>
-    </section>
+          </Typography>
+          <Typography variant="caption" color="primary">
+            {feedback}
+          </Typography>
+        </Paper>
+        <Paper sx={{ flex: 1, p: 2, backgroundColor: "#0b1221" }}>
+          <Typography variant="subtitle1" gutterBottom>
+            {t("ui.dashboard.logs.title", "Recent Logs")}
+          </Typography>
+          <Box component="pre" sx={{ maxHeight: 240, overflow: "auto", fontSize: 12, color: "white" }}>
+            {logs.slice(-1200) || t("ui.dashboard.status.idle", "Idle")}
+          </Box>
+        </Paper>
+      </Stack>
+    </Paper>
   );
 }

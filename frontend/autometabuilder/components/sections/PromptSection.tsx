@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Box, Button, Paper, Stack, TextField, Typography } from "@mui/material";
 
 type PromptSectionProps = {
   content: string;
@@ -21,18 +22,36 @@ export default function PromptSection({ content, onSave, t }: PromptSectionProps
   };
 
   return (
-    <section className="section-card" id="prompt">
-      <div className="section-card__header">
-        <h2>{t("ui.prompt.title", "Prompt Builder")}</h2>
-        <p>{t("ui.prompt.subtitle", "Shape how the assistant thinks, speaks, and decides")}</p>
-      </div>
-      <textarea className="prompt-editor" value={draft} onChange={(event) => setDraft(event.target.value)} rows={12} />
-      <div className="workflow-actions">
-        <button className="primary" type="button" onClick={handleSave}>
+    <Paper id="prompt" sx={{ p: 3, mb: 3, backgroundColor: "#0d111b" }}>
+      <Typography variant="h5" gutterBottom>
+        {t("ui.prompt.title", "Prompt Builder")}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" gutterBottom>
+        {t("ui.prompt.subtitle", "Shape how the assistant thinks, speaks, and decides")}
+      </Typography>
+      <TextField
+        multiline
+        minRows={10}
+        value={draft}
+        onChange={(event) => setDraft(event.target.value)}
+        fullWidth
+        InputProps={{
+          sx: {
+            backgroundColor: "#030712",
+            borderRadius: 2,
+            color: "white",
+            fontFamily: "JetBrains Mono, monospace",
+          },
+        }}
+      />
+      <Stack direction="row" spacing={2} alignItems="center" mt={2}>
+        <Button variant="contained" onClick={handleSave}>
           {t("ui.prompt.save", "Save Prompt")}
-        </button>
-        <span className="workflow-message">{message}</span>
-      </div>
-    </section>
+        </Button>
+        <Typography variant="body2" color="success.main">
+          {message}
+        </Typography>
+      </Stack>
+    </Paper>
   );
 }
