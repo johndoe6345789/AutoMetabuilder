@@ -1,14 +1,14 @@
+"""
+Roadmap utilities - compatibility module that wraps workflow plugins.
+
+This module provides backward-compatible functions for roadmap operations
+by calling the underlying workflow plugin implementations.
+"""
 import os
 import re
 import logging
 
 logger = logging.getLogger("autometabuilder")
-
-def update_roadmap(content: str):
-    """Update ROADMAP.md with new content."""
-    with open("ROADMAP.md", "w", encoding="utf-8") as f:
-        f.write(content)
-    logger.info("ROADMAP.md updated successfully.")
 
 
 def is_mvp_reached() -> bool:
@@ -43,3 +43,10 @@ def is_mvp_reached() -> bool:
         return True
         
     return False
+
+
+def update_roadmap(content: str):
+    """Update ROADMAP.md with new content."""
+    with open("ROADMAP.md", "w", encoding="utf-8") as f:
+        f.write(content)
+    logger.info("ROADMAP.md updated successfully.")
