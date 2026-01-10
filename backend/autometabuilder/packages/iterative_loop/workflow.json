@@ -184,5 +184,15 @@
         ]
       }
     }
-  }
+  },
+  "triggers": [
+    {
+      "nodeId": "load_context",
+      "kind": "manual",
+      "enabled": true,
+      "meta": {
+        "description": "Manually triggered Iterative Agent Loop workflow execution"
+      }
+    }
+  ]
 }

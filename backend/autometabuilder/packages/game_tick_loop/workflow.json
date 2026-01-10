@@ -109,5 +109,15 @@
         ]
       }
     }
-  }
+  },
+  "triggers": [
+    {
+      "nodeId": "seed_messages",
+      "kind": "manual",
+      "enabled": true,
+      "meta": {
+        "description": "Manually triggered meta.workflow_packages.game_tick_loop.label workflow execution"
+      }
+    }
+  ]
 }

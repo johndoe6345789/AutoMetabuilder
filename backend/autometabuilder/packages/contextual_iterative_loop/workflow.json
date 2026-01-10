@@ -173,5 +173,15 @@
         ]
       }
     }
-  }
+  },
+  "triggers": [
+    {
+      "nodeId": "list_files",
+      "kind": "manual",
+      "enabled": true,
+      "meta": {
+        "description": "Manually triggered meta.workflow_packages.contextual_iterative_loop.label workflow execution"
+      }
+    }
+  ]
 }
