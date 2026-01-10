@@ -4,7 +4,6 @@ import logging
 import os
 from .loaders import load_env
 from .loaders import load_metadata
-from .web.server import start_web_ui
 from .engine import load_workflow_config, build_workflow_context, build_workflow_engine
 
 TRACE_LEVEL = 5
@@ -56,6 +55,26 @@ def parse_args():
     return parser.parse_args()
 
 
+def run_web_workflow(logger):
+    """Start web server using workflow."""
+    # Load web server bootstrap workflow
+    from .data.workflow import load_workflow_packages
+    
+    packages = load_workflow_packages()
+    web_server_package = next((p for p in packages if p.get("id") == "web_server_bootstrap"), None)
+    
+    if not web_server_package:
+        logger.error("web_server_bootstrap workflow package not found")
+        return
+    
+    logger.info("Starting Web UI via workflow...")
+    workflow_config = web_server_package.get("workflow", {})
+    workflow_context = build_workflow_context({})
+    
+    engine = build_workflow_engine(workflow_config, workflow_context, logger)
+    engine.execute()
+
+
 def run_app() -> None:
     """Run the AutoMetabuilder CLI."""
     load_env()
@@ -64,8 +83,7 @@ def run_app() -> None:
 
     args = parse_args()
     if args.web:
-        logger.info("Starting Web UI...")
-        start_web_ui()
+        run_web_workflow(logger)
         return
 
     token = os.environ.get("GITHUB_TOKEN")

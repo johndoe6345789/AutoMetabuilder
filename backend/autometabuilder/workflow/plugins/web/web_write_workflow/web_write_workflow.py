@@ -1,5 +1,5 @@
 """Workflow plugin: write workflow."""
-from ....web.data.workflow import write_workflow
+from ....data.workflow import write_workflow
 
 
 def run(_runtime, inputs):

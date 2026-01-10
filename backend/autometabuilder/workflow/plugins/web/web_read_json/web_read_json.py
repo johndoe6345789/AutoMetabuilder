@@ -1,6 +1,6 @@
 """Workflow plugin: read JSON file."""
 from pathlib import Path
-from ....web.data.json_utils import read_json
+from ....data.json_utils import read_json
 
 
 def run(_runtime, inputs):

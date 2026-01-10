@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from flask import Blueprint, request
 
-from ..data import persist_env_vars
+from autometabuilder.data import persist_env_vars
 
 settings_bp = Blueprint("settings", __name__)
 

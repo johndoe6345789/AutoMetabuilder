@@ -5,7 +5,7 @@ import os
 
 from flask import Blueprint
 
-from ..data import (
+from autometabuilder.data import (
     get_env_vars,
     get_navigation_items,
     get_prompt_content,
@@ -17,7 +17,7 @@ from ..data import (
     load_workflow_packages,
     summarize_workflow_packages,
 )
-from ..run_state import bot_process, current_run_config, mock_running
+from autometabuilder.data.run_state import bot_process, current_run_config, mock_running
 from autometabuilder.roadmap_utils import is_mvp_reached
 
 context_bp = Blueprint("context", __name__)

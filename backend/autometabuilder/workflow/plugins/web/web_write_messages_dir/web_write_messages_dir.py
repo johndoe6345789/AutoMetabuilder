@@ -1,6 +1,6 @@
 """Workflow plugin: write messages directory."""
 from pathlib import Path
-from ....web.data.messages_io import write_messages_dir
+from ....data.messages_io import write_messages_dir
 
 
 def run(_runtime, inputs):

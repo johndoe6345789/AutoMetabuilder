@@ -1,5 +1,5 @@
 """Workflow plugin: delete translation."""
-from ....web.data.translations import delete_translation
+from ....data.translations import delete_translation
 
 
 def run(_runtime, inputs):

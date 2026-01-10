@@ -1,5 +1,5 @@
 """Workflow plugin: load translation."""
-from ....web.data.translations import load_translation
+from ....data.translations import load_translation
 
 
 def run(_runtime, inputs):

@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from flask import Blueprint, request
 
-from ..data import build_prompt_yaml, write_prompt, write_workflow
+from autometabuilder.data import build_prompt_yaml, write_prompt, write_workflow
 
 prompt_bp = Blueprint("prompt", __name__)
 

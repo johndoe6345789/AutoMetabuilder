@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from flask import Blueprint, request
 
-from ..run_state import start_bot
+from autometabuilder.data.run_state import start_bot
 
 run_bp = Blueprint("run", __name__)
 

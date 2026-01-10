@@ -1,6 +1,6 @@
 {
   "name": "Web Server Bootstrap",
-  "active": false,
+  "active": true,
   "nodes": [
     {
       "id": "configure_logging",
@@ -38,7 +38,7 @@
       "typeVersion": 1,
       "position": [900, -150],
       "parameters": {
-        "blueprint_path": "autometabuilder.web.routes.context.context_bp"
+        "blueprint_path": "autometabuilder.data.routes.context.context_bp"
       }
     },
     {
@@ -48,7 +48,7 @@
       "typeVersion": 1,
       "position": [900, -50],
       "parameters": {
-        "blueprint_path": "autometabuilder.web.routes.run.run_bp"
+        "blueprint_path": "autometabuilder.data.routes.run.run_bp"
       }
     },
     {
@@ -58,7 +58,7 @@
       "typeVersion": 1,
       "position": [900, 50],
       "parameters": {
-        "blueprint_path": "autometabuilder.web.routes.prompt.prompt_bp"
+        "blueprint_path": "autometabuilder.data.routes.prompt.prompt_bp"
       }
     },
     {
@@ -68,7 +68,7 @@
       "typeVersion": 1,
       "position": [900, 150],
       "parameters": {
-        "blueprint_path": "autometabuilder.web.routes.settings.settings_bp"
+        "blueprint_path": "autometabuilder.data.routes.settings.settings_bp"
       }
     },
     {
@@ -78,7 +78,7 @@
       "typeVersion": 1,
       "position": [900, 250],
       "parameters": {
-        "blueprint_path": "autometabuilder.web.routes.translations.translations_bp"
+        "blueprint_path": "autometabuilder.data.routes.translations.translations_bp"
       }
     },
     {
@@ -88,7 +88,7 @@
       "typeVersion": 1,
       "position": [900, 350],
       "parameters": {
-        "blueprint_path": "autometabuilder.web.routes.navigation.navigation_bp"
+        "blueprint_path": "autometabuilder.data.routes.navigation.navigation_bp"
       }
     },
     {

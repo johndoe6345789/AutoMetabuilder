@@ -74,7 +74,7 @@ These packages test the correctness of workflow plugins using the `test.*` asser
 Packages are loaded via `load_workflow_packages()` in `web/data/workflow.py`:
 
 ```python
-from autometabuilder.web.data import load_workflow_packages
+from autometabuilder.data import load_workflow_packages
 
 packages = load_workflow_packages()
 ```

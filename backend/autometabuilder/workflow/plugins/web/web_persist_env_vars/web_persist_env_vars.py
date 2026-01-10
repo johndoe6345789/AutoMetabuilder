@@ -1,5 +1,5 @@
 """Workflow plugin: persist environment variables."""
-from ....web.data.env import persist_env_vars
+from ....data.env import persist_env_vars
 
 
 def run(_runtime, inputs):

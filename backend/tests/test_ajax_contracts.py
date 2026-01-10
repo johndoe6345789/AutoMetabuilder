@@ -1,7 +1,7 @@
 """Contract tests for AJAX endpoints used by the Next.js frontend."""
 import pytest
 
-from autometabuilder.web.server import app
+from autometabuilder.data.server import app
 
 
 @pytest.fixture

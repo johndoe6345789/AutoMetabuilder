@@ -1,5 +1,5 @@
 """Workflow plugin: get prompt content."""
-from ....web.data.prompt import get_prompt_content
+from ....data.prompt import get_prompt_content
 
 
 def run(_runtime, _inputs):

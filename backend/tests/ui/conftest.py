@@ -4,7 +4,7 @@ import socket
 import threading
 import pytest
 import uvicorn
-from autometabuilder.web.server import app
+from autometabuilder.data.server import app
 
 @pytest.fixture(scope="session")
 def browser_type_launch_args():

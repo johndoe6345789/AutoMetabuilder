@@ -3,8 +3,8 @@ from __future__ import annotations
 
 from flask import Blueprint
 
-from ..data import get_navigation_items, load_metadata, load_workflow_packages, summarize_workflow_packages
-from ..workflow_graph import build_workflow_graph
+from autometabuilder.data import get_navigation_items, load_metadata, load_workflow_packages, summarize_workflow_packages
+from autometabuilder.data.workflow_graph import build_workflow_graph
 
 navigation_bp = Blueprint("navigation", __name__)
 

@@ -5,7 +5,7 @@ import json
 import logging
 from typing import Any, Dict, Iterable, List
 
-from .data import get_workflow_content, load_metadata
+from autometabuilder.data import get_workflow_content, load_metadata
 
 logger = logging.getLogger(__name__)
 

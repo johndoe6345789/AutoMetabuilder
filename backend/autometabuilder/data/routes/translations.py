@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from flask import Blueprint, request
 
-from ..data import create_translation, delete_translation, load_metadata, load_translation, list_translations, update_translation
+from autometabuilder.data import create_translation, delete_translation, load_metadata, load_translation, list_translations, update_translation
 
 translations_bp = Blueprint("translations", __name__)
 

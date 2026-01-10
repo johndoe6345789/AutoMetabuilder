@@ -17,7 +17,10 @@ The following environment variables are required:
 
 ## Directory layout
 
-- `backend/`: FastAPI/Flask API, workflow controllers, metadata, and CLI modules.
+- `backend/`: Workflow engine, plugins, data access, and CLI modules.
+  - `workflow/`: Workflow engine and 115+ workflow plugins
+  - `data/`: Data access functions and Flask routes
+  - `packages/`: Workflow packages (including `web_server_bootstrap`)
 - `frontend/`: Next.js app (using the app router) that talks to the backend over the REST endpoints.
 
 ## Usage
@@ -26,7 +29,11 @@ Run the CLI or the web UI via Poetry (the project uses the backend package defin
 
 ```bash
 poetry install
-poetry run autometabuilder    # starts the CLI or the web server when `--web` is supplied
+# Start web server (workflow-based)
+poetry run autometabuilder --web
+
+# Or run the main workflow
+poetry run autometabuilder
 ```
 
 ### Frontend development
