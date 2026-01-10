@@ -27,7 +27,12 @@ def test_validate_all_workflow_files():
     
     errors = []
     for workflow_path in workflow_files:
-        relative_path = workflow_path.relative_to(backend_dir)
+        try:
+            relative_path = workflow_path.relative_to(backend_dir)
+        except ValueError:
+            # If relative_to fails (e.g., due to symlinks), use the full path
+            relative_path = workflow_path
+        
         is_valid, error_msg = validate_workflow_file(workflow_path)
         
         if not is_valid:

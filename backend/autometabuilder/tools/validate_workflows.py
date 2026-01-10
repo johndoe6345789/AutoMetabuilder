@@ -98,7 +98,12 @@ def main():
     
     errors = []
     for workflow_path in workflow_files:
-        relative_path = workflow_path.relative_to(script_dir)
+        try:
+            relative_path = workflow_path.relative_to(script_dir)
+        except ValueError:
+            # If relative_to fails, use the full path
+            relative_path = workflow_path
+        
         is_valid, error_msg = validate_workflow_file(workflow_path)
         
         if is_valid:
