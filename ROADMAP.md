@@ -75,4 +75,4 @@
 ## Phase 11: Technical Debt
 - [x] **Structured workflow logging**: Add debug/trace warnings when parsing workflow definitions so graph builders surface malformed JSON and unbound bindings.
 - [x] **Route modularization**: Split `backend/autometabuilder/web/server.py` into focused route modules or blueprints so each file stays under 100 LOC and supports DI of helpers.
-- [ ] **AJAX contract tests**: Expand the backend test suite to cover `/api/workflow/graph`, `/api/workflow/plugins`, and nav/translation payloads with mocked metadata so API drift is caught early.
+- [x] **AJAX contract tests**: Expand the backend test suite to cover `/api/workflow/graph`, `/api/workflow/plugins`, and nav/translation payloads with mocked metadata so API drift is caught early.

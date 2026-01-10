@@ -18,7 +18,7 @@ from ..data import (
     summarize_workflow_packages,
 )
 from ..run_state import bot_process, current_run_config, mock_running
-from ..roadmap_utils import is_mvp_reached
+from autometabuilder.roadmap_utils import is_mvp_reached
 
 context_bp = Blueprint("context", __name__)
 
