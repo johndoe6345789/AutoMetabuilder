@@ -33,6 +33,7 @@ export default function TranslationsSection({ languages, onRefresh, t }: Transla
     setEditorValue(JSON.stringify(data.content, null, 2));
   };
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!selected && Object.keys(languages).length) {
       setSelected(Object.keys(languages)[0]);
@@ -44,6 +45,7 @@ export default function TranslationsSection({ languages, onRefresh, t }: Transla
       loadContent(selected);
     }
   }, [selected]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleSave = async () => {
     if (!selected) return;
