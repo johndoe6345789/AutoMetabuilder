@@ -11,6 +11,7 @@ def test_build_workflow_graph_structure():
 
     node_ids = {node["id"] for node in graph["nodes"]}
     for edge in graph["edges"]:
-        assert edge["from"] in node_ids
-        assert edge["to"] in node_ids
-        assert isinstance(edge["var"], str) and edge["var"], "edges should reference a variable"
+        assert edge["from"] in node_ids, f"Edge source {edge['from']} not in node IDs"
+        assert edge["to"] in node_ids, f"Edge target {edge['to']} not in node IDs"
+        # N8N format uses 'type' instead of 'var'
+        assert "type" in edge or "var" in edge, "edges should have connection type or variable"

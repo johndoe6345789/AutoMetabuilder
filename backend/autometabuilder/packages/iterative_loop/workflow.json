@@ -1,5 +1,5 @@
 {
-  "name": "Default Workflow",
+  "name": "Iterative Agent Loop",
   "active": false,
   "nodes": [
     {
@@ -7,7 +7,10 @@
       "name": "Load Context",
       "type": "core.load_context",
       "typeVersion": 1,
-      "position": [0, 0],
+      "position": [
+        0,
+        0
+      ],
       "parameters": {}
     },
     {
@@ -15,7 +18,10 @@
       "name": "Seed Messages",
       "type": "core.seed_messages",
       "typeVersion": 1,
-      "position": [0, 100],
+      "position": [
+        0,
+        100
+      ],
       "parameters": {}
     },
     {
@@ -23,7 +29,10 @@
       "name": "Append Context",
       "type": "core.append_context_message",
       "typeVersion": 1,
-      "position": [300, 50],
+      "position": [
+        300,
+        50
+      ],
       "parameters": {}
     },
     {
@@ -31,7 +40,10 @@
       "name": "Append User Instruction",
       "type": "core.append_user_instruction",
       "typeVersion": 1,
-      "position": [600, 50],
+      "position": [
+        600,
+        50
+      ],
       "parameters": {}
     },
     {
@@ -39,7 +51,10 @@
       "name": "Main Loop",
       "type": "control.loop",
       "typeVersion": 1,
-      "position": [900, 50],
+      "position": [
+        900,
+        50
+      ],
       "parameters": {
         "max_iterations": 10,
         "stop_when": "$no_tool_calls",
@@ -51,7 +66,10 @@
       "name": "AI Request",
       "type": "core.ai_request",
       "typeVersion": 1,
-      "position": [1200, 50],
+      "position": [
+        1200,
+        50
+      ],
       "parameters": {}
     },
     {
@@ -59,7 +77,10 @@
       "name": "Run Tool Calls",
       "type": "core.run_tool_calls",
       "typeVersion": 1,
-      "position": [1500, 50],
+      "position": [
+        1500,
+        50
+      ],
       "parameters": {}
     },
     {
@@ -67,49 +88,100 @@
       "name": "Append Tool Results",
       "type": "core.append_tool_results",
       "typeVersion": 1,
-      "position": [1800, 50],
+      "position": [
+        1800,
+        50
+      ],
       "parameters": {}
     }
   ],
   "connections": {
     "Load Context": {
       "main": {
-        "0": [{"node": "Append Context", "type": "main", "index": 0}]
+        "0": [
+          {
+            "node": "Append Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
       }
     },
     "Seed Messages": {
       "main": {
-        "0": [{"node": "Append Context", "type": "main", "index": 0}]
+        "0": [
+          {
+            "node": "Append Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
       }
     },
     "Append Context": {
       "main": {
-        "0": [{"node": "Append User Instruction", "type": "main", "index": 0}]
+        "0": [
+          {
+            "node": "Append User Instruction",
+            "type": "main",
+            "index": 0
+          }
+        ]
       }
     },
     "Append User Instruction": {
       "main": {
-        "0": [{"node": "Main Loop", "type": "main", "index": 0}]
+        "0": [
+          {
+            "node": "Main Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
       }
     },
     "Main Loop": {
       "main": {
-        "0": [{"node": "AI Request", "type": "main", "index": 0}]
+        "0": [
+          {
+            "node": "AI Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
       }
     },
     "AI Request": {
       "main": {
-        "0": [{"node": "Run Tool Calls", "type": "main", "index": 0}]
+        "0": [
+          {
+            "node": "Run Tool Calls",
+            "type": "main",
+            "index": 0
+          }
+        ]
       }
     },
     "Run Tool Calls": {
       "main": {
-        "0": [{"node": "Append Tool Results", "type": "main", "index": 0}]
+        "0": [
+          {
+            "node": "Append Tool Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
       }
     },
     "Append Tool Results": {
       "main": {
-        "0": [{"node": "Main Loop", "type": "main", "index": 0}]
+        "0": [
+          {
+            "node": "Main Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
       }
     }
   }

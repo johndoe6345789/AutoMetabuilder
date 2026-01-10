@@ -5,6 +5,7 @@ from typing import Any, Iterable
 
 from .json_utils import read_json
 from .metadata import load_metadata
+from .package_loader import load_all_packages
 from .paths import PACKAGE_ROOT
 
 
@@ -26,26 +27,13 @@ def write_workflow(content: str) -> None:
 
 def get_workflow_packages_dir() -> Path:
     metadata = load_metadata()
-    packages_name = metadata.get("workflow_packages_path", "workflow_packages")
+    packages_name = metadata.get("workflow_packages_path", "packages")
     return PACKAGE_ROOT / packages_name
 
 
 def load_workflow_packages() -> list[dict[str, Any]]:
     packages_dir = get_workflow_packages_dir()
-    if not packages_dir.exists():
-        return []
-    packages: list[dict[str, Any]] = []
-    for file in sorted(packages_dir.iterdir()):
-        if file.suffix != ".json":
-            continue
-        data = read_json(file)
-        if not isinstance(data, dict):
-            continue
-        pkg_id = data.get("id") or file.stem
-        data["id"] = pkg_id
-        data.setdefault("workflow", {"nodes": []})
-        packages.append(data)
-    return packages
+    return load_all_packages(packages_dir)
 
 
 def summarize_workflow_packages(packages: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -54,9 +42,12 @@ def summarize_workflow_packages(packages: Iterable[dict[str, Any]]) -> list[dict
         summary.append(
             {
                 "id": pkg["id"],
+                "name": pkg.get("name", pkg["id"]),
                 "label": pkg.get("label") or pkg["id"],
                 "description": pkg.get("description", ""),
                 "tags": pkg.get("tags", []),
+                "version": pkg.get("version", "1.0.0"),
+                "category": pkg.get("category", "templates"),
             }
         )
     return summary
