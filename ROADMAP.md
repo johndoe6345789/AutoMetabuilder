@@ -65,3 +65,4 @@
 - [x] **Atomic Next sections**: Compose dashboard, workflow builder, prompt editor, settings, and translation editor into dedicated components powered by localized strings.
 - [x] **Workflow templates & navigation JSON**: Serve workflow packages, nav items, and translation mappings from metadata-backed JSON endpoints.
 - [ ] **Document build constraints**: Record that `next build --webpack` fails in this sandbox because bundlers attempt to bind new ports, and continue iterating locally.
+- [x] **Material UI + webhooks**: Drive the dashboard with Material UI surfaces and a lightweight webhook emitter/listener so downstream components can react to run events without prop drilling.

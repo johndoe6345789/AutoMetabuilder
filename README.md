@@ -34,10 +34,10 @@ poetry run autometabuilder    # starts the CLI or the web server when `--web` is
 ```bash
 cd frontend
 npm install
-npm run dev --webpack        # uses the Webpack bundler for compatibility with restricted hosts
+npm run dev --webpack        # runs the Material UI-based Next.js app located inside frontend/autometabuilder
 ```
 
-The UI pushes translations, workflow content, and navigation data via the Flask-powered `/api/*` surface. Set `NEXT_PUBLIC_API_BASE` if the backend is hosted on another URL (default: `http://localhost:8000`).
+The Next.js app now lives under `frontend/autometabuilder` and uses Material UI panels + webhook helpers to react to workflow runs; it still reads translations, workflows, and metadata from the Flask `/api/*` surface. Override `NEXT_PUBLIC_API_BASE` to point to a remote backend if needed.
 
 ## Testing & linting
 
