@@ -102,12 +102,14 @@ Updated `packages/web_server_bootstrap/workflow.json` to orchestrate everything:
 
 **Total: 18 files, ~650 lines of imperative code deleted**
 
+**Update (Jan 2026): 19 files, ~715 lines deleted** (including `run_state.py`)
+
 ## Files Remaining in data/
 
 Only essentials that don't affect the core architecture:
 
 - `__init__.py` - Thin wrapper for backward compatibility (delegates to plugins)
-- `run_state.py` - Bot execution state (could be pluginized in future)
+- ~~`run_state.py` - Bot execution state (could be pluginized in future)~~ **✅ MIGRATED** → `control.start_bot`, `control.get_bot_status`, `control.reset_bot_state` plugins
 - `workflow_graph.py` - Workflow visualization (could be pluginized in future)
 - `navigation_items.json` - Static navigation data
 - `ui_assets.json` - Static UI assets
@@ -164,7 +166,14 @@ Only essentials that don't affect the core architecture:
 - `web.start_server` - Start HTTP server
 - `web.build_context` - Build API context object
 
-**Total: 34 plugins** (24 data + 6 routes + 4 server)
+### Control Plugins (4)
+
+- `control.switch` - Conditional branching
+- `control.start_bot` - Start bot execution in background thread
+- `control.get_bot_status` - Get current bot execution status
+- `control.reset_bot_state` - Reset bot execution state
+
+**Total: 38 plugins** (24 data + 6 routes + 4 server + 4 control)
 
 ## Benefits Achieved
 
@@ -223,3 +232,38 @@ All objectives from the problem statement have been achieved:
 - ✅ Deleted old cruft
 - ✅ Think declaratively - defined WHAT in workflow.json
 - ✅ Orchestrate, don't implement - let workflow assemble components
+
+## Additional Migration: Run State (Jan 2026)
+
+### Phase 4: Migrate Run State Management
+
+**Problem**: `data/run_state.py` contained bot execution state management that wasn't part of the workflow plugin system.
+
+**Solution**: Created 3 new control plugins:
+
+1. **`control.start_bot`** - Start bot execution in background thread
+   - Moved `start_bot()` and `_run_bot_task()` functions
+   - Maintains global state for bot process and config
+   - Handles mock mode and MVP stopping
+
+2. **`control.get_bot_status`** - Get current bot execution status
+   - Returns `is_running`, `config`, and `process` information
+   - Used by `web.route_context` for status API endpoint
+
+3. **`control.reset_bot_state`** - Reset bot execution state
+   - Cleans up bot process and configuration
+   - Available for manual state management
+
+**Updated Plugins**:
+- `web.route_run` - Now uses `control.start_bot` plugin instead of importing from `data.run_state`
+- `web.route_context` - Now uses `control.get_bot_status` plugin to check bot status
+
+**Files Deleted**:
+- ✅ `data/run_state.py` - All functionality migrated to control plugins
+
+**Benefits**:
+- Bot execution state management is now part of the workflow plugin system
+- Can be composed with other workflow plugins
+- Testable in isolation
+- Follows the same declarative pattern as other plugins
+
