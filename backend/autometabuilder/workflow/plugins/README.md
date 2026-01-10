@@ -2,6 +2,24 @@
 
 This document describes all available workflow plugins for building declarative n8n-style workflows.
 
+## Directory Structure
+
+Plugins are now organized into subdirectories by category:
+- **backend/** - Backend infrastructure and initialization plugins (12 plugins)
+- **core/** - Core workflow orchestration plugins (7 plugins)
+- **tools/** - Tool execution and development plugins (7 plugins)
+- **logic/** - Logic and comparison operations (9 plugins)
+- **list/** - List/array operations (7 plugins)
+- **dict/** - Dictionary/object operations (6 plugins)
+- **string/** - String manipulation (8 plugins)
+- **math/** - Mathematical operations (10 plugins)
+- **convert/** - Type conversions (7 plugins)
+- **control/** - Control flow (1 plugin)
+- **var/** - Variable management (4 plugins)
+- **utils/** - Utility functions (7 plugins)
+
+**Total: 85 plugins**
+
 ## Categories
 
 - [Core Plugins](#core-plugins) - AI and context management
@@ -136,6 +154,19 @@ Create GitHub pull request.
 
 **Outputs:**
 - `pr_number` - PR number
+
+### `tools.run_docker`
+Run command inside Docker container.
+
+**Inputs:**
+- `image` - Docker image name
+- `command` - Command to execute
+- `volumes` - Optional volume mappings dict
+- `workdir` - Optional working directory
+
+**Outputs:**
+- `output` - Command output
+- `error` - Error message (if any)
 
 ---
 
@@ -746,6 +777,33 @@ Load and register plugins.
 **Outputs:**
 - `result` - Boolean (success)
 
+### `backend.parse_cli_args`
+Parse command line arguments.
+
+**Outputs:**
+- `dry_run` - Boolean (dry-run mode)
+- `yolo` - Boolean (execute without confirmation)
+- `once` - Boolean (run single iteration)
+- `web` - Boolean (start web UI)
+
+### `backend.load_env`
+Load environment variables from .env file.
+
+**Outputs:**
+- `result` - String (status message)
+
+### `backend.load_tool_registry`
+Load tool registry entries.
+
+**Outputs:**
+- `result` - Tool registry array
+
+### `backend.load_tool_policies`
+Load tool policies from JSON.
+
+**Outputs:**
+- `result` - Tool policies dictionary
+
 ---
 
 ## Utility Plugins
@@ -789,6 +847,21 @@ Logical NOT operation.
 
 **Outputs:**
 - `result` - Negated boolean
+
+### `utils.check_mvp`
+Check if MVP section in ROADMAP.md is completed.
+
+**Outputs:**
+- `mvp_reached` - Boolean
+
+### `utils.update_roadmap`
+Update ROADMAP.md with new content.
+
+**Inputs:**
+- `content` - New roadmap content
+
+**Outputs:**
+- `result` - Status message
 
 ---
 
