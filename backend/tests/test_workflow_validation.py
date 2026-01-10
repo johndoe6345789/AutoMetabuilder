@@ -99,7 +99,8 @@ def test_validate_workflow_with_missing_name(tmp_path):
     
     is_valid, error_msg = validate_workflow_file(workflow_file, schema)
     assert not is_valid
-    assert "name" in error_msg.lower() or "required" in error_msg.lower()
+    # jsonschema reports missing required property
+    assert "required" in error_msg.lower() or "'name'" in error_msg
 
 
 def test_validate_workflow_with_empty_nodes(tmp_path):
@@ -116,8 +117,8 @@ def test_validate_workflow_with_empty_nodes(tmp_path):
     
     is_valid, error_msg = validate_workflow_file(workflow_file, schema)
     assert not is_valid
-    # jsonschema will report "[] should be non-empty"
-    assert "nodes" in error_msg.lower() or "empty" in error_msg.lower()
+    # jsonschema reports "[] is too short" for minItems violation
+    assert "too short" in error_msg.lower() and "nodes" in error_msg.lower()
 
 
 def test_validate_workflow_with_invalid_json(tmp_path):

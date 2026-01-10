@@ -9,7 +9,7 @@ try:
     import jsonschema
     from jsonschema import Draft202012Validator
 except ImportError:
-    print("Error: jsonschema library not found. Install with: poetry add jsonschema")
+    print("Error: jsonschema library not found. Install with: poetry install")
     sys.exit(1)
 
 
