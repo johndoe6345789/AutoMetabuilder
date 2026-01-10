@@ -4,8 +4,15 @@ This document describes all available workflow plugins for building declarative 
 
 ## Directory Structure
 
-Plugins are now organized into subdirectories by category:
-- **backend/** - Backend infrastructure and initialization plugins (14 plugins)
+Plugins are organized using an npm-style package structure. Each category folder contains:
+- A `package.json` with category metadata
+- Individual plugin folders, each containing:
+  - The plugin Python file (`plugin_name.py`)
+  - A `package.json` with plugin metadata
+
+### Categories
+
+- **backend/** - Backend infrastructure and initialization plugins (15 plugins)
 - **core/** - Core workflow orchestration plugins (7 plugins)
 - **tools/** - Tool execution and development plugins (7 plugins)
 - **notifications/** - External notification integrations (3 plugins)
@@ -19,9 +26,24 @@ Plugins are now organized into subdirectories by category:
 - **var/** - Variable management (4 plugins)
 - **test/** - Unit testing and assertions (5 plugins)
 - **utils/** - Utility functions (7 plugins)
-- **web/** - Web UI and Flask operations (26 plugins)
+- **web/** - Web UI and Flask operations (24 plugins)
 
-**Total: 95 plugins**
+**Total: 120 plugins in 15 categories**
+
+### Example Structure
+
+```
+backend/workflow/plugins/
+  math/
+    package.json              # Category metadata
+    math_add/
+      package.json            # Plugin metadata
+      math_add.py             # Plugin implementation
+    math_divide/
+      package.json
+      math_divide.py
+    ...
+```
 
 ## Categories
 
