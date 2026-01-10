@@ -1,5 +1,12 @@
 """Build workflow runtime context."""
-from ..utils.model_resolver import resolve_model_name
+import os
+
+DEFAULT_MODEL = "openai/gpt-4o"
+
+
+def resolve_model_name(prompt: dict) -> str:
+    """Resolve model name from env or prompt."""
+    return os.environ.get("LLM_MODEL", prompt.get("model", DEFAULT_MODEL))
 
 
 def build_workflow_context(parts: dict) -> dict:

@@ -1,5 +1,14 @@
 """Workflow plugin: update roadmap file."""
-from ....utils.roadmap_utils import update_roadmap
+import logging
+
+logger = logging.getLogger("autometabuilder")
+
+
+def _update_roadmap(content: str):
+    """Update ROADMAP.md with new content."""
+    with open("ROADMAP.md", "w", encoding="utf-8") as f:
+        f.write(content)
+    logger.info("ROADMAP.md updated successfully.")
 
 
 def run(_runtime, inputs):
@@ -8,5 +17,5 @@ def run(_runtime, inputs):
     if not content:
         return {"error": "Content is required"}
     
-    update_roadmap(content)
+    _update_roadmap(content)
     return {"result": "ROADMAP.md updated successfully"}
