@@ -5,7 +5,8 @@ from autometabuilder import load_messages
 
 class TestMetadata(unittest.TestCase):
     def test_metadata_exists(self):
-        metadata_path = os.path.join("..", "autometabuilder", "metadata.json")
+        metadata_path = os.path.join(os.path.dirname(__file__), "..", "autometabuilder", "metadata.json")
+        metadata_path = os.path.normpath(metadata_path)
         self.assertTrue(os.path.exists(metadata_path))
         
         with open(metadata_path, "r") as f:
