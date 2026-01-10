@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/notifications_discord",
+  "version": "1.0.0",
+  "description": "send Discord notification.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "notifications",
+    "workflow",
+    "plugin"
+  ],
+  "main": "notifications_discord.py",
+  "metadata": {
+    "plugin_type": "notifications.discord",
+    "category": "notifications"
+  }
+}

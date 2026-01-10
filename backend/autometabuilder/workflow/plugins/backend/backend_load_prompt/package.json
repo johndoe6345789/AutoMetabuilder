@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/backend_load_prompt",
+  "version": "1.0.0",
+  "description": "load prompt configuration.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "backend",
+    "workflow",
+    "plugin"
+  ],
+  "main": "backend_load_prompt.py",
+  "metadata": {
+    "plugin_type": "backend.load_prompt",
+    "category": "backend"
+  }
+}

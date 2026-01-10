@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/string_lower",
+  "version": "1.0.0",
+  "description": "convert string to lowercase.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "string",
+    "workflow",
+    "plugin"
+  ],
+  "main": "string_lower.py",
+  "metadata": {
+    "plugin_type": "string.lower",
+    "category": "string"
+  }
+}

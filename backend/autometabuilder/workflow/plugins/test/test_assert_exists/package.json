@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/test_assert_exists",
+  "version": "1.0.0",
+  "description": "assert value exists (is not None/null).",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "test",
+    "workflow",
+    "plugin"
+  ],
+  "main": "test_assert_exists.py",
+  "metadata": {
+    "plugin_type": "test.assert_exists",
+    "category": "test"
+  }
+}

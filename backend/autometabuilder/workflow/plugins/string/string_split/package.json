@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/string_split",
+  "version": "1.0.0",
+  "description": "split string.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "string",
+    "workflow",
+    "plugin"
+  ],
+  "main": "string_split.py",
+  "metadata": {
+    "plugin_type": "string.split",
+    "category": "string"
+  }
+}

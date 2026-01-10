@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/tools_create_pull_request",
+  "version": "1.0.0",
+  "description": "create pull request.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "tools",
+    "workflow",
+    "plugin"
+  ],
+  "main": "tools_create_pull_request.py",
+  "metadata": {
+    "plugin_type": "tools.create_pull_request",
+    "category": "tools"
+  }
+}

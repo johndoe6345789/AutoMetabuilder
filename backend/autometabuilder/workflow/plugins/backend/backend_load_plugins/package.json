@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/backend_load_plugins",
+  "version": "1.0.0",
+  "description": "load and register plugins.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "backend",
+    "workflow",
+    "plugin"
+  ],
+  "main": "backend_load_plugins.py",
+  "metadata": {
+    "plugin_type": "backend.load_plugins",
+    "category": "backend"
+  }
+}

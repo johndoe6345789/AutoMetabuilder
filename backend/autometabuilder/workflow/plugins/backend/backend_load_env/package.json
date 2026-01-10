@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/backend_load_env",
+  "version": "1.0.0",
+  "description": "load environment variables.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "backend",
+    "workflow",
+    "plugin"
+  ],
+  "main": "backend_load_env.py",
+  "metadata": {
+    "plugin_type": "backend.load_env",
+    "category": "backend"
+  }
+}

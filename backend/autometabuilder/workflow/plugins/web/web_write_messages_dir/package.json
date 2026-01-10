@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_write_messages_dir",
+  "version": "1.0.0",
+  "description": "write messages directory.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_write_messages_dir.py",
+  "metadata": {
+    "plugin_type": "web.write_messages_dir",
+    "category": "web"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/backend_load_metadata",
+  "version": "1.0.0",
+  "description": "load metadata.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "backend",
+    "workflow",
+    "plugin"
+  ],
+  "main": "backend_load_metadata.py",
+  "metadata": {
+    "plugin_type": "backend.load_metadata",
+    "category": "backend"
+  }
+}

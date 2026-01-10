@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_persist_env_vars",
+  "version": "1.0.0",
+  "description": "persist environment variables.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_persist_env_vars.py",
+  "metadata": {
+    "plugin_type": "web.persist_env_vars",
+    "category": "web"
+  }
+}

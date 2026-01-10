@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-web",
+  "version": "1.0.0",
+  "description": "Web UI and Flask operation plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "web",
+    "plugin_count": 24
+  }
+}

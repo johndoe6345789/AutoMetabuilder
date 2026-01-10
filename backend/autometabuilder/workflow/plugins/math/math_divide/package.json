@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/math_divide",
+  "version": "1.0.0",
+  "description": "divide numbers.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "math",
+    "workflow",
+    "plugin"
+  ],
+  "main": "math_divide.py",
+  "metadata": {
+    "plugin_type": "math.divide",
+    "category": "math"
+  }
+}

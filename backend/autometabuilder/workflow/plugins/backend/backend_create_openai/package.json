@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/backend_create_openai",
+  "version": "1.0.0",
+  "description": "create OpenAI client.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "backend",
+    "workflow",
+    "plugin"
+  ],
+  "main": "backend_create_openai.py",
+  "metadata": {
+    "plugin_type": "backend.create_openai",
+    "category": "backend"
+  }
+}

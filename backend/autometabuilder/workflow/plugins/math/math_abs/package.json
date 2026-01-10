@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/math_abs",
+  "version": "1.0.0",
+  "description": "absolute value.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "math",
+    "workflow",
+    "plugin"
+  ],
+  "main": "math_abs.py",
+  "metadata": {
+    "plugin_type": "math.abs",
+    "category": "math"
+  }
+}

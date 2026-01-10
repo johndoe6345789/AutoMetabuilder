@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/math_multiply",
+  "version": "1.0.0",
+  "description": "multiply numbers.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "math",
+    "workflow",
+    "plugin"
+  ],
+  "main": "math_multiply.py",
+  "metadata": {
+    "plugin_type": "math.multiply",
+    "category": "math"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/var_delete",
+  "version": "1.0.0",
+  "description": "delete variable from workflow store.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "var",
+    "workflow",
+    "plugin"
+  ],
+  "main": "var_delete.py",
+  "metadata": {
+    "plugin_type": "var.delete",
+    "category": "var"
+  }
+}

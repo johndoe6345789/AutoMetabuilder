@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-convert",
+  "version": "1.0.0",
+  "description": "Type conversion plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "convert",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "convert",
+    "plugin_count": 7
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/backend_parse_cli_args",
+  "version": "1.0.0",
+  "description": "parse CLI arguments.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "backend",
+    "workflow",
+    "plugin"
+  ],
+  "main": "backend_parse_cli_args.py",
+  "metadata": {
+    "plugin_type": "backend.parse_cli_args",
+    "category": "backend"
+  }
+}

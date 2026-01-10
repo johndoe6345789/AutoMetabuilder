@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_register_blueprint",
+  "version": "1.0.0",
+  "description": "register Flask blueprint.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_register_blueprint.py",
+  "metadata": {
+    "plugin_type": "web.register_blueprint",
+    "category": "web"
+  }
+}

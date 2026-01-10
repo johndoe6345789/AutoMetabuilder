@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_summarize_workflow_packages",
+  "version": "1.0.0",
+  "description": "summarize workflow packages.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_summarize_workflow_packages.py",
+  "metadata": {
+    "plugin_type": "web.summarize_workflow_packages",
+    "category": "web"
+  }
+}

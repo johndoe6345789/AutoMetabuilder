@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-logic",
+  "version": "1.0.0",
+  "description": "Logic and comparison operation plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "logic",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "logic",
+    "plugin_count": 9
+  }
+}

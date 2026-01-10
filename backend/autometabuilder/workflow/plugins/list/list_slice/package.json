@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/list_slice",
+  "version": "1.0.0",
+  "description": "slice a list.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "list",
+    "workflow",
+    "plugin"
+  ],
+  "main": "list_slice.py",
+  "metadata": {
+    "plugin_type": "list.slice",
+    "category": "list"
+  }
+}

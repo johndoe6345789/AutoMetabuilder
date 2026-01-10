@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_update_translation",
+  "version": "1.0.0",
+  "description": "update translation.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_update_translation.py",
+  "metadata": {
+    "plugin_type": "web.update_translation",
+    "category": "web"
+  }
+}

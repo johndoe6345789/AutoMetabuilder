@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/test_assert_true",
+  "version": "1.0.0",
+  "description": "assert value is true.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "test",
+    "workflow",
+    "plugin"
+  ],
+  "main": "test_assert_true.py",
+  "metadata": {
+    "plugin_type": "test.assert_true",
+    "category": "test"
+  }
+}

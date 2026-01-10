@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/backend_create_discord",
+  "version": "1.0.0",
+  "description": "create Discord client.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "backend",
+    "workflow",
+    "plugin"
+  ],
+  "main": "backend_create_discord.py",
+  "metadata": {
+    "plugin_type": "backend.create_discord",
+    "category": "backend"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/math_min",
+  "version": "1.0.0",
+  "description": "minimum value.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "math",
+    "workflow",
+    "plugin"
+  ],
+  "main": "math_min.py",
+  "metadata": {
+    "plugin_type": "math.min",
+    "category": "math"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_get_ui_messages",
+  "version": "1.0.0",
+  "description": "get UI messages.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_get_ui_messages.py",
+  "metadata": {
+    "plugin_type": "web.get_ui_messages",
+    "category": "web"
+  }
+}

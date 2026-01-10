@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/convert_to_list",
+  "version": "1.0.0",
+  "description": "convert to list.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "convert",
+    "workflow",
+    "plugin"
+  ],
+  "main": "convert_to_list.py",
+  "metadata": {
+    "plugin_type": "convert.to_list",
+    "category": "convert"
+  }
+}

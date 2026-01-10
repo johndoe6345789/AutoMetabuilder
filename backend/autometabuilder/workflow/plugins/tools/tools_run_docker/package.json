@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/tools_run_docker",
+  "version": "1.0.0",
+  "description": "run command in Docker container.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "tools",
+    "workflow",
+    "plugin"
+  ],
+  "main": "tools_run_docker.py",
+  "metadata": {
+    "plugin_type": "tools.run_docker",
+    "category": "tools"
+  }
+}

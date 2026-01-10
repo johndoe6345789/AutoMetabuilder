@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/logic_or",
+  "version": "1.0.0",
+  "description": "logical OR.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "logic",
+    "workflow",
+    "plugin"
+  ],
+  "main": "logic_or.py",
+  "metadata": {
+    "plugin_type": "logic.or",
+    "category": "logic"
+  }
+}

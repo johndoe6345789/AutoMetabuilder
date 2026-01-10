@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/dict_get",
+  "version": "1.0.0",
+  "description": "get value from dictionary.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "dict",
+    "workflow",
+    "plugin"
+  ],
+  "main": "dict_get.py",
+  "metadata": {
+    "plugin_type": "dict.get",
+    "category": "dict"
+  }
+}

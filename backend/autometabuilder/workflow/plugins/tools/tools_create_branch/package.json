@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/tools_create_branch",
+  "version": "1.0.0",
+  "description": "create branch.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "tools",
+    "workflow",
+    "plugin"
+  ],
+  "main": "tools_create_branch.py",
+  "metadata": {
+    "plugin_type": "tools.create_branch",
+    "category": "tools"
+  }
+}

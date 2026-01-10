@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-var",
+  "version": "1.0.0",
+  "description": "Variable management plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "var",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "var",
+    "plugin_count": 4
+  }
+}

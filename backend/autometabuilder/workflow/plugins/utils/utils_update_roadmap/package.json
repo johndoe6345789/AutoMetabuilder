@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/utils_update_roadmap",
+  "version": "1.0.0",
+  "description": "update roadmap file.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "utils",
+    "workflow",
+    "plugin"
+  ],
+  "main": "utils_update_roadmap.py",
+  "metadata": {
+    "plugin_type": "utils.update_roadmap",
+    "category": "utils"
+  }
+}

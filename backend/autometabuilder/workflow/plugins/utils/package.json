@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-utils",
+  "version": "1.0.0",
+  "description": "Utility function plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "utils",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "utils",
+    "plugin_count": 7
+  }
+}

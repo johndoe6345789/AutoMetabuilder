@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/math_power",
+  "version": "1.0.0",
+  "description": "power operation.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "math",
+    "workflow",
+    "plugin"
+  ],
+  "main": "math_power.py",
+  "metadata": {
+    "plugin_type": "math.power",
+    "category": "math"
+  }
+}

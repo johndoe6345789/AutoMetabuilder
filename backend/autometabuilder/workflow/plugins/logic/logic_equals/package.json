@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/logic_equals",
+  "version": "1.0.0",
+  "description": "equality comparison.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "logic",
+    "workflow",
+    "plugin"
+  ],
+  "main": "logic_equals.py",
+  "metadata": {
+    "plugin_type": "logic.equals",
+    "category": "logic"
+  }
+}

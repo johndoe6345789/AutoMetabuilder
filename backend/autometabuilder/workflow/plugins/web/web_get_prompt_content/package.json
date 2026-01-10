@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_get_prompt_content",
+  "version": "1.0.0",
+  "description": "get prompt content.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_get_prompt_content.py",
+  "metadata": {
+    "plugin_type": "web.get_prompt_content",
+    "category": "web"
+  }
+}

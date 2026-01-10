@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-core",
+  "version": "1.0.0",
+  "description": "Core workflow orchestration plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "core",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "core",
+    "plugin_count": 7
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-tools",
+  "version": "1.0.0",
+  "description": "Tool execution and development plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "tools",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "tools",
+    "plugin_count": 7
+  }
+}

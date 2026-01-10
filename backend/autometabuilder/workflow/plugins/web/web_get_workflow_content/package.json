@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_get_workflow_content",
+  "version": "1.0.0",
+  "description": "get workflow content.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_get_workflow_content.py",
+  "metadata": {
+    "plugin_type": "web.get_workflow_content",
+    "category": "web"
+  }
+}

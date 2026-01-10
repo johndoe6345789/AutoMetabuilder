@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_get_env_vars",
+  "version": "1.0.0",
+  "description": "get environment variables.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_get_env_vars.py",
+  "metadata": {
+    "plugin_type": "web.get_env_vars",
+    "category": "web"
+  }
+}

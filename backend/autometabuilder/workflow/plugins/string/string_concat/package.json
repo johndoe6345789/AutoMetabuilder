@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/string_concat",
+  "version": "1.0.0",
+  "description": "concatenate strings.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "string",
+    "workflow",
+    "plugin"
+  ],
+  "main": "string_concat.py",
+  "metadata": {
+    "plugin_type": "string.concat",
+    "category": "string"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@autometabuilder/workflow-plugins-list",
+  "version": "1.0.0",
+  "description": "List/array operation plugins",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "list",
+    "workflow",
+    "plugins"
+  ],
+  "metadata": {
+    "category": "list",
+    "plugin_count": 7
+  }
+}

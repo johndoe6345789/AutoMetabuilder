@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_list_translations",
+  "version": "1.0.0",
+  "description": "list translations.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_list_translations.py",
+  "metadata": {
+    "plugin_type": "web.list_translations",
+    "category": "web"
+  }
+}

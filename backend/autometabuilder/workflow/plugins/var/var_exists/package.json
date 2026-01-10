@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/var_exists",
+  "version": "1.0.0",
+  "description": "check if variable exists in workflow store.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "var",
+    "workflow",
+    "plugin"
+  ],
+  "main": "var_exists.py",
+  "metadata": {
+    "plugin_type": "var.exists",
+    "category": "var"
+  }
+}

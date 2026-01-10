@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_build_context",
+  "version": "1.0.0",
+  "description": "build context for API.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_build_context.py",
+  "metadata": {
+    "plugin_type": "web.build_context",
+    "category": "web"
+  }
+}

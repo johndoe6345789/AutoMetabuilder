@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/web_create_translation",
+  "version": "1.0.0",
+  "description": "create translation.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "workflow",
+    "plugin"
+  ],
+  "main": "web_create_translation.py",
+  "metadata": {
+    "plugin_type": "web.create_translation",
+    "category": "web"
+  }
+}

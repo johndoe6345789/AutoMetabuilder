@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/math_subtract",
+  "version": "1.0.0",
+  "description": "subtract numbers.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "math",
+    "workflow",
+    "plugin"
+  ],
+  "main": "math_subtract.py",
+  "metadata": {
+    "plugin_type": "math.subtract",
+    "category": "math"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/list_sort",
+  "version": "1.0.0",
+  "description": "sort a list.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "list",
+    "workflow",
+    "plugin"
+  ],
+  "main": "list_sort.py",
+  "metadata": {
+    "plugin_type": "list.sort",
+    "category": "list"
+  }
+}

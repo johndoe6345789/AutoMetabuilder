@@ -1,0 +1,17 @@
+{
+  "name": "@autometabuilder/utils_not",
+  "version": "1.0.0",
+  "description": "boolean not.",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": [
+    "utils",
+    "workflow",
+    "plugin"
+  ],
+  "main": "utils_not.py",
+  "metadata": {
+    "plugin_type": "utils.not",
+    "category": "utils"
+  }
+}
