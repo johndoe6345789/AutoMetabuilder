@@ -110,7 +110,7 @@ Only essentials that don't affect the core architecture:
 
 - `__init__.py` - Thin wrapper for backward compatibility (delegates to plugins)
 - ~~`run_state.py` - Bot execution state (could be pluginized in future)~~ **✅ MIGRATED** → `control.start_bot`, `control.get_bot_status`, `control.reset_bot_state` plugins
-- `workflow_graph.py` - Workflow visualization (could be pluginized in future)
+- ~~`workflow_graph.py` - Workflow visualization (could be pluginized in future)~~ **✅ MOVED** → `workflow/workflow_graph.py`
 - `navigation_items.json` - Static navigation data
 - `ui_assets.json` - Static UI assets
 
