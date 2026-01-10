@@ -1,11 +1,11 @@
 """Build workflow engine with dependencies."""
-from ..workflow.engine import WorkflowEngine
-from ..workflow.input_resolver import InputResolver
-from ..workflow.loop_executor import LoopExecutor
-from ..workflow.node_executor import NodeExecutor
-from ..workflow.plugin_registry import PluginRegistry, load_plugin_map
-from ..workflow.runtime import WorkflowRuntime
-from ..workflow.tool_runner import ToolRunner
+from .engine import WorkflowEngine
+from .input_resolver import InputResolver
+from .loop_executor import LoopExecutor
+from .node_executor import NodeExecutor
+from .plugin_registry import PluginRegistry, load_plugin_map
+from .runtime import WorkflowRuntime
+from .tool_runner import ToolRunner
 
 
 def build_workflow_engine(workflow_config: dict, context: dict, logger):
