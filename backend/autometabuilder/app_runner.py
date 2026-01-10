@@ -3,7 +3,7 @@ import logging
 import os
 from .utils import parse_args
 from .loaders import load_env
-from .logging_config import configure_logging
+from .utils.logging_config import configure_logging
 from .loaders import load_metadata
 from .web.server import start_web_ui
 from .engine import load_workflow_config, build_workflow_context, build_workflow_engine
