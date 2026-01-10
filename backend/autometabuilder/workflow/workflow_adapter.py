@@ -1,4 +1,4 @@
-"""Adapter to detect and route workflow formats."""
+"""N8N workflow format handler."""
 from __future__ import annotations
 
 import logging
@@ -14,7 +14,7 @@ def is_n8n_workflow(workflow: Dict[str, Any]) -> bool:
     if not isinstance(workflow, dict):
         return False
     
-    # N8N workflows have explicit connections and position in nodes
+    # N8N workflows must have explicit connections
     has_connections = "connections" in workflow
     nodes = workflow.get("nodes", [])
     
@@ -31,21 +31,18 @@ def is_n8n_workflow(workflow: Dict[str, Any]) -> bool:
 
 
 class WorkflowAdapter:
-    """Adapt between legacy and n8n workflows."""
+    """Execute n8n workflows (breaking change: legacy format no longer supported)."""
     
     def __init__(self, node_executor, runtime, plugin_registry):
-        self.node_executor = node_executor
         self.runtime = runtime
         self.plugin_registry = plugin_registry
         self.n8n_executor = N8NExecutor(runtime, plugin_registry)
     
     def execute(self, workflow: Dict[str, Any]) -> None:
-        """Execute workflow using appropriate format handler."""
-        if is_n8n_workflow(workflow):
-            logger.debug("Executing n8n-style workflow")
-            self.n8n_executor.execute(workflow)
-        else:
-            logger.debug("Executing legacy workflow")
-            nodes = workflow.get("nodes", [])
-            if isinstance(nodes, list):
-                self.node_executor.execute_nodes(nodes)
+        """Execute n8n workflow."""
+        if not is_n8n_workflow(workflow):
+            logger.error("Legacy workflow format is no longer supported. Please migrate to n8n schema.")
+            raise ValueError("Only n8n workflow format is supported")
+        
+        logger.debug("Executing n8n workflow")
+        self.n8n_executor.execute(workflow)

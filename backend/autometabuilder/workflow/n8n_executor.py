@@ -4,6 +4,8 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, List
 
+from .execution_order import build_execution_order
+
 logger = logging.getLogger(__name__)
 
 
@@ -24,7 +26,7 @@ class N8NExecutor:
             return
         
         # Build execution order from connections
-        execution_order = self._build_execution_order(nodes, connections)
+        execution_order = build_execution_order(nodes, connections)
         
         # Execute nodes in order
         for node_name in execution_order:
@@ -38,39 +40,6 @@ class N8NExecutor:
             if node.get("name") == name:
                 return node
         return None
-    
-    def _build_execution_order(
-        self, 
-        nodes: List[Dict],
-        connections: Dict[str, Any]
-    ) -> List[str]:
-        """Build topological execution order."""
-        # Simple approach: find nodes with no inputs, then process
-        node_names = {node["name"] for node in nodes}
-        has_inputs = set()
-        
-        for source_name, outputs in connections.items():
-            for output_type, indices in outputs.items():
-                for targets in indices.values():
-                    for target in targets:
-                        has_inputs.add(target["node"])
-        
-        # Start with nodes that have no inputs
-        order = [name for name in node_names if name not in has_inputs]
-        
-        # Add remaining nodes (simplified BFS)
-        remaining = node_names - set(order)
-        while remaining:
-            added = False
-            for name in list(remaining):
-                order.append(name)
-                remaining.remove(name)
-                added = True
-                break
-            if not added:
-                break
-        
-        return order
     
     def _execute_node(self, node: Dict[str, Any]) -> Any:
         """Execute single node."""

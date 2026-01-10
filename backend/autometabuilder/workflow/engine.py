@@ -1,9 +1,9 @@
-"""Workflow engine runner."""
+"""Workflow engine runner for n8n format."""
 from .workflow_adapter import WorkflowAdapter, is_n8n_workflow
 
 
 class WorkflowEngine:
-    """Run workflow configs through a node executor."""
+    """Run n8n workflow configs (breaking change: legacy format removed)."""
     def __init__(self, workflow_config, node_executor, logger, runtime=None, plugin_registry=None):
         self.workflow_config = workflow_config or {}
         self.node_executor = node_executor
@@ -18,15 +18,14 @@ class WorkflowEngine:
             self.adapter = None
 
     def execute(self):
-        """Execute the workflow config."""
-        # Use adapter if available and workflow is n8n format
-        if self.adapter and is_n8n_workflow(self.workflow_config):
-            self.adapter.execute(self.workflow_config)
-            return
+        """Execute the n8n workflow config."""
+        # Enforce n8n format only
+        if not is_n8n_workflow(self.workflow_config):
+            self.logger.error("Legacy workflow format is no longer supported. Please migrate to n8n schema.")
+            raise ValueError("Only n8n workflow format is supported")
         
-        # Fallback to legacy execution
-        nodes = self.workflow_config.get("nodes")
-        if not isinstance(nodes, list):
-            self.logger.error("Workflow config missing nodes list.")
-            return
-        self.node_executor.execute_nodes(nodes)
+        if self.adapter:
+            self.adapter.execute(self.workflow_config)
+        else:
+            self.logger.error("Workflow engine requires runtime and plugin_registry for n8n execution")
+            raise RuntimeError("Cannot execute n8n workflow without runtime and plugin_registry")
