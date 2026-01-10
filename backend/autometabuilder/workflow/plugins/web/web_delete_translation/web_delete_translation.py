@@ -2,7 +2,7 @@
 import json
 import shutil
 from pathlib import Path
-from autometabuilder.loaders.metadata_loader import load_metadata
+from autometabuilder.utils import load_metadata
 
 
 def run(_runtime, inputs):

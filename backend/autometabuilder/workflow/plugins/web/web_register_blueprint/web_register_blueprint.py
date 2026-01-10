@@ -1,4 +1,5 @@
 """Workflow plugin: register Flask blueprint."""
+from .....utils import load_callable
 
 
 def run(runtime, inputs):
@@ -25,7 +26,6 @@ def run(runtime, inputs):
         if not blueprint_path:
             return {"error": "blueprint or blueprint_path is required"}
         
-        from ....loaders.callable_loader import load_callable
         try:
             blueprint = load_callable(blueprint_path)
         except Exception as e:

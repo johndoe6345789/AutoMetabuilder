@@ -1,6 +1,5 @@
 """Workflow plugin: build tool map."""
-from ....loaders.callable_loader import load_callable
-from ....loaders.tool_registry_loader import load_tool_registry
+from .....utils import load_callable, load_tool_registry
 
 
 def _build_tool_map(gh, registry_entries: list) -> dict:

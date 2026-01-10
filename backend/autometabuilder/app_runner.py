@@ -2,8 +2,7 @@
 import argparse
 import logging
 import os
-from .loaders import load_env
-from .loaders import load_metadata
+from dotenv import load_dotenv
 from .engine import load_workflow_config, build_workflow_context, build_workflow_engine
 
 TRACE_LEVEL = 5
@@ -75,9 +74,22 @@ def run_web_workflow(logger):
     engine.execute()
 
 
+def _load_metadata_for_workflow() -> dict:
+    """Load metadata.json for workflow config."""
+    import json
+    from pathlib import Path
+    
+    metadata_path = Path(__file__).resolve().parent / "metadata.json"
+    if not metadata_path.exists():
+        return {}
+    
+    with metadata_path.open("r", encoding="utf-8") as f:
+        return json.load(f)
+
+
 def run_app() -> None:
     """Run the AutoMetabuilder CLI."""
-    load_env()
+    load_dotenv()
     configure_logging()
     logger = logging.getLogger("autometabuilder")
 
@@ -98,7 +110,7 @@ def run_app() -> None:
     }
     workflow_context = build_workflow_context(context_parts)
     
-    metadata = load_metadata()
+    metadata = _load_metadata_for_workflow()
     workflow_config = load_workflow_config(metadata)
     
     logger.info("Starting workflow: %s", workflow_config.get("name", "Unnamed"))
