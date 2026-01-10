@@ -158,6 +158,12 @@
 "type": "array",
 "items": { "$ref": "#/$defs/credentialBinding" },
 "default": []
+},
+"triggers": {
+"description": "Optional explicit trigger declarations for event-driven workflows.",
+"type": "array",
+"default": [],
+"items": { "$ref": "#/$defs/trigger" }
 }
 },
 "$defs": {
@@ -397,6 +403,25 @@
 "description": "Input index on target node.",
 "type": "integer",
 "minimum": 0
+}
+}
+},
+"trigger": {
+"type": "object",
+"additionalProperties": false,
+"required": ["nodeId", "kind"],
+"properties": {
+"nodeId": { "type": "string", "minLength": 1 },
+"kind": {
+"type": "string",
+"enum": ["webhook", "schedule", "queue", "email", "poll", "manual", "other"]
+},
+"enabled": { "type": "boolean", "default": true },
+"meta": {
+"description": "Trigger-kind-specific metadata for routing/registration.",
+"type": "object",
+"additionalProperties": true,
+"default": {}
 }
 }
 }

@@ -147,5 +147,15 @@
         ]
       }
     }
-  }
+  },
+  "triggers": [
+    {
+      "nodeId": "load_context",
+      "kind": "manual",
+      "enabled": true,
+      "meta": {
+        "description": "Manually triggered single-pass workflow execution"
+      }
+    }
+  ]
 }
