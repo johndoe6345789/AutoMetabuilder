@@ -1,0 +1,13 @@
+{
+  "name": "@autometabuilder/web_route_context",
+  "version": "1.0.0",
+  "description": "Flask blueprint for context API routes",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": ["web", "workflow", "plugin", "flask", "routes"],
+  "main": "web_route_context.py",
+  "metadata": {
+    "plugin_type": "web.route_context",
+    "category": "web"
+  }
+}

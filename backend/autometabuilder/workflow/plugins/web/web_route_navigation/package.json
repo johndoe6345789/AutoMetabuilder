@@ -1,0 +1,13 @@
+{
+  "name": "@autometabuilder/web_route_navigation",
+  "version": "1.0.0",
+  "description": "Flask blueprint for navigation API routes",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": ["web", "workflow", "plugin", "flask", "routes"],
+  "main": "web_route_navigation.py",
+  "metadata": {
+    "plugin_type": "web.route_navigation",
+    "category": "web"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@autometabuilder/web_route_run",
+  "version": "1.0.0",
+  "description": "Flask blueprint for run API routes",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": ["web", "workflow", "plugin", "flask", "routes"],
+  "main": "web_route_run.py",
+  "metadata": {
+    "plugin_type": "web.route_run",
+    "category": "web"
+  }
+}
