@@ -5,14 +5,23 @@ import sys
 from pathlib import Path
 from typing import List, Tuple
 
-# Import the schema module - try direct import first (when installed via poetry)
-# If that fails, add parent directory to path (for direct script execution)
 try:
-    from autometabuilder.workflow.n8n_schema import N8NWorkflow
+    import jsonschema
+    from jsonschema import Draft202012Validator
 except ImportError:
-    backend_dir = Path(__file__).resolve().parent.parent.parent
-    sys.path.insert(0, str(backend_dir))
-    from autometabuilder.workflow.n8n_schema import N8NWorkflow
+    print("Error: jsonschema library not found. Install with: poetry add jsonschema")
+    sys.exit(1)
+
+
+def load_schema() -> dict:
+    """Load the N8N workflow JSON schema."""
+    schema_path = Path(__file__).resolve().parent.parent / "schema" / "n8n-workflow.schema.json"
+    
+    if not schema_path.exists():
+        raise FileNotFoundError(f"Schema file not found at: {schema_path}")
+    
+    with open(schema_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
 
 
 def find_workflow_files(base_path: Path) -> List[Path]:
@@ -28,9 +37,9 @@ def find_workflow_files(base_path: Path) -> List[Path]:
     return sorted(workflow_files)
 
 
-def validate_workflow_file(workflow_path: Path) -> Tuple[bool, str]:
+def validate_workflow_file(workflow_path: Path, schema: dict) -> Tuple[bool, str]:
     """
-    Validate a single workflow JSON file.
+    Validate a single workflow JSON file against the schema.
     
     Returns:
         Tuple of (is_valid, error_message)
@@ -43,35 +52,15 @@ def validate_workflow_file(workflow_path: Path) -> Tuple[bool, str]:
     except Exception as e:
         return False, f"Error reading file: {e}"
     
-    # Basic structure checks
-    if not isinstance(workflow_data, dict):
-        return False, "Workflow data must be an object"
+    # Validate against schema
+    validator = Draft202012Validator(schema)
+    errors = list(validator.iter_errors(workflow_data))
     
-    # Check required fields
-    required_fields = ["name", "nodes", "connections"]
-    missing_fields = [field for field in required_fields if field not in workflow_data]
-    if missing_fields:
-        return False, f"Missing required fields: {', '.join(missing_fields)}"
-    
-    # Check name
-    if not isinstance(workflow_data["name"], str) or not workflow_data["name"]:
-        return False, "Field 'name' must be a non-empty string"
-    
-    # Check nodes
-    if not isinstance(workflow_data["nodes"], list):
-        return False, "Field 'nodes' must be an array"
-    
-    if len(workflow_data["nodes"]) < 1:
-        return False, "Field 'nodes' must contain at least 1 node (use a start node for blank workflows)"
-    
-    # Check connections
-    if not isinstance(workflow_data["connections"], dict):
-        return False, "Field 'connections' must be an object"
-    
-    # Full validation
-    is_valid = N8NWorkflow.validate(workflow_data)
-    if not is_valid:
-        return False, "Schema validation failed (check node structure, position, types, etc.)"
+    if errors:
+        # Return the first error with a clear message
+        error = errors[0]
+        error_path = ".".join(str(p) for p in error.path) if error.path else "root"
+        return False, f"{error.message} (at {error_path})"
     
     return True, ""
 
@@ -85,6 +74,13 @@ def main():
     # Verify we found the right directory
     if not (script_dir / "packages").exists():
         print("Error: Could not locate autometabuilder/packages directory")
+        return 1
+    
+    # Load the schema
+    try:
+        schema = load_schema()
+    except Exception as e:
+        print(f"Error loading schema: {e}")
         return 1
     
     # Find all workflow files
@@ -104,7 +100,7 @@ def main():
             # If relative_to fails, use the full path
             relative_path = workflow_path
         
-        is_valid, error_msg = validate_workflow_file(workflow_path)
+        is_valid, error_msg = validate_workflow_file(workflow_path, schema)
         
         if is_valid:
             print(f"✓ {relative_path}")

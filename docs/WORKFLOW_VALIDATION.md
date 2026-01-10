@@ -1,10 +1,10 @@
 # Workflow JSON Validation
 
-This repository includes a validation tool for workflow JSON files based on the N8N-style workflow schema defined in ROADMAP.md.
+This repository includes a validation tool for workflow JSON files based on the N8N-style workflow schema defined in ROADMAP.md and extracted to a dedicated schema file.
 
 ## Schema Definition
 
-The workflow JSON schema is defined in [ROADMAP.md](../ROADMAP.md) (lines 84-430). It defines the structure for N8N-style workflows with the following key requirements:
+The workflow JSON schema is extracted from [ROADMAP.md](../ROADMAP.md) (lines 84-430) and stored in `backend/autometabuilder/schema/n8n-workflow.schema.json`. It defines the structure for N8N-style workflows with the following key requirements:
 
 - **Required fields**: `name`, `nodes`, `connections`
 - **Nodes**: Must contain at least 1 node with `id`, `name`, `type`, `typeVersion`, and `position`
@@ -170,8 +170,9 @@ When adding new workflow JSON files:
 
 ## Implementation Details
 
-The validation is implemented in:
-- **Validator Module**: `backend/autometabuilder/workflow/n8n_schema.py`
+The validation is implemented using:
+- **JSON Schema**: `backend/autometabuilder/schema/n8n-workflow.schema.json` (extracted from ROADMAP.md)
+- **Validation Library**: `jsonschema` (official JSON Schema validator for Python)
 - **Validation Tool**: `backend/autometabuilder/tools/validate_workflows.py`
 - **Tests**: `backend/tests/test_workflow_validation.py`
 - **Schema Tests**: `backend/tests/test_n8n_schema.py`

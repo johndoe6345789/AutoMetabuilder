@@ -6,6 +6,7 @@ import pytest
 
 from autometabuilder.tools.validate_workflows import (
     find_workflow_files,
+    load_schema,
     validate_workflow_file,
 )
 
@@ -20,10 +21,19 @@ def test_find_workflow_files():
     assert all(f.exists() for f in workflow_files)
 
 
+def test_load_schema():
+    """Test that the schema can be loaded."""
+    schema = load_schema()
+    assert isinstance(schema, dict)
+    assert schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema"
+    assert schema.get("title") == "N8N-Style Workflow"
+
+
 def test_validate_all_workflow_files():
     """Test that all workflow files in packages directory are valid."""
     backend_dir = Path(__file__).parent.parent / "autometabuilder"
     workflow_files = find_workflow_files(backend_dir)
+    schema = load_schema()
     
     errors = []
     for workflow_path in workflow_files:
@@ -33,7 +43,7 @@ def test_validate_all_workflow_files():
             # If relative_to fails (e.g., due to symlinks), use the full path
             relative_path = workflow_path
         
-        is_valid, error_msg = validate_workflow_file(workflow_path)
+        is_valid, error_msg = validate_workflow_file(workflow_path, schema)
         
         if not is_valid:
             errors.append((relative_path, error_msg))
@@ -46,6 +56,7 @@ def test_validate_all_workflow_files():
 
 def test_validate_minimal_valid_workflow(tmp_path):
     """Test validation of a minimal valid workflow."""
+    schema = load_schema()
     workflow_data = {
         "name": "Test Workflow",
         "nodes": [
@@ -63,12 +74,13 @@ def test_validate_minimal_valid_workflow(tmp_path):
     workflow_file = tmp_path / "workflow.json"
     workflow_file.write_text(json.dumps(workflow_data))
     
-    is_valid, error_msg = validate_workflow_file(workflow_file)
+    is_valid, error_msg = validate_workflow_file(workflow_file, schema)
     assert is_valid, f"Validation failed: {error_msg}"
 
 
 def test_validate_workflow_with_missing_name(tmp_path):
     """Test validation of workflow missing required 'name' field."""
+    schema = load_schema()
     workflow_data = {
         "nodes": [
             {
@@ -85,13 +97,14 @@ def test_validate_workflow_with_missing_name(tmp_path):
     workflow_file = tmp_path / "workflow.json"
     workflow_file.write_text(json.dumps(workflow_data))
     
-    is_valid, error_msg = validate_workflow_file(workflow_file)
+    is_valid, error_msg = validate_workflow_file(workflow_file, schema)
     assert not is_valid
-    assert "name" in error_msg.lower()
+    assert "name" in error_msg.lower() or "required" in error_msg.lower()
 
 
 def test_validate_workflow_with_empty_nodes(tmp_path):
     """Test validation of workflow with empty nodes array."""
+    schema = load_schema()
     workflow_data = {
         "name": "Empty Workflow",
         "nodes": [],
@@ -101,24 +114,26 @@ def test_validate_workflow_with_empty_nodes(tmp_path):
     workflow_file = tmp_path / "workflow.json"
     workflow_file.write_text(json.dumps(workflow_data))
     
-    is_valid, error_msg = validate_workflow_file(workflow_file)
+    is_valid, error_msg = validate_workflow_file(workflow_file, schema)
     assert not is_valid
-    assert "nodes" in error_msg.lower()
-    assert "at least 1" in error_msg.lower()
+    # jsonschema will report "[] should be non-empty"
+    assert "nodes" in error_msg.lower() or "empty" in error_msg.lower()
 
 
 def test_validate_workflow_with_invalid_json(tmp_path):
     """Test validation of file with invalid JSON."""
+    schema = load_schema()
     workflow_file = tmp_path / "workflow.json"
     workflow_file.write_text("{ invalid json }")
     
-    is_valid, error_msg = validate_workflow_file(workflow_file)
+    is_valid, error_msg = validate_workflow_file(workflow_file, schema)
     assert not is_valid
     assert "json" in error_msg.lower()
 
 
 def test_validate_workflow_with_invalid_node(tmp_path):
     """Test validation of workflow with invalid node structure."""
+    schema = load_schema()
     workflow_data = {
         "name": "Test Workflow",
         "nodes": [
@@ -133,12 +148,13 @@ def test_validate_workflow_with_invalid_node(tmp_path):
     workflow_file = tmp_path / "workflow.json"
     workflow_file.write_text(json.dumps(workflow_data))
     
-    is_valid, error_msg = validate_workflow_file(workflow_file)
+    is_valid, error_msg = validate_workflow_file(workflow_file, schema)
     assert not is_valid
 
 
 def test_validate_workflow_with_triggers(tmp_path):
     """Test validation of workflow with triggers array."""
+    schema = load_schema()
     workflow_data = {
         "name": "Test Workflow with Triggers",
         "nodes": [
@@ -166,5 +182,5 @@ def test_validate_workflow_with_triggers(tmp_path):
     workflow_file = tmp_path / "workflow.json"
     workflow_file.write_text(json.dumps(workflow_data))
     
-    is_valid, error_msg = validate_workflow_file(workflow_file)
+    is_valid, error_msg = validate_workflow_file(workflow_file, schema)
     assert is_valid, f"Validation failed: {error_msg}"
