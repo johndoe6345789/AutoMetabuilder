@@ -1,8 +1,18 @@
 {
-  "name": "web.api_navigation",
+  "name": "@autometabuilder/web_api_navigation",
   "version": "1.0.0",
   "description": "Handle /api/navigation endpoint",
   "main": "web_api_navigation.py",
   "author": "AutoMetabuilder",
-  "category": "web"
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "api",
+    "navigation",
+    "plugin"
+  ],
+  "metadata": {
+    "plugin_type": "web.api_navigation",
+    "category": "web"
+  }
 }
