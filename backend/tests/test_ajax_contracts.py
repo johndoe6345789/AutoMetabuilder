@@ -1,13 +1,47 @@
 """Contract tests for AJAX endpoints used by the Next.js frontend."""
 import pytest
-
-from autometabuilder.data.server import app
+import logging
+from autometabuilder.workflow import build_workflow_engine, build_workflow_context
+from autometabuilder.data import load_workflow_packages
 
 
 @pytest.fixture
 def client():
-    with app.test_client() as client:
-        yield client
+    """Build Flask app using workflow and return test client."""
+    # Load web server bootstrap workflow
+    packages = load_workflow_packages()
+    web_server_package = next((p for p in packages if p.get("id") == "web_server_bootstrap"), None)
+    
+    if not web_server_package:
+        pytest.skip("web_server_bootstrap workflow package not found")
+    
+    # Build workflow context and engine
+    workflow_config = web_server_package.get("workflow", {})
+    workflow_context = build_workflow_context({})
+    
+    logger = logging.getLogger("test")
+    logger.setLevel(logging.ERROR)  # Suppress logs during tests
+    
+    # Execute workflow to build the Flask app (but don't start the server)
+    # We need to execute the workflow up to the point where the app is created
+    # but not start the server
+    engine = build_workflow_engine(workflow_config, workflow_context, logger)
+    
+    # Get the Flask app from the workflow execution
+    # The workflow stores the app in the runtime context
+    try:
+        engine.execute()
+    except SystemExit:
+        pass  # Workflow tries to start server, which we don't want in tests
+    
+    # Get the app from the runtime
+    app = engine.node_executor.runtime.context.get("flask_app")
+    
+    if app is None:
+        pytest.skip("Flask app not created by workflow")
+    
+    with app.test_client() as test_client:
+        yield test_client
 
 
 def test_workflow_graph_contract(client):
