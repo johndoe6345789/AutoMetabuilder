@@ -7,6 +7,7 @@
   "backend.load_metadata": "autometabuilder.workflow.plugins.backend.backend_load_metadata.run",
   "backend.load_plugins": "autometabuilder.workflow.plugins.backend.backend_load_plugins.run",
   "backend.load_prompt": "autometabuilder.workflow.plugins.backend.backend_load_prompt.run",
+  "backend.load_tool_policies": "autometabuilder.workflow.plugins.backend.backend_load_tool_policies.run",
   "backend.load_tool_registry": "autometabuilder.workflow.plugins.backend.backend_load_tool_registry.run",
   "backend.load_tools": "autometabuilder.workflow.plugins.backend.backend_load_tools.run",
   "backend.parse_cli_args": "autometabuilder.workflow.plugins.backend.backend_parse_cli_args.run",
