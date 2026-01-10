@@ -5,9 +5,10 @@ This document describes all available workflow plugins for building declarative 
 ## Directory Structure
 
 Plugins are now organized into subdirectories by category:
-- **backend/** - Backend infrastructure and initialization plugins (12 plugins)
+- **backend/** - Backend infrastructure and initialization plugins (14 plugins)
 - **core/** - Core workflow orchestration plugins (7 plugins)
 - **tools/** - Tool execution and development plugins (7 plugins)
+- **notifications/** - External notification integrations (3 plugins)
 - **logic/** - Logic and comparison operations (9 plugins)
 - **list/** - List/array operations (7 plugins)
 - **dict/** - Dictionary/object operations (6 plugins)
@@ -18,13 +19,15 @@ Plugins are now organized into subdirectories by category:
 - **var/** - Variable management (4 plugins)
 - **test/** - Unit testing and assertions (5 plugins)
 - **utils/** - Utility functions (7 plugins)
+- **web/** - Web UI and Flask operations (26 plugins)
 
-**Total: 90 plugins**
+**Total: 95 plugins**
 
 ## Categories
 
 - [Core Plugins](#core-plugins) - AI and context management
 - [Tool Plugins](#tool-plugins) - File system and SDLC operations
+- [Notification Plugins](#notification-plugins) - External notification integrations
 - [Logic Plugins](#logic-plugins) - Boolean logic and comparisons
 - [List Plugins](#list-plugins) - Collection operations
 - [Dictionary Plugins](#dictionary-plugins) - Object/map operations
@@ -36,6 +39,7 @@ Plugins are now organized into subdirectories by category:
 - [Test Plugins](#test-plugins) - Unit testing and assertions
 - [Backend Plugins](#backend-plugins) - System initialization
 - [Utility Plugins](#utility-plugins) - General utilities
+- [Web Plugins](#web-plugins) - Web UI and Flask operations
 
 ---
 
@@ -169,6 +173,57 @@ Run command inside Docker container.
 **Outputs:**
 - `output` - Command output
 - `error` - Error message (if any)
+
+---
+
+## Notification Plugins
+
+**Note:** Notification plugins require the corresponding backend plugins (`backend.create_slack` and/or `backend.create_discord`) to be run first to initialize the clients.
+
+### `notifications.slack`
+Send notification to Slack.
+
+**Prerequisites:**
+- `backend.create_slack` must be run first to initialize the Slack client
+
+**Inputs:**
+- `message` - The message to send
+- `channel` - Optional channel (defaults to SLACK_CHANNEL env var)
+
+**Outputs:**
+- `success` - Boolean (true if sent successfully)
+- `message` - Status message
+- `error` - Error message (if failed)
+- `skipped` - Boolean (true if skipped due to missing config)
+
+### `notifications.discord`
+Send notification to Discord.
+
+**Prerequisites:**
+- `backend.create_discord` must be run first to initialize the Discord configuration
+
+**Inputs:**
+- `message` - The message to send
+- `channel_id` - Optional channel ID (defaults to DISCORD_CHANNEL_ID env var)
+
+**Outputs:**
+- `success` - Boolean (true if sent successfully)
+- `message` - Status message
+- `error` - Error message (if failed)
+- `skipped` - Boolean (true if skipped due to missing config)
+
+### `notifications.all`
+Send notification to all configured channels (Slack and Discord).
+
+**Prerequisites:**
+- `backend.create_slack` and `backend.create_discord` should be run first for full functionality
+
+**Inputs:**
+- `message` - The message to send to all channels
+
+**Outputs:**
+- `success` - Boolean
+- `message` - Status message
 
 ---
 
@@ -811,6 +866,28 @@ Initialize OpenAI client.
 **Outputs:**
 - `result` - OpenAI client
 - `initialized` - Boolean
+
+### `backend.create_slack`
+Initialize Slack WebClient.
+
+**Inputs:**
+- `token` - Optional Slack bot token (defaults to SLACK_BOT_TOKEN env var)
+
+**Outputs:**
+- `result` - Slack client
+- `initialized` - Boolean
+- `error` - Error message (if failed)
+
+### `backend.create_discord`
+Initialize Discord client configuration.
+
+**Inputs:**
+- `token` - Optional Discord bot token (defaults to DISCORD_BOT_TOKEN env var)
+
+**Outputs:**
+- `result` - Discord token
+- `initialized` - Boolean
+- `error` - Error message (if failed)
 
 ### `backend.load_metadata`
 Load metadata.json.

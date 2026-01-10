@@ -1,0 +1,70 @@
+"""Workflow plugin: send Discord notification."""
+import os
+import logging
+import asyncio
+
+logger = logging.getLogger("autometabuilder.notifications")
+
+
+async def _send_discord_notification_async(message: str, token: str, intents, channel_id: str):
+    """Send Discord notification asynchronously."""
+    # Import discord here to avoid loading it at module level
+    import discord
+    
+    client = discord.Client(intents=intents)
+    
+    @client.event
+    async def on_ready():
+        channel = client.get_channel(int(channel_id))
+        if channel:
+            await channel.send(message)
+            logger.info("Discord notification sent successfully.")
+        await client.close()
+    
+    try:
+        await client.start(token)
+    except Exception as e:
+        logger.error(f"Error sending Discord notification: {e}")
+        raise
+
+
+def run(runtime, inputs):
+    """
+    Send a notification to Discord.
+    
+    Inputs:
+        message: The message to send
+        channel_id: Optional channel ID (defaults to DISCORD_CHANNEL_ID env var)
+        
+    Returns:
+        dict: Contains success status and any error message
+    """
+    message = inputs.get("message", "")
+    channel_id = inputs.get("channel_id") or os.environ.get("DISCORD_CHANNEL_ID")
+    
+    # Get Discord token and intents from runtime context (initialized by backend.create_discord)
+    token = runtime.context.get("discord_token")
+    intents = runtime.context.get("discord_intents")
+    
+    if not token:
+        logger.warning("Discord notification skipped: Discord client not initialized.")
+        return {
+            "success": False,
+            "skipped": True,
+            "error": "Discord client not initialized"
+        }
+    
+    if not channel_id:
+        logger.warning("Discord notification skipped: DISCORD_CHANNEL_ID missing.")
+        return {
+            "success": False,
+            "skipped": True,
+            "error": "DISCORD_CHANNEL_ID missing"
+        }
+    
+    try:
+        asyncio.run(_send_discord_notification_async(message, token, intents, channel_id))
+        return {"success": True, "message": "Discord notification sent"}
+    except Exception as e:
+        logger.error(f"Error running Discord notification: {e}")
+        return {"success": False, "error": str(e)}
