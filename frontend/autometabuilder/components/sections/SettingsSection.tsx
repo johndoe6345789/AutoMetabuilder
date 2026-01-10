@@ -35,7 +35,7 @@ export default function SettingsSection({ envVars, onSave, t }: SettingsSectionP
   };
 
   return (
-    <Paper id="settings" sx={{ p: 3, mb: 3, backgroundColor: "#0d111b" }}>
+    <Paper id="settings" sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)" }}>
       <Typography variant="h5" gutterBottom>
         {t("ui.settings.title", "Settings")}
       </Typography>
@@ -51,9 +51,9 @@ export default function SettingsSection({ envVars, onSave, t }: SettingsSectionP
             onChange={(event) => updateField(key, event.target.value)}
             InputProps={{
               sx: {
-                backgroundColor: "#030712",
+                backgroundColor: "var(--color-input-bg)",
                 borderRadius: 1,
-                color: "white",
+                color: "var(--color-text-strong)",
               },
             }}
           />

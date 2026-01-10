@@ -15,7 +15,7 @@ export default function PageLayout({ navItems, section, onSectionChange, t, chil
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar items={navItems} selected={section} onSelect={onSectionChange} t={t} />
-      <Box component="main" sx={{ flexGrow: 1, p: 3, bgcolor: "#04070f", minHeight: "100vh" }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, bgcolor: "var(--color-app-bg)", minHeight: "100vh" }}>
         <Toolbar disableGutters>
           <div>
             <Typography variant="h4" color="text.primary" gutterBottom>

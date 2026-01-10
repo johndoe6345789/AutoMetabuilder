@@ -40,7 +40,7 @@ function renderPortChips(
         key={`${direction}-${name}`}
         label={`${direction === "in" ? "⮂" : "⮀"} ${portLabel}`}
         size="small"
-        sx={{ backgroundColor: "rgba(255,255,255,0.08)", color: "white" }}
+        sx={{ backgroundColor: "var(--color-divider)", color: "var(--color-text-strong)" }}
       />
     );
   });

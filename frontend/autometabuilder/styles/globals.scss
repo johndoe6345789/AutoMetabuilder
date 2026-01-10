@@ -3,6 +3,18 @@
 :root {
   color: $text;
   background: $body-bg;
+  --color-body-bg: #{$body-bg};
+  --color-app-bg: #{$app-bg};
+  --color-panel-bg: #{$panel-bg};
+  --color-panel-alt: #{$panel-bg-alt};
+  --color-input-bg: #{$input-bg};
+  --color-sidebar-bg: #{$sidebar-bg};
+  --color-text: #{$text};
+  --color-text-strong: #{$text-strong};
+  --color-text-muted: #{$muted};
+  --color-text-muted-strong: #{rgba($text, 0.8)};
+  --color-border-muted: #{rgba($muted, 0.4)};
+  --color-divider: #{rgba($text, 0.08)};
 }
 
 * {

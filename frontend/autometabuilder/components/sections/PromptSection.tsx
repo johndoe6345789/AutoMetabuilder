@@ -22,7 +22,7 @@ export default function PromptSection({ content, onSave, t }: PromptSectionProps
   };
 
   return (
-    <Paper id="prompt" sx={{ p: 3, mb: 3, backgroundColor: "#0d111b" }}>
+    <Paper id="prompt" sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)" }}>
       <Typography variant="h5" gutterBottom>
         {t("ui.prompt.title", "Prompt Builder")}
       </Typography>
@@ -37,9 +37,9 @@ export default function PromptSection({ content, onSave, t }: PromptSectionProps
         fullWidth
         InputProps={{
           sx: {
-            backgroundColor: "#030712",
+            backgroundColor: "var(--color-input-bg)",
             borderRadius: 2,
-            color: "white",
+            color: "var(--color-text-strong)",
             fontFamily: "JetBrains Mono, monospace",
           },
         }}

@@ -42,7 +42,7 @@ export default function DashboardSection({ status, logs, onRun, t }: DashboardSe
   };
 
   return (
-    <Paper id="dashboard" sx={{ p: 3, mb: 3, backgroundColor: "#0d111b" }}>
+    <Paper id="dashboard" sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)" }}>
       <Typography variant="h5" gutterBottom>
         {t("ui.dashboard.title", "Dashboard")}
       </Typography>
@@ -50,7 +50,7 @@ export default function DashboardSection({ status, logs, onRun, t }: DashboardSe
         {t("ui.dashboard.subtitle", "Control the bot and monitor system activity")}
       </Typography>
       <Stack direction={{ xs: "column", md: "row" }} spacing={3} mt={2}>
-        <Paper sx={{ flex: 1, p: 2, backgroundColor: "#0b1221" }}>
+        <Paper sx={{ flex: 1, p: 2, backgroundColor: "var(--color-panel-alt)" }}>
           <Typography variant="subtitle1" gutterBottom>
             {t("ui.dashboard.bot_control", "Bot Control")}
           </Typography>
@@ -99,11 +99,11 @@ export default function DashboardSection({ status, logs, onRun, t }: DashboardSe
             {feedback}
           </Typography>
         </Paper>
-        <Paper sx={{ flex: 1, p: 2, backgroundColor: "#0b1221" }}>
+        <Paper sx={{ flex: 1, p: 2, backgroundColor: "var(--color-panel-alt)" }}>
           <Typography variant="subtitle1" gutterBottom>
             {t("ui.dashboard.logs.title", "Recent Logs")}
           </Typography>
-          <Box component="pre" sx={{ maxHeight: 240, overflow: "auto", fontSize: 12, color: "white" }}>
+          <Box component="pre" sx={{ maxHeight: 240, overflow: "auto", fontSize: 12, color: "var(--color-text-strong)" }}>
             {logs.slice(-1200) || t("ui.dashboard.status.idle", "Idle")}
           </Box>
         </Paper>

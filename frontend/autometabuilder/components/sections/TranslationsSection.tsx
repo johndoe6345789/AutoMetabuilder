@@ -75,7 +75,7 @@ export default function TranslationsSection({ languages, onRefresh, t }: Transla
   };
 
   return (
-    <Paper id="translations" sx={{ p: 3, mb: 3, backgroundColor: "#0d111b" }}>
+    <Paper id="translations" sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)" }}>
       <Typography variant="h5" gutterBottom>
         {t("ui.translations.title", "Translations")}
       </Typography>
@@ -101,9 +101,9 @@ export default function TranslationsSection({ languages, onRefresh, t }: Transla
           onChange={(event) => setEditorValue(event.target.value)}
           InputProps={{
             sx: {
-              backgroundColor: "#030712",
+              backgroundColor: "var(--color-input-bg)",
               borderRadius: 2,
-              color: "white",
+              color: "var(--color-text-strong)",
               fontFamily: "JetBrains Mono, monospace",
             },
           }}

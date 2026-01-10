@@ -30,7 +30,7 @@ export default function WorkflowGraphPanel({ t }: WorkflowGraphPanelProps) {
   }, []);
 
   return (
-    <Paper sx={{ p: 2, backgroundColor: "#0b1221" }}>
+    <Paper sx={{ p: 2, backgroundColor: "var(--color-panel-alt)" }}>
       <Typography variant="subtitle1" gutterBottom>
         {t("ui.workflow.graph.title", "Workflow Graph")}
       </Typography>
@@ -45,7 +45,7 @@ export default function WorkflowGraphPanel({ t }: WorkflowGraphPanelProps) {
         <Typography color="error">{error}</Typography>
       ) : (
         <>
-          <Stack spacing={1} divider={<Divider light sx={{ borderColor: "rgba(255,255,255,0.08)" }} />}>
+          <Stack spacing={1} divider={<Divider light sx={{ borderColor: "var(--color-divider)" }} />}>
             {graph?.nodes.map((node) => (
               <Box key={node.id} sx={{ display: "flex", flexDirection: "column" }}>
                 <Stack direction="row" alignItems="center" spacing={1}>
@@ -60,7 +60,7 @@ export default function WorkflowGraphPanel({ t }: WorkflowGraphPanelProps) {
               </Box>
             ))}
           </Stack>
-          <Divider sx={{ my: 2, borderColor: "rgba(255,255,255,0.08)" }} />
+          <Divider sx={{ my: 2, borderColor: "var(--color-divider)" }} />
           <Stack spacing={1}>
             {graph?.edges.map((edge, index) => (
               <Typography key={`${edge.from}-${edge.to}-${edge.var}-${index}`} variant="caption" color="text.secondary">

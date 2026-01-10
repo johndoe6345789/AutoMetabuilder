@@ -27,7 +27,7 @@ export default function WorkflowSection({ content, packages, onSave, onTemplateS
   };
 
   return (
-    <Paper id="workflow" sx={{ p: 3, mb: 3, backgroundColor: "#0d111b" }}>
+    <Paper id="workflow" sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)" }}>
       <Typography variant="h5" gutterBottom>
         {t("ui.workflow.title", "Workflow Builder")}
       </Typography>
@@ -44,10 +44,10 @@ export default function WorkflowSection({ content, packages, onSave, onTemplateS
             sx={{
               width: "100%",
               fontFamily: "JetBrains Mono, monospace",
-              backgroundColor: "#030712",
-              border: "1px solid rgba(148, 163, 184, 0.4)",
+              backgroundColor: "var(--color-input-bg)",
+              border: "1px solid var(--color-border-muted)",
               borderRadius: 2,
-              color: "white",
+              color: "var(--color-text-strong)",
               p: 2,
             }}
           />
@@ -60,7 +60,7 @@ export default function WorkflowSection({ content, packages, onSave, onTemplateS
             </Typography>
           </Stack>
         </Box>
-        <Paper sx={{ flex: 1, p: 2, backgroundColor: "#0b1221" }}>
+        <Paper sx={{ flex: 1, p: 2, backgroundColor: "var(--color-panel-alt)" }}>
           <Stack spacing={2}>
             <Box>
               <Typography variant="subtitle1" gutterBottom>

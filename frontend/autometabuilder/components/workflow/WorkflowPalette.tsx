@@ -43,7 +43,7 @@ export default function WorkflowPalette({ t }: WorkflowPaletteProps) {
   const hasQuery = search.trim().length > 0;
 
   return (
-    <Paper sx={{ p: 2, backgroundColor: "#0b1221" }}>
+    <Paper sx={{ p: 2, backgroundColor: "var(--color-panel-alt)" }}>
       <Typography variant="subtitle1" gutterBottom>
         {t("ui.workflow.palette.title", "Workflow Palette")}
       </Typography>
@@ -66,7 +66,7 @@ export default function WorkflowPalette({ t }: WorkflowPaletteProps) {
           {`${t("ui.workflow.palette.empty", "No matching nodes.")} "${search.trim()}"`}
         </Typography>
       ) : (
-        <Stack spacing={1} divider={<Divider sx={{ borderColor: "rgba(255,255,255,0.08)" }} />}>
+        <Stack spacing={1} divider={<Divider sx={{ borderColor: "var(--color-divider)" }} />}>
           {entries.map(([id, plugin]) => (
             <WorkflowPaletteCard key={id} id={id} plugin={plugin} t={t} />
           ))}
