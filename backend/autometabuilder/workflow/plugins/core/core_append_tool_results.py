@@ -47,6 +47,6 @@ def run(runtime, inputs):
 
     if runtime.context["args"].yolo and _is_mvp_reached():
         runtime.logger.info("MVP reached. Stopping YOLO loop.")
-        notify_all("AutoMetabuilder YOLO loop stopped: MVP reached.")
+        notify_all(runtime, "AutoMetabuilder YOLO loop stopped: MVP reached.")
 
     return {"messages": messages}

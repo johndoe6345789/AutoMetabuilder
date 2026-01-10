@@ -1,39 +1,29 @@
 """Workflow plugin: send notification to all channels."""
 import os
 import logging
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
-import discord
 import asyncio
 
 logger = logging.getLogger("autometabuilder.notifications")
 
 
-def _send_slack(message: str):
-    """Send Slack notification."""
-    token = os.environ.get("SLACK_BOT_TOKEN")
-    channel = os.environ.get("SLACK_CHANNEL")
-    if not token or not channel:
-        logger.warning("Slack notification skipped: SLACK_BOT_TOKEN or SLACK_CHANNEL missing.")
+def _send_slack(client, message: str, channel: str):
+    """Send Slack notification using provided client."""
+    if not client or not channel:
+        logger.warning("Slack notification skipped: client or channel missing.")
         return
     
-    client = WebClient(token=token)
     try:
+        from slack_sdk.errors import SlackApiError
         client.chat_postMessage(channel=channel, text=message)
         logger.info("Slack notification sent successfully.")
     except SlackApiError as e:
         logger.error(f"Error sending Slack notification: {e}")
 
 
-async def _send_discord_async(message: str):
+async def _send_discord_async(message: str, token: str, intents, channel_id: str):
     """Send Discord notification asynchronously."""
-    token = os.environ.get("DISCORD_BOT_TOKEN")
-    channel_id = os.environ.get("DISCORD_CHANNEL_ID")
-    if not token or not channel_id:
-        logger.warning("Discord notification skipped: DISCORD_BOT_TOKEN or DISCORD_CHANNEL_ID missing.")
-        return
+    import discord
     
-    intents = discord.Intents.default()
     client = discord.Client(intents=intents)
     
     @client.event
@@ -50,10 +40,14 @@ async def _send_discord_async(message: str):
         logger.error(f"Error sending Discord notification: {e}")
 
 
-def _send_discord(message: str):
+def _send_discord(message: str, token: str, intents, channel_id: str):
     """Send Discord notification."""
+    if not token or not channel_id:
+        logger.warning("Discord notification skipped: token or channel_id missing.")
+        return
+    
     try:
-        asyncio.run(_send_discord_async(message))
+        asyncio.run(_send_discord_async(message, token, intents, channel_id))
     except Exception as e:
         logger.error(f"Error running Discord notification: {e}")
 
@@ -70,9 +64,18 @@ def run(runtime, inputs):
     """
     message = inputs.get("message", "")
     
+    # Get Slack client from runtime context
+    slack_client = runtime.context.get("slack_client")
+    slack_channel = os.environ.get("SLACK_CHANNEL")
+    
+    # Get Discord config from runtime context
+    discord_token = runtime.context.get("discord_token")
+    discord_intents = runtime.context.get("discord_intents")
+    discord_channel_id = os.environ.get("DISCORD_CHANNEL_ID")
+    
     # Send to both channels
-    _send_slack(message)
-    _send_discord(message)
+    _send_slack(slack_client, message, slack_channel)
+    _send_discord(message, discord_token, discord_intents, discord_channel_id)
     
     return {
         "success": True,

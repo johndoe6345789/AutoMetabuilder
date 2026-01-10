@@ -19,7 +19,7 @@ def run(runtime, inputs):
         runtime.logger
     )
     if not tool_calls and resp_msg.content:
-        notify_all(f"AutoMetabuilder task complete: {resp_msg.content[:100]}...")
+        notify_all(runtime, f"AutoMetabuilder task complete: {resp_msg.content[:100]}...")
     return {
         "tool_results": tool_results,
         "no_tool_calls": not bool(tool_calls)

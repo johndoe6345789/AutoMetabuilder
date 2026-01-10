@@ -5,7 +5,7 @@ This document describes all available workflow plugins for building declarative 
 ## Directory Structure
 
 Plugins are now organized into subdirectories by category:
-- **backend/** - Backend infrastructure and initialization plugins (12 plugins)
+- **backend/** - Backend infrastructure and initialization plugins (14 plugins)
 - **core/** - Core workflow orchestration plugins (7 plugins)
 - **tools/** - Tool execution and development plugins (7 plugins)
 - **notifications/** - External notification integrations (3 plugins)
@@ -21,7 +21,7 @@ Plugins are now organized into subdirectories by category:
 - **utils/** - Utility functions (7 plugins)
 - **web/** - Web UI and Flask operations (26 plugins)
 
-**Total: 93 plugins**
+**Total: 95 plugins**
 
 ## Categories
 
@@ -178,12 +178,16 @@ Run command inside Docker container.
 
 ## Notification Plugins
 
+**Note:** Notification plugins require the corresponding backend plugins (`backend.create_slack` and/or `backend.create_discord`) to be run first to initialize the clients.
+
 ### `notifications.slack`
 Send notification to Slack.
 
+**Prerequisites:**
+- `backend.create_slack` must be run first to initialize the Slack client
+
 **Inputs:**
 - `message` - The message to send
-- `token` - Optional Slack bot token (defaults to SLACK_BOT_TOKEN env var)
 - `channel` - Optional channel (defaults to SLACK_CHANNEL env var)
 
 **Outputs:**
@@ -195,9 +199,11 @@ Send notification to Slack.
 ### `notifications.discord`
 Send notification to Discord.
 
+**Prerequisites:**
+- `backend.create_discord` must be run first to initialize the Discord configuration
+
 **Inputs:**
 - `message` - The message to send
-- `token` - Optional Discord bot token (defaults to DISCORD_BOT_TOKEN env var)
 - `channel_id` - Optional channel ID (defaults to DISCORD_CHANNEL_ID env var)
 
 **Outputs:**
@@ -208,6 +214,9 @@ Send notification to Discord.
 
 ### `notifications.all`
 Send notification to all configured channels (Slack and Discord).
+
+**Prerequisites:**
+- `backend.create_slack` and `backend.create_discord` should be run first for full functionality
 
 **Inputs:**
 - `message` - The message to send to all channels
@@ -857,6 +866,28 @@ Initialize OpenAI client.
 **Outputs:**
 - `result` - OpenAI client
 - `initialized` - Boolean
+
+### `backend.create_slack`
+Initialize Slack WebClient.
+
+**Inputs:**
+- `token` - Optional Slack bot token (defaults to SLACK_BOT_TOKEN env var)
+
+**Outputs:**
+- `result` - Slack client
+- `initialized` - Boolean
+- `error` - Error message (if failed)
+
+### `backend.create_discord`
+Initialize Discord client configuration.
+
+**Inputs:**
+- `token` - Optional Discord bot token (defaults to DISCORD_BOT_TOKEN env var)
+
+**Outputs:**
+- `result` - Discord token
+- `initialized` - Boolean
+- `error` - Error message (if failed)
 
 ### `backend.load_metadata`
 Load metadata.json.
