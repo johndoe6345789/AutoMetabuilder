@@ -47,7 +47,7 @@
 - [x] **Flask + Next.js split**: Replace the Jinja-based FastAPI UI with a Flask REST backend and Next.js frontend consuming metadata, translations, workflows, logs, and nav via AJAX.
 - [x] **Atomic Next sections**: Compose dashboard, workflow builder, prompt editor, settings, and translation editor into dedicated components powered by localized strings.
 - [x] **Workflow templates & navigation JSON**: Serve workflow packages, nav items, and translation mappings from metadata-backed JSON endpoints.
-- [ ] **Document build constraints**: Record that `next build --webpack` fails in this sandbox because bundlers attempt to bind new ports, and continue iterating locally.
+- [x] **Document build constraints**: Record that `next build --webpack` fails in this sandbox because bundlers attempt to bind new ports, and continue iterating locally.
 - [x] **Storybook + Playwright**: Add a Storybook catalog for the Material UI sections and a Playwright suite (with `npm run test:e2e`) so the frontend gets visual regression/backstop coverage tied to the Flask API.
 - [x] **Material UI + webhooks**: Drive the dashboard with Material UI surfaces and a lightweight webhook emitter/listener so downstream components can react to run events without prop drilling.
 
@@ -61,3 +61,13 @@
 - [ ] **Selection + Inspector**: Multi-select, bulk edit, right-side inspector for node/edge properties.
 - [ ] **Inline Validation & Execution Preview**: Warn on missing inputs and simulate data flow + store bindings.
 - [ ] **Workspace Controls**: Auto-save drafts, template import/export, keyboard shortcuts, undo/redo stack, context menus, and performant rendering for big graphs.
+
+## Phase 10: Workflow & UI Refinement
+- [ ] **Atomic Workflow Plugin System**: Define micro plugin/lambda nodes (filters, maps, reduces, fetches, branches, AI requests) with clear multi-input/multi-output contracts so workflows mirror n8n’s granularity and can broadcast webhook events.
+- [ ] **Workflow Package Templates**: Package curated templates (blank, single pass, contextual loops, plan/execute/summarize, iteration controls like “1 run”, “X runs”, “YOLO”, “Stop at MVP”) and surface them via AJAX-enabled picker so builders import pre-configured flows.
+- [ ] **AJAX Configuration Delivery**: Serve navigation, metadata, translations, workflow packages, and script wiring from dedicated endpoints instead of embedding JSON in pages; let the client hydrate via fetch loops.
+- [ ] **Localized UI Editors**: Rework settings, translation, and prompt editors to show human descriptions, full CRUD flows, and ensure metadata/strings come from translation files so Playwright can assert localization coverage.
+- [ ] **Workflow Action Library**: Build an atomic action library with declarative JSON definitions for each filter, transformer, and AI request, wire them into the plugin registry, and add DEBUG/INFO/TRACE/ERROR logging for execution visibility.
+- [ ] **Testing & Quality**: Expand Playwright suites to cover internationalization/localization, workflow templates, and AJAX-driven navigation; continue running unit tests, static analysis, linters, and e2e jobs to close the testing triangle.
+- [ ] **Styling & Tooling**: Investigate SASS adoption for the Material UI theme, keep component files ≤100 LOC, and enforce plugin/service/controller patterns with DI so styles stay modular.
+- [ ] **Component Decomposition**: Audit remaining Jinja templates and Next.js components so each file owns a single macro/component, loops over declarative data, and delegates translation lookups to shared helpers.

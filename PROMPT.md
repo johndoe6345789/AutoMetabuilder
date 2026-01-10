@@ -53,3 +53,5 @@ We should reassess priorities before inventing work.
 React component logic (just above the bottom jsx) can be converted to one or more custom hooks.
 
 Use atomic React components.
+
+Don't hardcode strings, use a translation file or some sort of external JSON mapping.
