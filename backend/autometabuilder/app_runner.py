@@ -58,7 +58,7 @@ def parse_args():
 def run_web_workflow(logger):
     """Start web server using workflow."""
     # Load web server bootstrap workflow
-    from .data.workflow import load_workflow_packages
+    from .data import load_workflow_packages
     
     packages = load_workflow_packages()
     web_server_package = next((p for p in packages if p.get("id") == "web_server_bootstrap"), None)

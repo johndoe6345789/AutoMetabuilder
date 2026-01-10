@@ -1,6 +1,6 @@
 """Workflow plugin: read JSON file."""
+import json
 from pathlib import Path
-from ....data.json_utils import read_json
 
 
 def run(_runtime, inputs):
@@ -9,5 +9,13 @@ def run(_runtime, inputs):
     if not path:
         return {"error": "path is required"}
     
-    json_data = read_json(Path(path))
+    path_obj = Path(path)
+    if not path_obj.exists():
+        return {"result": {}}
+    
+    try:
+        json_data = json.loads(path_obj.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {"result": {}}
+    
     return {"result": json_data}

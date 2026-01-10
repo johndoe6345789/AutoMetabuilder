@@ -1,0 +1,13 @@
+{
+  "name": "@autometabuilder/web_route_settings",
+  "version": "1.0.0",
+  "description": "Flask blueprint for settings API routes",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": ["web", "workflow", "plugin", "flask", "routes"],
+  "main": "web_route_settings.py",
+  "metadata": {
+    "plugin_type": "web.route_settings",
+    "category": "web"
+  }
+}
