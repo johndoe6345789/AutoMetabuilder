@@ -1,13 +1,13 @@
 """Workflow plugin: load tools."""
 import json
 import os
-from pathlib import Path
+from .....utils import get_package_root
 
 
 def _load_tools(metadata: dict) -> list:
     """Load tool specs from metadata reference."""
     # Locate tools relative to autometabuilder package root
-    base_dir = Path(__file__).resolve().parents[4]
+    base_dir = get_package_root()
     tools_path = base_dir / metadata.get("tools_path", "tools.json")
     
     if tools_path.is_dir():

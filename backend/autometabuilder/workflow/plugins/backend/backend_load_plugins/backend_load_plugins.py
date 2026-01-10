@@ -3,15 +3,15 @@ import importlib
 import inspect
 import logging
 import os
-from pathlib import Path
+from .....utils import get_package_root
 
 logger = logging.getLogger("autometabuilder")
 
 
 def _load_plugins(tool_map: dict, tools: list) -> None:
     """Load plugin tools and append metadata."""
-    # Locate plugins directory relative to autometabuilder package root
-    plugins_dir = Path(__file__).resolve().parents[4] / "plugins"
+    # Locate plugins directory in package root
+    plugins_dir = get_package_root() / "plugins"
     if not os.path.exists(plugins_dir):
         return
 

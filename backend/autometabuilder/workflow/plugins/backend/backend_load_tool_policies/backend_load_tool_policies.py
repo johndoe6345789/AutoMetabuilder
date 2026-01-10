@@ -1,13 +1,13 @@
 """Workflow plugin: load tool policies."""
 import json
 import os
-from pathlib import Path
+from .....utils import get_package_root
 
 
 def _load_tool_policies() -> dict:
     """Load tool policies JSON."""
-    # Locate tool_policies.json relative to autometabuilder package root
-    path = Path(__file__).resolve().parents[4] / "tool_policies.json"
+    # Locate tool_policies.json in package root
+    path = get_package_root() / "tool_policies.json"
     if not os.path.exists(path):
         return {"modifying_tools": []}
     try:

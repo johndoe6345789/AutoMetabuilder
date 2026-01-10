@@ -3,11 +3,20 @@
 This module provides helper functions that are used across the codebase.
 These are pure utility functions that don't contain business logic.
 """
+import importlib
 import json
 import os
 import yaml
 from pathlib import Path
 from typing import Any
+
+
+def get_package_root() -> Path:
+    """Get the AutoMetabuilder package root directory.
+    
+    Returns the absolute path to the autometabuilder package root.
+    """
+    return Path(__file__).resolve().parent
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -16,6 +25,20 @@ def read_json(path: Path) -> dict[str, Any]:
         return {}
     with path.open("r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def load_callable(path: str):
+    """Import and return a callable by dotted path.
+    
+    Args:
+        path: Dotted path to callable (e.g., 'module.submodule.function')
+        
+    Returns:
+        The callable object
+    """
+    module_path, attr = path.rsplit(".", 1)
+    module = importlib.import_module(module_path)
+    return getattr(module, attr)
 
 
 def load_metadata() -> dict[str, Any]:
@@ -29,8 +52,8 @@ def load_metadata() -> dict[str, Any]:
         "workflow_plugins_path": "workflow_plugins",
     }
     
-    # Locate metadata.json relative to the autometabuilder package root
-    metadata_path = Path(__file__).resolve().parent / "metadata.json"
+    # Locate metadata.json in package root
+    metadata_path = get_package_root() / "metadata.json"
     metadata = read_json(metadata_path)
     base_dir = metadata_path.parent
     
@@ -60,3 +83,19 @@ def load_prompt_yaml() -> dict:
         with open(local_path, "r", encoding="utf-8") as f:
             return yaml.safe_load(f)
     raise FileNotFoundError(f"Prompt file not found at {local_path}")
+
+
+def load_tool_registry() -> list:
+    """Load tool registry entries from tool_registry.json.
+    
+    This is a utility function for loading tool registry configuration.
+    """
+    path = get_package_root() / "tool_registry.json"
+    if not os.path.exists(path):
+        return []
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except json.JSONDecodeError:
+        return []
+    return data if isinstance(data, list) else []
