@@ -1,0 +1,13 @@
+{
+  "name": "@autometabuilder/control_get_bot_status",
+  "version": "1.0.0",
+  "description": "Get current bot execution status",
+  "author": "AutoMetabuilder",
+  "license": "MIT",
+  "keywords": ["control", "workflow", "plugin", "bot", "status"],
+  "main": "control_get_bot_status.py",
+  "metadata": {
+    "plugin_type": "control.get_bot_status",
+    "category": "control"
+  }
+}
