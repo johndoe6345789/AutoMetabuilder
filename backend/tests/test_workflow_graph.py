@@ -1,4 +1,4 @@
-from autometabuilder.data.workflow_graph import build_workflow_graph
+from autometabuilder.workflow.workflow_graph import build_workflow_graph
 
 
 def test_build_workflow_graph_structure():
