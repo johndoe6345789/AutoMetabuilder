@@ -1,0 +1,233 @@
+{
+  "name": "Web Server Bootstrap",
+  "active": false,
+  "nodes": [
+    {
+      "id": "configure_logging",
+      "name": "Configure Logging",
+      "type": "backend.configure_logging",
+      "typeVersion": 1,
+      "position": [0, 0],
+      "parameters": {}
+    },
+    {
+      "id": "load_env",
+      "name": "Load Environment",
+      "type": "backend.load_env",
+      "typeVersion": 1,
+      "position": [300, 0],
+      "parameters": {}
+    },
+    {
+      "id": "create_app",
+      "name": "Create Flask App",
+      "type": "web.create_flask_app",
+      "typeVersion": 1,
+      "position": [600, 0],
+      "parameters": {
+        "name": "autometabuilder",
+        "config": {
+          "JSON_SORT_KEYS": false
+        }
+      }
+    },
+    {
+      "id": "register_context",
+      "name": "Register Context Routes",
+      "type": "web.register_blueprint",
+      "typeVersion": 1,
+      "position": [900, -150],
+      "parameters": {
+        "blueprint_path": "autometabuilder.web.routes.context.context_bp"
+      }
+    },
+    {
+      "id": "register_run",
+      "name": "Register Run Routes",
+      "type": "web.register_blueprint",
+      "typeVersion": 1,
+      "position": [900, -50],
+      "parameters": {
+        "blueprint_path": "autometabuilder.web.routes.run.run_bp"
+      }
+    },
+    {
+      "id": "register_prompt",
+      "name": "Register Prompt Routes",
+      "type": "web.register_blueprint",
+      "typeVersion": 1,
+      "position": [900, 50],
+      "parameters": {
+        "blueprint_path": "autometabuilder.web.routes.prompt.prompt_bp"
+      }
+    },
+    {
+      "id": "register_settings",
+      "name": "Register Settings Routes",
+      "type": "web.register_blueprint",
+      "typeVersion": 1,
+      "position": [900, 150],
+      "parameters": {
+        "blueprint_path": "autometabuilder.web.routes.settings.settings_bp"
+      }
+    },
+    {
+      "id": "register_translations",
+      "name": "Register Translation Routes",
+      "type": "web.register_blueprint",
+      "typeVersion": 1,
+      "position": [900, 250],
+      "parameters": {
+        "blueprint_path": "autometabuilder.web.routes.translations.translations_bp"
+      }
+    },
+    {
+      "id": "register_navigation",
+      "name": "Register Navigation Routes",
+      "type": "web.register_blueprint",
+      "typeVersion": 1,
+      "position": [900, 350],
+      "parameters": {
+        "blueprint_path": "autometabuilder.web.routes.navigation.navigation_bp"
+      }
+    },
+    {
+      "id": "start_server",
+      "name": "Start Web Server",
+      "type": "web.start_server",
+      "typeVersion": 1,
+      "position": [1200, 100],
+      "parameters": {
+        "host": "0.0.0.0",
+        "port": 8000,
+        "debug": false
+      }
+    }
+  ],
+  "connections": {
+    "Configure Logging": {
+      "main": {
+        "0": [
+          {
+            "node": "Load Environment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      }
+    },
+    "Load Environment": {
+      "main": {
+        "0": [
+          {
+            "node": "Create Flask App",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      }
+    },
+    "Create Flask App": {
+      "main": {
+        "0": [
+          {
+            "node": "Register Context Routes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Register Run Routes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Register Prompt Routes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Register Settings Routes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Register Translation Routes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Register Navigation Routes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      }
+    },
+    "Register Context Routes": {
+      "main": {
+        "0": [
+          {
+            "node": "Start Web Server",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      }
+    },
+    "Register Run Routes": {
+      "main": {
+        "0": [
+          {
+            "node": "Start Web Server",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      }
+    },
+    "Register Prompt Routes": {
+      "main": {
+        "0": [
+          {
+            "node": "Start Web Server",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      }
+    },
+    "Register Settings Routes": {
+      "main": {
+        "0": [
+          {
+            "node": "Start Web Server",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      }
+    },
+    "Register Translation Routes": {
+      "main": {
+        "0": [
+          {
+            "node": "Start Web Server",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      }
+    },
+    "Register Navigation Routes": {
+      "main": {
+        "0": [
+          {
+            "node": "Start Web Server",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      }
+    }
+  }
+}
