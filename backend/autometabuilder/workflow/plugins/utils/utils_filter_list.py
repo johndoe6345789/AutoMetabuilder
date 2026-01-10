@@ -1,6 +1,6 @@
 """Workflow plugin: filter list."""
 import re
-from ..value_helpers import ValueHelpers
+from ...value_helpers import ValueHelpers
 
 
 def run(_runtime, inputs):
