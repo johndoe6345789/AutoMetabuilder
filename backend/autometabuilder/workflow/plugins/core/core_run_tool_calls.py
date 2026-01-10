@@ -1,5 +1,5 @@
 """Workflow plugin: run tool calls."""
-from ....integrations.notifications import notify_all
+from ...notification_helpers import notify_all
 from ..tool_calls_handler import handle_tool_calls
 
 

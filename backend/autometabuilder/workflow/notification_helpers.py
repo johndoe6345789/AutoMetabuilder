@@ -1,3 +1,4 @@
+"""Notification helpers for workflow plugins."""
 import os
 import logging
 from slack_sdk import WebClient
@@ -7,7 +8,9 @@ import asyncio
 
 logger = logging.getLogger("autometabuilder.notifications")
 
+
 def send_slack_notification(message: str):
+    """Send a notification to Slack."""
     token = os.environ.get("SLACK_BOT_TOKEN")
     channel = os.environ.get("SLACK_CHANNEL")
     if not token or not channel:
@@ -21,7 +24,9 @@ def send_slack_notification(message: str):
     except SlackApiError as e:
         logger.error(f"Error sending Slack notification: {e}")
 
+
 async def send_discord_notification_async(message: str):
+    """Send Discord notification asynchronously."""
     token = os.environ.get("DISCORD_BOT_TOKEN")
     channel_id = os.environ.get("DISCORD_CHANNEL_ID")
     if not token or not channel_id:
@@ -44,12 +49,16 @@ async def send_discord_notification_async(message: str):
     except Exception as e:
         logger.error(f"Error sending Discord notification: {e}")
 
+
 def send_discord_notification(message: str):
+    """Send a Discord notification."""
     try:
         asyncio.run(send_discord_notification_async(message))
     except Exception as e:
         logger.error(f"Error running Discord notification: {e}")
 
+
 def notify_all(message: str):
+    """Send notification to all configured channels."""
     send_slack_notification(message)
     send_discord_notification(message)

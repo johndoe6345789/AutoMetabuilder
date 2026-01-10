@@ -8,6 +8,7 @@ Plugins are now organized into subdirectories by category:
 - **backend/** - Backend infrastructure and initialization plugins (12 plugins)
 - **core/** - Core workflow orchestration plugins (7 plugins)
 - **tools/** - Tool execution and development plugins (7 plugins)
+- **notifications/** - External notification integrations (3 plugins)
 - **logic/** - Logic and comparison operations (9 plugins)
 - **list/** - List/array operations (7 plugins)
 - **dict/** - Dictionary/object operations (6 plugins)
@@ -18,13 +19,15 @@ Plugins are now organized into subdirectories by category:
 - **var/** - Variable management (4 plugins)
 - **test/** - Unit testing and assertions (5 plugins)
 - **utils/** - Utility functions (7 plugins)
+- **web/** - Web UI and Flask operations (26 plugins)
 
-**Total: 90 plugins**
+**Total: 93 plugins**
 
 ## Categories
 
 - [Core Plugins](#core-plugins) - AI and context management
 - [Tool Plugins](#tool-plugins) - File system and SDLC operations
+- [Notification Plugins](#notification-plugins) - External notification integrations
 - [Logic Plugins](#logic-plugins) - Boolean logic and comparisons
 - [List Plugins](#list-plugins) - Collection operations
 - [Dictionary Plugins](#dictionary-plugins) - Object/map operations
@@ -36,6 +39,7 @@ Plugins are now organized into subdirectories by category:
 - [Test Plugins](#test-plugins) - Unit testing and assertions
 - [Backend Plugins](#backend-plugins) - System initialization
 - [Utility Plugins](#utility-plugins) - General utilities
+- [Web Plugins](#web-plugins) - Web UI and Flask operations
 
 ---
 
@@ -169,6 +173,48 @@ Run command inside Docker container.
 **Outputs:**
 - `output` - Command output
 - `error` - Error message (if any)
+
+---
+
+## Notification Plugins
+
+### `notifications.slack`
+Send notification to Slack.
+
+**Inputs:**
+- `message` - The message to send
+- `token` - Optional Slack bot token (defaults to SLACK_BOT_TOKEN env var)
+- `channel` - Optional channel (defaults to SLACK_CHANNEL env var)
+
+**Outputs:**
+- `success` - Boolean (true if sent successfully)
+- `message` - Status message
+- `error` - Error message (if failed)
+- `skipped` - Boolean (true if skipped due to missing config)
+
+### `notifications.discord`
+Send notification to Discord.
+
+**Inputs:**
+- `message` - The message to send
+- `token` - Optional Discord bot token (defaults to DISCORD_BOT_TOKEN env var)
+- `channel_id` - Optional channel ID (defaults to DISCORD_CHANNEL_ID env var)
+
+**Outputs:**
+- `success` - Boolean (true if sent successfully)
+- `message` - Status message
+- `error` - Error message (if failed)
+- `skipped` - Boolean (true if skipped due to missing config)
+
+### `notifications.all`
+Send notification to all configured channels (Slack and Discord).
+
+**Inputs:**
+- `message` - The message to send to all channels
+
+**Outputs:**
+- `success` - Boolean
+- `message` - Status message
 
 ---
 

@@ -1,7 +1,7 @@
 """Workflow plugin: append tool results."""
 import os
 import re
-from ....integrations.notifications import notify_all
+from ...notification_helpers import notify_all
 
 
 def _is_mvp_reached() -> bool:
