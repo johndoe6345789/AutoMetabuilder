@@ -39,7 +39,6 @@ def reset_bot_state():
     _reset_run_state()
 
 
-
 def _run_bot_task(mode: str, iterations: int, yolo: bool, stop_at_mvp: bool) -> None:
     """Execute bot task in background thread."""
     global _bot_process, _mock_running, _current_run_config
