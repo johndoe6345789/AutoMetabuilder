@@ -1,11 +1,24 @@
 """Workflow plugin: AI request."""
-from ....services.openai_client import get_completion
+from tenacity import retry, stop_after_attempt, wait_exponential
+
+
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
+def _get_completion(client, model, messages, tools):
+    """Request a chat completion with retries."""
+    return client.chat.completions.create(
+        model=model,
+        messages=messages,
+        tools=tools,
+        tool_choice="auto",
+        temperature=1.0,
+        top_p=1.0,
+    )
 
 
 def run(runtime, inputs):
     """Invoke the model with current messages."""
     messages = list(inputs.get("messages") or [])
-    response = get_completion(
+    response = _get_completion(
         runtime.context["client"],
         runtime.context["model_name"],
         messages,
