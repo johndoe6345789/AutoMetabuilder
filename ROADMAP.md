@@ -71,3 +71,8 @@
 - [ ] **Testing & Quality**: Expand Playwright suites to cover internationalization/localization, workflow templates, and AJAX-driven navigation; continue running unit tests, static analysis, linters, and e2e jobs to close the testing triangle.
 - [ ] **Styling & Tooling**: Investigate SASS adoption for the Material UI theme, keep component files ≤100 LOC, and enforce plugin/service/controller patterns with DI so styles stay modular.
 - [ ] **Component Decomposition**: Audit remaining Jinja templates and Next.js components so each file owns a single macro/component, loops over declarative data, and delegates translation lookups to shared helpers.
+
+## Phase 11: Technical Debt
+- [x] **Structured workflow logging**: Add debug/trace warnings when parsing workflow definitions so graph builders surface malformed JSON and unbound bindings.
+- [ ] **Route modularization**: Split `backend/autometabuilder/web/server.py` into focused route modules or blueprints so each file stays under 100 LOC and supports DI of helpers.
+- [ ] **AJAX contract tests**: Expand the backend test suite to cover `/api/workflow/graph`, `/api/workflow/plugins`, and nav/translation payloads with mocked metadata so API drift is caught early.

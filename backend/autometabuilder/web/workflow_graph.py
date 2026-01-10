@@ -2,9 +2,12 @@
 from __future__ import annotations
 
 import json
+import logging
 from typing import Any, Dict, Iterable, List
 
 from .data import get_workflow_content, load_metadata
+
+logger = logging.getLogger(__name__)
 
 
 def _parse_workflow_definition() -> Dict[str, Any]:
@@ -13,7 +16,8 @@ def _parse_workflow_definition() -> Dict[str, Any]:
         return {"nodes": []}
     try:
         parsed = json.loads(payload)
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as exc:
+        logger.warning("Invalid workflow JSON: %s", exc)
         return {"nodes": []}
     return parsed if isinstance(parsed, dict) else {"nodes": []}
 
@@ -45,6 +49,8 @@ def _build_edges(nodes: Iterable[Dict[str, Any]]) -> List[Dict[str, str]]:
         outputs = node.get("outputs", {})
         for value in outputs.values():
             if isinstance(value, str):
+                if value in producers:
+                    logger.debug("Variable %s already produced by %s; overwriting with %s", value, producers[value], node["id"])
                 producers[value] = node["id"]
     edges: List[Dict[str, str]] = []
     for node in nodes:
@@ -55,6 +61,8 @@ def _build_edges(nodes: Iterable[Dict[str, Any]]) -> List[Dict[str, str]]:
                 source = producers.get(variable)
                 if source:
                     edges.append({"from": source, "to": node["id"], "var": variable, "port": port})
+                else:
+                    logger.debug("No producer found for %s referenced by %s.%s", variable, node["id"], port)
     return edges
 
 
@@ -63,6 +71,7 @@ def build_workflow_graph() -> Dict[str, Any]:
     plugin_map = load_metadata().get("workflow_plugins", {})
     nodes = _gather_nodes(definition.get("nodes", []), plugin_map)
     edges = _build_edges(nodes)
+    logger.debug("Built workflow graph with %d nodes and %d edges", len(nodes), len(edges))
     return {
         "nodes": nodes,
         "edges": edges,
