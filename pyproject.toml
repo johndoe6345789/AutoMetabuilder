@@ -17,6 +17,7 @@ tenacity = "^9.1.2"
 flask = "^2.3.3"
 slack-sdk = "^3.39.0"
 discord-py = "^2.6.4"
+jsonschema = "^4.10.3"
 
 [build-system]
 requires = ["poetry-core"]
@@ -24,6 +25,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 autometabuilder = "autometabuilder.main:main"
+validate-workflows = "autometabuilder.tools.validate_workflows:main"
 
 [dependency-groups]
 dev = [

@@ -48,6 +48,16 @@ The Next.js app now lives under `frontend/autometabuilder` and uses Material UI 
 
 ## Testing & linting
 
+### Workflow JSON Validation
+
+Validate all workflow JSON files against the N8N schema:
+
+```bash
+poetry run validate-workflows
+```
+
+See [docs/WORKFLOW_VALIDATION.md](docs/WORKFLOW_VALIDATION.md) for detailed documentation.
+
 ### Python
 
 ```bash
