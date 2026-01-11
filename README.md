@@ -58,6 +58,10 @@ poetry run validate-workflows
 
 See [docs/WORKFLOW_VALIDATION.md](docs/WORKFLOW_VALIDATION.md) for detailed documentation.
 
+### Workflow Triggers
+
+Workflows now support triggers to define entry points. See [docs/TRIGGER_USAGE.md](docs/TRIGGER_USAGE.md) for usage guide.
+
 ### Python
 
 ```bash
