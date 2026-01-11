@@ -20,19 +20,47 @@ class N8NExecutor:
         """Execute n8n workflow."""
         nodes = workflow.get("nodes", [])
         connections = workflow.get("connections", {})
+        triggers = workflow.get("triggers", [])
         
         if not nodes:
             logger.warning("No nodes in workflow")
             return
         
-        # Build execution order from connections
-        execution_order = build_execution_order(nodes, connections)
+        # Find enabled manual trigger (if any)
+        start_node_id = self._get_start_node_from_triggers(triggers)
+        
+        # Build execution order from connections (optionally starting from trigger node)
+        execution_order = build_execution_order(nodes, connections, start_node_id)
         
         # Execute nodes in order
         for node_name in execution_order:
             node = self._find_node_by_name(nodes, node_name)
             if node:
                 self._execute_node(node)
+    
+    def _get_start_node_from_triggers(self, triggers: List[Dict]) -> str | None:
+        """Get start node ID from enabled manual triggers.
+        
+        Args:
+            triggers: List of trigger definitions
+            
+        Returns:
+            Node ID to start from, or None if no suitable trigger found
+        """
+        if not triggers:
+            return None
+        
+        # Find first enabled manual trigger
+        for trigger in triggers:
+            if trigger.get("kind") == "manual" and trigger.get("enabled", True):
+                return trigger.get("nodeId")
+        
+        # If no manual trigger, use first enabled trigger of any kind
+        for trigger in triggers:
+            if trigger.get("enabled", True):
+                return trigger.get("nodeId")
+        
+        return None
     
     def _find_node_by_name(self, nodes: List[Dict], name: str) -> Dict | None:
         """Find node by name."""
