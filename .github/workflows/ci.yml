@@ -36,15 +36,15 @@ jobs:
         run: poetry run validate-workflows
 
       - name: Static analysis
-        run: poetry run python -m compileall src
+        run: poetry run python -m compileall backend
 
       - name: Lint (errors only)
         run: |
           python -m pip install pylint
-          poetry run pylint --errors-only src/autometabuilder
+          poetry run pylint --errors-only backend/autometabuilder
 
       - name: Unit tests
-        run: PYTHONPATH=src poetry run pytest tests/test_main.py tests/test_metadata.py tests/test_roadmap.py
+        run: PYTHONPATH=backend poetry run pytest backend/tests/test_main.py backend/tests/test_metadata.py backend/tests/test_roadmap.py
 
       - name: UI tests
-        run: PYTHONPATH=src poetry run pytest tests/ui
+        run: PYTHONPATH=backend poetry run pytest backend/tests/ui
