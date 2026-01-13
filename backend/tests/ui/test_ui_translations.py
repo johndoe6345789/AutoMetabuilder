@@ -1,6 +1,6 @@
 from playwright.sync_api import Page, expect
 
-from autometabuilder.metadata_loader import load_metadata
+from autometabuilder.utils import load_metadata
 from .helpers import wait_for_nav
 
 
