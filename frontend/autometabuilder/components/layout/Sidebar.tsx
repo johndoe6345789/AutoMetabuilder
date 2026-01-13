@@ -11,7 +11,7 @@ type SidebarProps = {
 export default function Sidebar({ items, selected, onSelect, t }: SidebarProps) {
   return (
     <Drawer variant="permanent" anchor="left" sx={{ width: 220, flexShrink: 0 }}>
-      <Box sx={{ height: "100%", backgroundColor: "var(--color-sidebar-bg)" }}>
+      <Box sx={{ height: "100%", backgroundColor: "var(--color-sidebar-bg)", display: "flex", flexDirection: "column" }}>
         <Box sx={{ px: 3, py: 2 }}>
           <Typography variant="overline" color="text.secondary">
             {t("ui.app.name", "AutoMetabuilder")}
@@ -33,6 +33,9 @@ export default function Sidebar({ items, selected, onSelect, t }: SidebarProps) 
             </ListItemButton>
           ))}
         </List>
+        <Box className="amb-sidebar-footer" sx={{ mt: "auto", px: 3, py: 2, color: "var(--color-text-muted-strong)" }}>
+          testuser
+        </Box>
       </Box>
     </Drawer>
   );

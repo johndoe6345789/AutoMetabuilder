@@ -5,9 +5,10 @@ type PromptSectionProps = {
   content: string;
   onSave: (content: string) => Promise<void>;
   t: (key: string, fallback?: string) => string;
+  active: boolean;
 };
 
-export default function PromptSection({ content, onSave, t }: PromptSectionProps) {
+export default function PromptSection({ content, onSave, t, active }: PromptSectionProps) {
   const [draft, setDraft] = useState(content);
   const [message, setMessage] = useState("");
 
@@ -22,7 +23,11 @@ export default function PromptSection({ content, onSave, t }: PromptSectionProps
   };
 
   return (
-    <Paper id="prompt" sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)" }}>
+    <Paper
+      id="prompt"
+      className={active ? "active" : ""}
+      sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)", display: active ? "block" : "none" }}
+    >
       <Typography variant="h5" gutterBottom>
         {t("ui.prompt.title", "Prompt Builder")}
       </Typography>

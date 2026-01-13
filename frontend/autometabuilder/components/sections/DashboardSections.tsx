@@ -31,19 +31,18 @@ export default function DashboardSections({
 }: DashboardSectionsProps) {
   return (
     <>
-      {section === "dashboard" && <DashboardSection logs={context.logs} status={context.status} onRun={onRun} t={t} />}
-      {section === "workflow" && (
-        <WorkflowSection
-          content={context.workflow_content}
-          packages={context.workflow_packages}
-          onSave={onWorkflowSave}
-          onTemplateSelect={onTemplateSelect}
-          t={t}
-        />
-      )}
-      {section === "prompt" && <PromptSection content={context.prompt_content} onSave={onPromptSave} t={t} />}
-      {section === "settings" && <SettingsSection envVars={context.env_vars} onSave={onSettingsSave} t={t} />}
-      {section === "translations" && <TranslationsSection languages={context.translations} onRefresh={onTranslationsRefresh} t={t} />}
+      <DashboardSection logs={context.logs} status={context.status} onRun={onRun} t={t} active={section === "dashboard"} />
+      <WorkflowSection
+        content={context.workflow_content}
+        packages={context.workflow_packages}
+        onSave={onWorkflowSave}
+        onTemplateSelect={onTemplateSelect}
+        t={t}
+        active={section === "workflow"}
+      />
+      <PromptSection content={context.prompt_content} onSave={onPromptSave} t={t} active={section === "prompt"} />
+      <SettingsSection envVars={context.env_vars} onSave={onSettingsSave} t={t} active={section === "settings"} />
+      <TranslationsSection languages={context.translations} onRefresh={onTranslationsRefresh} t={t} active={section === "translations"} />
     </>
   );
 }

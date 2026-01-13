@@ -19,17 +19,22 @@ type DashboardSectionProps = {
   logs: string;
   onRun: (payload: DashboardRunPayload) => Promise<void>;
   t: (key: string, fallback?: string) => string;
+  active: boolean;
 };
 
-export default function DashboardSection({ status, logs, onRun, t }: DashboardSectionProps) {
+export default function DashboardSection({ status, logs, onRun, t, active }: DashboardSectionProps) {
   const { mode, setMode, iterations, setIterations, stopAtMvp, setStopAtMvp, feedback, handleRun } = useDashboardControls({
     onRun,
     t,
   });
 
   return (
-    <Paper id="dashboard" sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)" }}>
-      <Typography variant="h5" gutterBottom>
+    <Paper
+      id="dashboard"
+      className={active ? "active" : ""}
+      sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)", display: active ? "block" : "none" }}
+    >
+      <Typography variant="h5" component="h1" gutterBottom>
         {t("ui.dashboard.title", "Dashboard")}
       </Typography>
       <Typography variant="body2" color="text.secondary" gutterBottom>
@@ -73,10 +78,11 @@ export default function DashboardSection({ status, logs, onRun, t }: DashboardSe
             onClick={handleRun}
             disabled={status.is_running}
             sx={{ mt: 2 }}
+            id="run-btn"
           >
             {t("ui.dashboard.start_bot", "Start Bot")}
           </Button>
-          <Typography variant="caption" color="text.secondary" display="block" mt={1}>
+          <Typography variant="caption" color="text.secondary" display="block" mt={1} id="status-indicator">
             {status.is_running ? t("ui.dashboard.status.running", "Running") : t("ui.dashboard.status.idle", "Idle")} •
             {" "}
             {status.mvp_reached ? t("ui.dashboard.status.mvp_reached", "Reached") : t("ui.dashboard.status.mvp_progress", "In Progress")}

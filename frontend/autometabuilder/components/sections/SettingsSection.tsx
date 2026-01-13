@@ -5,9 +5,10 @@ type SettingsSectionProps = {
   envVars: Record<string, string>;
   onSave: (values: Record<string, string>) => Promise<void>;
   t: (key: string, fallback?: string) => string;
+  active: boolean;
 };
 
-export default function SettingsSection({ envVars, onSave, t }: SettingsSectionProps) {
+export default function SettingsSection({ envVars, onSave, t, active }: SettingsSectionProps) {
   const [values, setValues] = useState<Record<string, string>>(envVars);
   const [newKey, setNewKey] = useState("");
   const [newValue, setNewValue] = useState("");
@@ -35,7 +36,11 @@ export default function SettingsSection({ envVars, onSave, t }: SettingsSectionP
   };
 
   return (
-    <Paper id="settings" sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)" }}>
+    <Paper
+      id="settings"
+      className={active ? "active" : ""}
+      sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)", display: active ? "block" : "none" }}
+    >
       <Typography variant="h5" gutterBottom>
         {t("ui.settings.title", "Settings")}
       </Typography>
