@@ -18,6 +18,7 @@ flask = "^2.3.3"
 slack-sdk = "^3.39.0"
 discord-py = "^2.6.4"
 jsonschema = "^4.10.3"
+asgiref = "^3.7.0"
 
 [build-system]
 requires = ["poetry-core"]
