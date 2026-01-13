@@ -30,5 +30,6 @@ validate-workflows = "autometabuilder.tools.validate_workflows:main"
 [dependency-groups]
 dev = [
     "playwright (>=1.57.0,<2.0.0)",
-    "pytest-playwright (>=0.7.2,<0.8.0)"
+    "pytest-playwright (>=0.7.2,<0.8.0)",
+    "uvicorn (>=0.27.0,<1.0.0)"
 ]
