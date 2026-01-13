@@ -153,17 +153,20 @@ def create_app():
                 app.register_blueprint(navigation_bp)
             
             # Serve static files
+            from pathlib import Path
+            frontend_dist = Path(__file__).resolve().parent.parent.parent.parent / 'frontend' / 'dist'
+            
             @app.route('/')
             def index():
-                return send_from_directory('/home/runner/work/AutoMetabuilder/AutoMetabuilder/frontend/dist', 'index.html')
+                return send_from_directory(frontend_dist, 'index.html')
             
             @app.route('/<path:path>')
             def serve_static(path):
                 try:
-                    return send_from_directory('/home/runner/work/AutoMetabuilder/AutoMetabuilder/frontend/dist', path)
-                except:
+                    return send_from_directory(frontend_dist, path)
+                except (FileNotFoundError, OSError):
                     # Fallback to index.html for SPA routing
-                    return send_from_directory('/home/runner/work/AutoMetabuilder/AutoMetabuilder/frontend/dist', 'index.html')
+                    return send_from_directory(frontend_dist, 'index.html')
         
         except Exception as e:
             logger.error(f"Failed to register routes: {e}")
