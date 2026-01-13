@@ -5,9 +5,10 @@ type TranslationsSectionProps = {
   languages: Record<string, string>;
   onRefresh: () => void;
   t: (key: string, fallback?: string) => string;
+  active: boolean;
 };
 
-export default function TranslationsSection({ languages, onRefresh, t }: TranslationsSectionProps) {
+export default function TranslationsSection({ languages, onRefresh, t, active }: TranslationsSectionProps) {
   const {
     selected,
     editorValue,
@@ -23,7 +24,11 @@ export default function TranslationsSection({ languages, onRefresh, t }: Transla
   } = useTranslationManager({ languages, onRefresh, t });
 
   return (
-    <Paper id="translations" sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)" }}>
+    <Paper
+      id="translations"
+      className={active ? "active" : ""}
+      sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)", display: active ? "block" : "none" }}
+    >
       <Typography variant="h5" gutterBottom>
         {t("ui.translations.title", "Translations")}
       </Typography>

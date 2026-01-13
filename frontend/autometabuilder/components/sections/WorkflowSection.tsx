@@ -10,9 +10,10 @@ type WorkflowSectionProps = {
   onSave: (content: string) => Promise<void>;
   onTemplateSelect: (id: string) => void;
   t: (key: string, fallback?: string) => string;
+  active: boolean;
 };
 
-export default function WorkflowSection({ content, packages, onSave, onTemplateSelect, t }: WorkflowSectionProps) {
+export default function WorkflowSection({ content, packages, onSave, onTemplateSelect, t, active }: WorkflowSectionProps) {
   const [draft, setDraft] = useState(content);
   const [message, setMessage] = useState("");
 
@@ -27,7 +28,11 @@ export default function WorkflowSection({ content, packages, onSave, onTemplateS
   };
 
   return (
-    <Paper id="workflow" sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)" }}>
+    <Paper
+      id="workflow"
+      className={active ? "active" : ""}
+      sx={{ p: 3, mb: 3, backgroundColor: "var(--color-panel-bg)", display: active ? "block" : "none" }}
+    >
       <Typography variant="h5" gutterBottom>
         {t("ui.workflow.title", "Workflow Builder")}
       </Typography>
