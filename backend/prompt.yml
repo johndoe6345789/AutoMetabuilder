@@ -1,8 +1,0 @@
-messages:
-  - role: system
-    content: >-
-      Test system prompt
-  - role: user
-    content: >-
-      Test user prompt
-model: openai/gpt-4o
