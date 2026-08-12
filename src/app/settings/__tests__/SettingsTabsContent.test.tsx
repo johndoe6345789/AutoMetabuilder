@@ -28,7 +28,7 @@ const baseProps = {
   setAutoSave: jest.fn(),
   defaultExecutor: 'typescript',
   setDefaultExecutor: jest.fn(),
-  workflowTimeout: 300,
+  workflowTimeout: '300',
   setWorkflowTimeout: jest.fn(),
   onDeleteClick: jest.fn(),
   onSave: jest.fn(),

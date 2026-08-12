@@ -33,8 +33,8 @@ const { setZoom, zoomIn, zoomOut, resetZoom, setPan, panBy, resetPan } = editorS
 describe('useEditorZoom', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useDispatch as jest.Mock).mockReturnValue(mockDispatch)
-    ;(useSelector as jest.Mock).mockReturnValue(1.5)
+    ;(useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch)
+    ;(useSelector as unknown as jest.Mock).mockReturnValue(1.5)
   })
 
   it('should return zoom value from selector', () => {
@@ -78,8 +78,8 @@ describe('useEditorZoom', () => {
 describe('useEditorPan', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useDispatch as jest.Mock).mockReturnValue(mockDispatch)
-    ;(useSelector as jest.Mock).mockReturnValue({ x: 10, y: 20 })
+    ;(useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch)
+    ;(useSelector as unknown as jest.Mock).mockReturnValue({ x: 10, y: 20 })
   })
 
   it('should return pan value from selector', () => {

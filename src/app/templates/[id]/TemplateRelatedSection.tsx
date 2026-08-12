@@ -7,7 +7,8 @@
 import React from 'react';
 import { Box, Typography } from '@metabuilder/m3';
 import { TemplateCard } from '@metabuilder/components/cards';
-import type { ProjectTemplate } from '@metabuilder/types';
+import type { ProjectTemplate } from '@/types/template';
+import { toSharedTemplate } from '@/utils/templateAdapter';
 import styles from '@scss/atoms/template-detail.module.scss';
 
 interface TemplateRelatedSectionProps {
@@ -22,7 +23,10 @@ export default function TemplateRelatedSection({
       <Typography variant="h5">Related Templates</Typography>
       <Box className={styles.relatedGrid}>
         {relatedTemplates.map((related) => (
-          <TemplateCard key={related.id} template={related} />
+          <TemplateCard
+            key={related.id}
+            template={toSharedTemplate(related)}
+          />
         ))}
       </Box>
     </Box>

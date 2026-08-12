@@ -23,7 +23,8 @@ export default function HelpGettingStarted() {
           <Typography
             variant="body2"
             color="text.secondary"
-            paragraph
+            as="p"
+            gutterBottom
           >
             New to MetaBuilder? Follow these steps:
           </Typography>

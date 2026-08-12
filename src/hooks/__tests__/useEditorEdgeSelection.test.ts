@@ -31,8 +31,8 @@ const mockDispatch = jest.fn()
 const actions = editorSlice.actions
 
 function setupMocks(overrides: any = {}) {
-  ;(useDispatch as jest.Mock).mockReturnValue(mockDispatch)
-  ;(useSelector as jest.Mock).mockImplementation((selector: any) => {
+  ;(useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch)
+  ;(useSelector as unknown as jest.Mock).mockImplementation((selector: any) => {
     const storeState = {
       editor: {
         selectedEdges: new Set<string>(),

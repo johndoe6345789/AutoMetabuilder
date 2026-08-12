@@ -10,7 +10,7 @@ import {
   NodePalette,
   PropertiesDialog,
 } from '@metabuilder/components/workflow-editor';
-import type { WorkflowNode } from '@metabuilder/hooks';
+import type { WorkflowNode } from '@metabuilder/hooks/workflow-editor';
 
 interface EditorPanelsProps {
   nodeSearch: string;

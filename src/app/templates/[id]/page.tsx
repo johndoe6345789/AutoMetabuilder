@@ -7,6 +7,7 @@ import {
   Breadcrumbs, Tabs, Tab, Box,
 } from '@metabuilder/m3';
 import { TemplateHeader } from '@metabuilder/components/layout';
+import { toSharedTemplate } from '@/utils/templateAdapter';
 import styles from '@scss/atoms/template-detail.module.scss';
 import { useTemplateDetail } from './hooks/useTemplateDetail';
 import CreateProjectDialog from './CreateProjectDialog';
@@ -35,7 +36,7 @@ export default function TemplateDetailPage() {
             href: `/templates/${template.id}` },
         ]}
       />
-      <TemplateHeader template={template} />
+      <TemplateHeader template={toSharedTemplate(template)} />
       <Box component="nav" className={styles.tabs}>
         <Tabs value={0}>
           <Tab label="Overview" />

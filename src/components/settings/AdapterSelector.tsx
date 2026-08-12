@@ -12,6 +12,7 @@ import {
   MenuItem,
 } from '@metabuilder/m3';
 import DB_CONFIG from './database-config.json';
+import { singleValue } from '@/utils/selectValue';
 
 interface AdapterSelectorProps {
   selectedAdapter: string;
@@ -30,7 +31,7 @@ export default function AdapterSelector({
       <Select
         fullWidth
         value={selectedAdapter}
-        onChange={(e) => onAdapterChange(e.target.value)}
+        onChange={(e) => onAdapterChange(singleValue(e.target.value))}
         data-testid="adapter-select"
       >
         {DB_CONFIG.adapters.map((a) => (

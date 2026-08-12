@@ -6,7 +6,7 @@
 
 import { DragEvent, RefObject } from 'react';
 import type { NodeType } from '@metabuilder/components/workflow-editor';
-import type { WorkflowNode, WorkflowConnection } from '@metabuilder/hooks';
+import type { WorkflowNode, Connection as WorkflowConnection } from '@metabuilder/hooks/workflow-editor';
 import type { DrawingConnection } from './useDrawingConnection';
 
 interface EditorCanvasPropsInput {

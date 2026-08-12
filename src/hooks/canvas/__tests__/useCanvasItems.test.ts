@@ -54,9 +54,9 @@ function setupMocks({
   error = null as string | null,
   isResizing = false,
 } = {}) {
-  ;(useDispatch as jest.Mock).mockReturnValue(mockDispatch)
+  ;(useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch)
   ;(useUI as jest.Mock).mockReturnValue({ error: mockShowError, success: mockShowSuccess })
-  ;(useSelector as jest.Mock).mockImplementation((selector: any) => {
+  ;(useSelector as unknown as jest.Mock).mockImplementation((selector: any) => {
     if (selector.name === 'selectCurrentProjectId' || selector === require('@metabuilder/redux-slices').selectCurrentProjectId) return projectId
     if (selector === require('@metabuilder/redux-slices').selectCanvasItems) return canvasItems
     if (selector === require('@metabuilder/redux-slices').selectProjectIsLoading) return isLoading

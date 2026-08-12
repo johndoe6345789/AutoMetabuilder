@@ -14,6 +14,7 @@ import {
   Divider,
 } from '@metabuilder/m3';
 import PREFS from './settings-options.json';
+import { singleValue } from '@/utils/selectValue';
 
 interface WorkflowExecutorSettingsProps {
   defaultExecutor: string;
@@ -38,7 +39,7 @@ export default function WorkflowExecutorSettings({
         <Select
           fullWidth
           value={defaultExecutor}
-          onChange={(e) => setDefaultExecutor(e.target.value)}
+          onChange={(e) => setDefaultExecutor(singleValue(e.target.value))}
           data-testid="default-executor-select"
         >
           {PREFS.executors.map((ex) => (
@@ -61,7 +62,8 @@ export default function WorkflowExecutorSettings({
           value={workflowTimeout}
           onChange={(e) => setWorkflowTimeout(e.target.value)}
           helperText="Maximum execution time for workflows"
-          inputProps={{ min: 30, max: 3600 }}
+          min={30}
+          max={3600}
           data-testid="workflow-timeout-input"
         />
       </Box>

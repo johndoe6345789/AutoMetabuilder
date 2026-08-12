@@ -14,14 +14,8 @@ import {
   type NodeType,
   ConnectionLine,
 } from '@metabuilder/components/workflow-editor';
-import type { WorkflowNode, WorkflowConnection } from '@metabuilder/hooks';
-
-interface DrawingConnection {
-  startNodeId: string;
-  startPort: string;
-  startPosition: { x: number; y: number };
-  currentPosition: { x: number; y: number };
-}
+import type { WorkflowNode, Connection as WorkflowConnection } from '@metabuilder/hooks/workflow-editor';
+import type { DrawingConnection } from './hooks/useDrawingConnection';
 
 interface EditorConnectionLayerProps {
   connections: WorkflowConnection[];

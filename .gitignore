@@ -30,26 +30,22 @@ yarn-error.log*
 .env.production.local
 
 # Python
+#
+# Interpreter droppings only. The setuptools packaging rules that used to sit
+# here (var/, eggs/, sdist/, wheels/, parts/, /lib/, *.egg-info, ...) came from
+# the stock Python template and outlived the packaged backend that needed them.
+# They were not harmless: "var/" carries no slash, so git matched it at every
+# depth and silently dropped workflow-lib/plugins/{cpp,go,python,rust,ts}/var -
+# the var.* workflow plugin - from every commit. Nothing here builds a Python
+# distribution any more, so the rules are gone rather than anchored.
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
-.Python
+
+# Build output (JavaScript; emitted at many depths, so deliberately unanchored)
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-/lib/
-/lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
 
 # Virtual environment
 venv/
@@ -78,3 +74,6 @@ Thumbs.db
 # Cache
 .cache/
 .eslintcache
+
+# TypeScript incremental build info
+*.tsbuildinfo

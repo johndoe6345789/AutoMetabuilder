@@ -41,7 +41,7 @@ export default function AchievementUnlockedCard({
         <LinearProgress
           variant="determinate"
           value={(unlockedCount / totalCount) * 100}
-          sx={{ height: 8, borderRadius: 4 }}
+          style={{ height: 8, borderRadius: 4 }}
         />
       </CardContent>
     </Card>

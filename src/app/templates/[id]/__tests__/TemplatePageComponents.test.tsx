@@ -34,14 +34,33 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import TemplateRelatedSection from '../TemplateRelatedSection';
 import TemplateMainContent from '../TemplateMainContent';
+import type { ProjectTemplate } from '@/types/template';
 
-const makeTemplate = (overrides: Record<string, any> = {}) => ({
+const threeWorkflows: ProjectTemplate['workflows'] = [1, 2, 3].map((n) => ({
+  name: `Workflow ${n}`,
+  description: `Workflow ${n} description`,
+  nodes: [],
+}));
+
+const makeTemplate = (
+  overrides: Partial<ProjectTemplate> = {}
+): ProjectTemplate => ({
   id: 'tpl-1',
   name: 'My Template',
   description: 'A template',
   longDescription: 'A longer description',
+  category: 'automation',
+  icon: 'bolt',
+  color: 'var(--mat-sys-primary)',
+  difficulty: 'beginner',
   workflows: [],
   tags: ['tag1', 'tag2'],
+  metadata: {
+    author: 'Test Author',
+    version: '1.0.0',
+    createdAt: 0,
+    updatedAt: 0,
+  },
   ...overrides,
 });
 
@@ -141,7 +160,7 @@ describe('TemplateMainContent', () => {
   it('renders workflows list via TemplateWorkflowsList', () => {
     render(
       <TemplateMainContent
-        template={makeTemplate({ workflows: [1, 2, 3] })}
+        template={makeTemplate({ workflows: threeWorkflows })}
         relatedTemplates={[]}
         onCreateProject={jest.fn()}
       />

@@ -26,7 +26,8 @@ export default function RecentWorkflowMeta({
       sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
     >
       <AccessTime
-        sx={{ fontSize: 16, color: 'text.secondary' }}
+        size={16}
+        color="var(--mat-sys-on-surface-variant)"
       />
       <Typography variant="caption" color="text.secondary">
         Updated {formatTimeAgo(updatedAt)}

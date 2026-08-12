@@ -53,19 +53,33 @@ export interface ProjectTemplate {
 /**
  * Template Category - classification for templates
  */
-export type TemplateCategory =
-  | 'automation'
-  | 'data-processing'
-  | 'integration'
-  | 'monitoring'
-  | 'reporting'
-  | 'communication'
-  | 'content'
-  | 'ecommerce'
-  | 'finance'
-  | 'crm'
-  | 'hr'
-  | 'custom';
+/**
+ * Declared as values, not just a union, so the category emitted by the shared
+ * TemplateSidebar - typed `TemplateCategory | string` on that side - can be
+ * checked at runtime instead of asserted.
+ */
+export const TEMPLATE_CATEGORIES = [
+  'automation',
+  'data-processing',
+  'integration',
+  'monitoring',
+  'reporting',
+  'communication',
+  'content',
+  'ecommerce',
+  'finance',
+  'crm',
+  'hr',
+  'custom',
+] as const;
+
+export type TemplateCategory = (typeof TEMPLATE_CATEGORIES)[number];
+
+export function isTemplateCategory(
+  value: string
+): value is TemplateCategory {
+  return (TEMPLATE_CATEGORIES as readonly string[]).includes(value);
+}
 
 /**
  * Template Filter Options

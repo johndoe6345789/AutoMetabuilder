@@ -6,6 +6,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { renderHook, act } from '@testing-library/react';
 
+import type { Achievement } from '../hooks/useAchievements';
 import AchievementCardHeader from '../AchievementCardHeader';
 import AchievementProgress from '../AchievementProgress';
 import AchievementLevelCard from '../AchievementLevelCard';
@@ -176,9 +177,20 @@ describe('AchievementStatsCards', () => {
 
 // ── RecentUnlocked ───────────────────────────────────────────────────────────
 describe('RecentUnlocked', () => {
-  const achievements = [
-    { id: 'a1', title: 'First Steps', icon: '🏆', points: 100, category: 'General', unlockedAt: 1700000000 },
-    { id: 'a2', title: 'Speedster', icon: '⚡', points: 200, category: 'Speed', unlockedAt: 1700100000 },
+  // unlockedAt is an ISO string on Achievement, not an epoch number.
+  const achievements: Achievement[] = [
+    {
+      id: 'a1', title: 'First Steps', description: 'Got started',
+      icon: '🏆', points: 100, category: 'General',
+      unlocked: true, progress: 1, maxProgress: 1,
+      unlockedAt: '2023-11-14T22:13:20.000Z',
+    },
+    {
+      id: 'a2', title: 'Speedster', description: 'Went fast',
+      icon: '⚡', points: 200, category: 'Speed',
+      unlocked: true, progress: 1, maxProgress: 1,
+      unlockedAt: '2023-11-16T01:20:00.000Z',
+    },
   ];
 
   it('renders nothing when recentUnlocked is empty', () => {

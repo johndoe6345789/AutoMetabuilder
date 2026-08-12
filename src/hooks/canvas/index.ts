@@ -31,4 +31,4 @@ export type { UseProjectCanvasReturn } from './types';
 
 // Composite hook
 export { useProjectCanvas } from './useProjectCanvas';
-export default useProjectCanvas from './useProjectCanvas';
+export { default } from './useProjectCanvas';

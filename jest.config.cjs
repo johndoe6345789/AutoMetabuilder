@@ -23,6 +23,23 @@ const customJestConfig = {
     // Intercept @/../../../../../hooks/* (monorepo hooks with ESM deps)
     '^@/(\\.\\./)+(hooks/.*)$': '<rootDir>/__mocks__/componentsMock.tsx',
 
+    // Sibling repos still import each other by paths from the pre-split
+    // monorepo: hooks/ reaches for '../redux/service-adapters' and several
+    // files for '../redux/redux-slices', but those directories are named
+    // adapters/ and slices/ in the redux repo. Webpack never trips on this
+    // because the barrels it pulls in differ; jest evaluates them eagerly.
+    // Mapped here rather than edited in the other repos.
+    '^(\\.\\./)+redux/service-adapters$': '<rootDir>/../redux/adapters/src/index.ts',
+    '^(\\.\\./)+redux/redux-slices$': '<rootDir>/../redux/slices/src/index.ts',
+
+    // postcss pulls nanoid, whose "browser" condition is ESM-only; jsdom picks
+    // that build and jest cannot parse it. nanoid 3 ships a CJS twin.
+    '^nanoid$': '<rootDir>/node_modules/nanoid/index.browser.cjs',
+
+    // tsconfig maps these at the app level; jest needs its own copy.
+    '^@icons/(.*)$': '<rootDir>/../icons/$1',
+    '^@scss/(.*)$': 'identity-obj-proxy',
+
     // Handle module aliases
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@metabuilder/m3$': '<rootDir>/__mocks__/m3Mock.tsx',
@@ -65,12 +82,26 @@ const customJestConfig = {
     '/coverage/',
     '/public/',
   ],
+  // Sibling repos are imported by relative path, so their files sit outside
+  // this project and Jest's upward node_modules walk never reaches ours - the
+  // same gap webpack needs resolve.modules for. Without this, every suite that
+  // renders an m3 component dies on "Cannot find module 'react/jsx-runtime'".
+  moduleDirectories: ['node_modules', '<rootDir>/node_modules'],
   testPathIgnorePatterns: [
     '/node_modules/',
     '/.next/',
+    // @metabuilder/workflow is a separate package with its own CI job; its
+    // suites are not configured to run under this app's jest setup.
+    '/workflow-lib/',
+    // Playwright and vitest suites - different runners, not jest's to collect.
+    '/playwright/',
+    '/test-server/',
+    '/workflow_editor/',
   ],
+  // nanoid, uuid and lodash-es ship ESM only; without transforming them Jest
+  // fails to parse their entry points ("Unexpected token 'export'").
   transformIgnorePatterns: [
-    '/node_modules/(?!(@metabuilder)/)',
+    '/node_modules/(?!(@metabuilder|nanoid|uuid|lodash-es)/)',
   ],
 }
 

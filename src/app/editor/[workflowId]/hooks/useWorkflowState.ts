@@ -13,6 +13,27 @@ import {
   buildSavePayload,
 } from './workflowStateUtils';
 
+/**
+ * The shape this editor needs from a persisted workflow. useWorkflows().getWorkflow
+ * is typed Promise<unknown | null> because the storage backend is pluggable, so the
+ * record is narrowed here rather than cast - a bad record then skips the load
+ * instead of populating the editor with undefined fields.
+ */
+interface StoredWorkflow {
+  id: string;
+  name: string;
+  description?: string;
+  nodes?: Workflow['nodes'];
+  createdAt: string | number | Date;
+  updatedAt: string | number | Date;
+}
+
+function isStoredWorkflow(value: unknown): value is StoredWorkflow {
+  if (typeof value !== 'object' || value === null) return false;
+  const record = value as Record<string, unknown>;
+  return typeof record.id === 'string' && typeof record.name === 'string';
+}
+
 export function useWorkflowState() {
   const router = useRouter();
   const params = useParams();
@@ -37,7 +58,7 @@ export function useWorkflowState() {
   const loadWorkflowData = async () => {
     if (!workflowId || workflowId === 'new') return;
     const data = await getWorkflow(workflowId);
-    if (data) {
+    if (isStoredWorkflow(data)) {
       setWorkflow({
         id: data.id,
         name: data.name,
@@ -56,7 +77,7 @@ export function useWorkflowState() {
       await updateWorkflow(workflowId, payload);
     } else {
       const created = await createWorkflow(payload);
-      if (created) router.push(`/editor/${created.id}`);
+      if (isStoredWorkflow(created)) router.push(`/editor/${created.id}`);
     }
   };
 

@@ -63,11 +63,19 @@ export interface WorkflowConnection {
 }
 
 /**
+ * Lifecycle state of a stored workflow, as shown on cards and list rows.
+ * Distinct from the per-run ExecutionResult.status further down this file.
+ */
+export type WorkflowStatus = 'draft' | 'active' | 'paused' | 'archived';
+
+/**
  * Complete workflow definition
  */
 export interface Workflow {
   id: string;
   name: string;
+  /** Absent on workflows created before the field existed; treat as 'draft'. */
+  status?: WorkflowStatus;
   description?: string;
   version: string;
   tenantId: string;

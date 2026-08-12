@@ -58,7 +58,7 @@ export default function HelpFAQSection({
             <Typography
               variant="body2"
               color="text.secondary"
-              textAlign="center"
+              align="center"
             >
               No results found for &quot;{searchQuery}&quot;.
               Try a different search term.

@@ -6,13 +6,9 @@
 
 import React from 'react';
 import styles from '@scss/atoms/workspace.module.scss';
+import type { Project } from '@metabuilder/types';
 import WorkspaceCreateProjectForm from './WorkspaceCreateProjectForm';
 import WorkspaceProjectsGrid from './WorkspaceProjectsGrid';
-
-interface Project {
-  id: string;
-  [key: string]: unknown;
-}
 
 interface WorkspaceProjectsBodyProps {
   starredProjects: Project[];
@@ -20,7 +16,7 @@ interface WorkspaceProjectsBodyProps {
   showCreateForm: boolean;
   newProjectName: string;
   setNewProjectName: (v: string) => void;
-  onSubmitCreate: () => void;
+  onSubmitCreate: (e: React.FormEvent) => void;
   onCancelCreate: () => void;
 }
 

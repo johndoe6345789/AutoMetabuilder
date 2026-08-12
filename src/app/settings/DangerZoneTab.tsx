@@ -27,7 +27,7 @@ export default function DangerZoneTab({
     <Card data-testid="danger-zone-card">
       <CardHeader
         title="Danger Zone"
-        sx={{
+        style={{
           backgroundColor: 'var(--mat-sys-error-container)',
         }}
       />
@@ -35,7 +35,7 @@ export default function DangerZoneTab({
         <Alert
           severity="warning"
           icon={<WarningIcon />}
-          sx={{ mb: 3 }}
+          style={{ marginBottom: 24 }}
         >
           Actions here cannot be undone. Proceed with caution.
         </Alert>

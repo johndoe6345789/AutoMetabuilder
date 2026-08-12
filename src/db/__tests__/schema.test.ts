@@ -24,6 +24,15 @@ function createMockTable() {
   return tableObj
 }
 
+/**
+ * The mocked tables are flat objects whose query methods all return `this`, so
+ * collection-level methods such as first() are callable on the table itself.
+ * Dexie's Table type does not declare them, hence this accessor.
+ */
+function asMockTable(table: unknown) {
+  return table as ReturnType<typeof createMockTable>
+}
+
 jest.mock('dexie', () => {
   class MockDexie {
     workflows = createMockTable()
@@ -426,7 +435,7 @@ describe('projectCanvasItemDB', () => {
 
   it('getByWorkflow returns item for project+workflow', async () => {
     const result = await projectCanvasItemDB.getByWorkflow('proj-1', 'wf-1')
-    expect(db.projectCanvasItems.first).toHaveBeenCalled()
+    expect(asMockTable(db.projectCanvasItems).first).toHaveBeenCalled()
   })
 
   it('deleteByProject removes all items for project', async () => {

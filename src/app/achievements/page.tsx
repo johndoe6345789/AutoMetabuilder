@@ -56,7 +56,7 @@ export default function AchievementsPage() {
       />
 
       <RecentUnlocked
-        recentUnlocked={recentUnlocked as any}
+        recentUnlocked={recentUnlocked}
         formatDate={formatDate}
       />
 

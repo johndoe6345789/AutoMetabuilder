@@ -11,14 +11,11 @@ import {
   TemplateListItem,
 } from '@metabuilder/components/cards';
 import styles from '@scss/atoms/templates.module.scss';
-
-interface Template {
-  id: string;
-  [key: string]: unknown;
-}
+import type { ProjectTemplate } from '@/types/template';
+import { toSharedTemplate } from '@/utils/templateAdapter';
 
 interface TemplatesContentProps {
-  filteredTemplates: Template[];
+  filteredTemplates: ProjectTemplate[];
   allTemplatesCount: number;
   viewMode: string;
   onResetFilters: () => void;
@@ -76,7 +73,7 @@ export default function TemplatesContent({
               {filteredTemplates.map((template) => (
                 <TemplateCard
                   key={template.id}
-                  template={template}
+                  template={toSharedTemplate(template)}
                 />
               ))}
             </Box>
@@ -86,7 +83,7 @@ export default function TemplatesContent({
               {filteredTemplates.map((template) => (
                 <TemplateListItem
                   key={template.id}
-                  template={template}
+                  template={toSharedTemplate(template)}
                 />
               ))}
             </Box>

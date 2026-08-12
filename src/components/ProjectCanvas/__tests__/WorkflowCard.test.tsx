@@ -46,11 +46,15 @@ function setupMocks() {
 
 const defaultItem = {
   id: 'item-1',
+  projectId: 'proj-1',
+  workflowId: 'wf-1',
   position: { x: 100, y: 200 },
   size: { width: 300, height: 200 },
   color: '#ff0000',
   zIndex: 1,
   minimized: false,
+  createdAt: 0,
+  updatedAt: 0,
 }
 
 const defaultWorkflow = {

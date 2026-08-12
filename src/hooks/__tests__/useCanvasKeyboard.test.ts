@@ -20,8 +20,8 @@ import { useCanvasKeyboard } from '../useCanvasKeyboard'
 const mockDispatch = jest.fn()
 
 function setupMocks(selectedIds = new Set<string>()) {
-  ;(useDispatch as jest.Mock).mockReturnValue(mockDispatch)
-  ;(useSelector as jest.Mock).mockReturnValue(selectedIds)
+  ;(useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch)
+  ;(useSelector as unknown as jest.Mock).mockReturnValue(selectedIds)
 }
 
 function fireKeydown(key: string, extra: Partial<KeyboardEventInit> = {}) {

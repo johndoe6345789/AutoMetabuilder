@@ -1,7 +1,12 @@
 /** toolbarHandlers - Async handlers for ExecutionToolbar */
 
 type ValidateFn = () => Promise<{ valid: boolean }>;
-type ExecuteFn = (id: string) => Promise<void>;
+/**
+ * The executor resolves with an ExecutionResult; doExecute only awaits it, so
+ * the return is left unknown rather than void - Promise<T> is not assignable to
+ * Promise<void>, and narrowing it here would just push a cast to the caller.
+ */
+type ExecuteFn = (id: string) => Promise<unknown>;
 type SetLoadingFn = (v: boolean) => void;
 type SetMessageFn = (v: string | null) => void;
 

@@ -31,8 +31,10 @@ interface SettingsTabsContentProps {
   setAutoSave: (v: boolean) => void;
   defaultExecutor: string;
   setDefaultExecutor: (v: string) => void;
-  workflowTimeout: number;
-  setWorkflowTimeout: (v: number) => void;
+  // Held as a string end to end: it is bound to a text input, and useSettings
+  // seeds it with '300'. WorkflowsTab and WorkflowExecutorSettings agree.
+  workflowTimeout: string;
+  setWorkflowTimeout: (v: string) => void;
   onDeleteClick: () => void;
   onSave: () => void;
 }

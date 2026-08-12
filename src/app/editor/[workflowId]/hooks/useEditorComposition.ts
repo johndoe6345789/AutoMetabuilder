@@ -7,7 +7,7 @@
 import { DragEvent, RefObject } from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import type { NodeType } from '@metabuilder/components/workflow-editor';
-import type { Workflow } from '@metabuilder/hooks';
+import type { Workflow } from '@metabuilder/hooks/workflow-editor';
 import { useNodeTypes } from '@metabuilder/hooks/workflow-editor';
 import { useCanvasInteraction } from './useCanvasInteraction';
 import { useNodeOperations } from './useNodeOperations';

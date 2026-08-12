@@ -47,9 +47,9 @@ const makeItem = (id = 'item-1') => ({
 })
 
 function setupMocks(projectId = 'proj-1') {
-  ;(useDispatch as jest.Mock).mockReturnValue(mockDispatch)
+  ;(useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch)
   ;(useUI as jest.Mock).mockReturnValue({ error: mockShowError, success: mockShowSuccess })
-  ;(useSelector as jest.Mock).mockReturnValue(projectId)
+  ;(useSelector as unknown as jest.Mock).mockReturnValue(projectId)
 }
 
 describe('useCanvasItemsOperations', () => {

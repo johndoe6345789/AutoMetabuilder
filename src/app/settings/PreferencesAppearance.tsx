@@ -12,6 +12,7 @@ import {
   MenuItem,
 } from '@metabuilder/m3';
 import PREFS from './settings-options.json';
+import { singleValue } from '@/utils/selectValue';
 
 interface PreferencesAppearanceProps {
   theme: string;
@@ -35,7 +36,7 @@ export default function PreferencesAppearance({
         <Select
           fullWidth
           value={theme}
-          onChange={(e) => setTheme(e.target.value)}
+          onChange={(e) => setTheme(singleValue(e.target.value))}
           data-testid="theme-select"
         >
           {PREFS.themes.map((t) => (
@@ -56,7 +57,7 @@ export default function PreferencesAppearance({
         <Select
           fullWidth
           value={language}
-          onChange={(e) => setLanguage(e.target.value)}
+          onChange={(e) => setLanguage(singleValue(e.target.value))}
           data-testid="language-select"
         >
           {PREFS.languages.map((l) => (

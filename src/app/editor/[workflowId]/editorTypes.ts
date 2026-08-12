@@ -9,10 +9,14 @@ import type {
   SetStateAction,
 } from 'react';
 import type { NodeType } from '@metabuilder/components/workflow-editor';
+// Owned by the hook that produces it. This module previously redeclared it with
+// startNodeId/startPort, names nothing at runtime ever set - useNodeConnections
+// reads sourceNodeId/sourceOutput - so the duplicate was silently wrong.
+import type { DrawingConnection } from './hooks/useDrawingConnection';
 import type {
   WorkflowNode,
-  WorkflowConnection,
-} from '@metabuilder/hooks';
+  Connection as WorkflowConnection,
+} from '@metabuilder/hooks/workflow-editor';
 
 export interface UseCanvasPanInput {
   canvasOffset: { x: number; y: number };
@@ -25,12 +29,7 @@ export interface UseCanvasPanInput {
   canvasRef: RefObject<HTMLDivElement>;
 }
 
-export interface DrawingConnection {
-  startNodeId: string;
-  startPort: string;
-  startPosition: { x: number; y: number };
-  currentPosition: { x: number; y: number };
-}
+export type { DrawingConnection };
 
 export interface EditorCanvasAreaProps {
   canvasRef: RefObject<HTMLDivElement>;
@@ -49,12 +48,9 @@ export interface EditorCanvasAreaProps {
   onWheel: (e: React.WheelEvent<HTMLDivElement>) => void;
   onNodeSelect: (id: string) => void;
   onNodeDoubleClick: (id: string) => void;
-  onNodeDragStart: (
-    e: React.MouseEvent,
-    id: string,
-    offsetX: number,
-    offsetY: number
-  ) => void;
+  // useNodeDrag derives the offset from the event itself, and the library's
+  // CanvasNode calls this with two arguments; the offsets were never passed.
+  onNodeDragStart: (e: React.MouseEvent, id: string) => void;
   onConnectionStart: (
     nodeId: string,
     port: string,

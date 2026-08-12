@@ -16,13 +16,13 @@ import { ProjectCanvasItem } from '../../types/project'
 const createMockItems = (count: number): ProjectCanvasItem[] => {
   return Array.from({ length: count }, (_, i) => ({
     id: `item-${i}`,
-    type: 'workflow' as const,
+    projectId: 'proj-1',
     workflowId: `workflow-${i}`,
     position: { x: 0, y: 0 },
-    metadata: {
-      name: `Workflow ${i}`,
-      description: `Test workflow ${i}`,
-    },
+    size: { width: 240, height: 160 },
+    zIndex: i,
+    createdAt: 0,
+    updatedAt: 0,
   }))
 }
 

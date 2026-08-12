@@ -14,6 +14,7 @@ import {
 } from '@metabuilder/m3';
 import { SearchIcon } from '@icons/react';
 import FILTER_OPTIONS from './workflow-filters.json';
+import { singleValue } from '@/utils/selectValue';
 
 interface WorkflowFiltersProps {
   searchQuery: string;
@@ -54,7 +55,7 @@ export default function WorkflowFilters({
         <InputLabel>Status</InputLabel>
         <Select
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
+          onChange={(e) => setStatusFilter(singleValue(e.target.value))}
           label="Status"
         >
           {FILTER_OPTIONS.statuses.map((s) => (
@@ -68,7 +69,7 @@ export default function WorkflowFilters({
         <InputLabel>Category</InputLabel>
         <Select
           value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
+          onChange={(e) => setCategoryFilter(singleValue(e.target.value))}
           label="Category"
         >
           {FILTER_OPTIONS.categories.map((c) => (

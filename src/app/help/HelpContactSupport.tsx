@@ -22,7 +22,8 @@ export default function HelpContactSupport() {
         <Typography
           variant="body2"
           color="text.secondary"
-          paragraph
+          as="p"
+          gutterBottom
         >
           Can&apos;t find what you&apos;re looking for? Our support
           team is here to help.

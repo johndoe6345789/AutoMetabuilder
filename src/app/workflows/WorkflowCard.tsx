@@ -5,7 +5,7 @@
 'use client';
 
 import React from 'react';
-import type { Workflow } from '@metabuilder/hooks';
+import type { Workflow } from '@/types/workflow';
 import styles from '@scss/atoms/dashboard.module.scss';
 import WorkflowCardMedia from './WorkflowCardMedia';
 import WorkflowStatusBadge from './WorkflowStatusBadge';
@@ -23,7 +23,7 @@ export default function WorkflowCard({
   return (
     <article className={styles.card}>
       <WorkflowCardMedia
-        status={workflow.status}
+        status={workflow.status ?? 'draft'}
         icon={workflow.metadata?.labels?.icon}
       />
       <div className={styles.cardContent}>
@@ -38,7 +38,7 @@ export default function WorkflowCard({
           <h3 className={styles.cardTitle}>
             {workflow.name}
           </h3>
-          <WorkflowStatusBadge status={workflow.status} />
+          <WorkflowStatusBadge status={workflow.status ?? 'draft'} />
         </div>
         <p className={styles.cardDescription}>
           {workflow.description || 'No description'}

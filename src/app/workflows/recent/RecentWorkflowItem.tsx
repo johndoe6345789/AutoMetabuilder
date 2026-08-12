@@ -13,7 +13,7 @@ import {
   ListItem,
   Edit,
 } from '@metabuilder/m3';
-import type { Workflow } from '@metabuilder/hooks';
+import type { Workflow } from '@/types/workflow';
 import RecentWorkflowMeta from './RecentWorkflowMeta';
 import RecentWorkflowHeader from './RecentWorkflowHeader';
 
@@ -40,7 +40,7 @@ export default function RecentWorkflowItem({
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <RecentWorkflowHeader
           name={workflow.name}
-          status={workflow.status}
+          status={workflow.status ?? 'draft'}
         />
         <Typography
           variant="body2"

@@ -7,11 +7,7 @@
 import React from 'react';
 import { ProjectCard } from '@metabuilder/components/cards';
 import styles from '@scss/atoms/workspace.module.scss';
-
-interface Project {
-  id: string;
-  [key: string]: unknown;
-}
+import type { Project } from '@metabuilder/types';
 
 interface WorkspaceProjectsGridProps {
   projects: Project[];

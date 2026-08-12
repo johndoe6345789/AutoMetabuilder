@@ -19,19 +19,11 @@ import {
   ListItemText,
 } from '@metabuilder/m3';
 import styles from '@scss/atoms/mat-card.module.scss';
-
-interface Achievement {
-  id: string;
-  title: string;
-  icon: string;
-  points: number;
-  category: string;
-  unlockedAt?: number;
-}
+import type { Achievement } from './hooks/useAchievements';
 
 interface RecentUnlockedProps {
   recentUnlocked: Achievement[];
-  formatDate: (ts: number) => string;
+  formatDate: (dateString: string) => string;
 }
 
 export default function RecentUnlocked({

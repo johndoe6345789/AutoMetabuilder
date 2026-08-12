@@ -4,7 +4,6 @@
 
 import { useState, type MouseEvent } from 'react';
 import type { Workflow } from '@metabuilder/components/workflow-editor';
-import type { DrawingConnection } from './useCanvasInteraction';
 import { useNodeCrud } from './useNodeCrud';
 import { useNodeDragMove } from './useNodeDragMove';
 
@@ -17,8 +16,6 @@ interface NodeDragParams {
   setDraggingNodeId: (id: string | null) => void;
   dragOffset: { x: number; y: number };
   setDragOffset: (offset: { x: number; y: number }) => void;
-  drawingConnection: DrawingConnection | null;
-  setDrawingConnection: (c: DrawingConnection | null) => void;
   canvasRef: React.RefObject<HTMLDivElement>;
 }
 

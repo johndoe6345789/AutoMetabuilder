@@ -31,9 +31,8 @@ export default function DocsToc({
         On This Page
       </Typography>
       {TABLE_OF_CONTENTS.map((item) => (
-        <Box
+        <a
           key={item.id}
-          component="a"
           href={`#${item.id}`}
           className={`${styles.tocLink} ${
             activeTocItem === item.id ? styles.active : ''
@@ -45,7 +44,7 @@ export default function DocsToc({
           data-testid={`toc-${item.id}`}
         >
           {item.title}
-        </Box>
+        </a>
       ))}
     </Box>
   );

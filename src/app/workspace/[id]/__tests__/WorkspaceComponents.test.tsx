@@ -8,6 +8,17 @@ import userEvent from '@testing-library/user-event';
 
 import WorkspaceCreateProjectForm from '../WorkspaceCreateProjectForm';
 import WorkspaceProjectsBody from '../WorkspaceProjectsBody';
+import type { Project } from '@metabuilder/types';
+
+const makeProject = (overrides: Partial<Project>): Project => ({
+  id: 'p',
+  name: 'Project',
+  workspaceId: 'ws-1',
+  tenantId: 'tenant-1',
+  createdAt: 0,
+  updatedAt: 0,
+  ...overrides,
+});
 
 // ── WorkspaceCreateProjectForm ────────────────────────────────────────────────
 describe('WorkspaceCreateProjectForm', () => {
@@ -94,7 +105,7 @@ describe('WorkspaceProjectsBody', () => {
     render(
       <WorkspaceProjectsBody
         {...baseProps}
-        starredProjects={[{ id: 'p1', name: 'Starred' }]}
+        starredProjects={[makeProject({ id: 'p1', name: 'Starred' })]}
       />
     );
     expect(screen.getByText('⭐ Starred Projects')).toBeInTheDocument();
@@ -104,7 +115,7 @@ describe('WorkspaceProjectsBody', () => {
     render(
       <WorkspaceProjectsBody
         {...baseProps}
-        starredProjects={[{ id: 'p1', name: 'Starred' }]}
+        starredProjects={[makeProject({ id: 'p1', name: 'Starred' })]}
       />
     );
     expect(screen.getByText('All Projects')).toBeInTheDocument();

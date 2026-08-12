@@ -7,10 +7,33 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import TemplatesContent from '../TemplatesContent';
+import type { ProjectTemplate } from '@/types/template';
 
-const templates = [
-  { id: 't1', name: 'Email Template', category: 'communication' },
-  { id: 't2', name: 'HTTP Request', category: 'api' },
+const makeTemplate = (
+  overrides: Partial<ProjectTemplate>
+): ProjectTemplate => ({
+  id: 'tpl',
+  name: 'Template',
+  description: 'A template',
+  category: 'automation',
+  icon: 'bolt',
+  color: 'var(--mat-sys-primary)',
+  difficulty: 'beginner',
+  workflows: [],
+  tags: [],
+  metadata: {
+    author: 'Test Author',
+    version: '1.0.0',
+    createdAt: 0,
+    updatedAt: 0,
+  },
+  ...overrides,
+});
+
+const templates: ProjectTemplate[] = [
+  makeTemplate({ id: 't1', name: 'Email Template', category: 'communication' }),
+  // 'api' is not a TemplateCategory; integration is the closest member.
+  makeTemplate({ id: 't2', name: 'HTTP Request', category: 'integration' }),
 ];
 
 describe('TemplatesContent', () => {

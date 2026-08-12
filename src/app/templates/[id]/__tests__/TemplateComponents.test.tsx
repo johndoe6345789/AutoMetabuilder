@@ -8,6 +8,7 @@ import { render, screen } from '@testing-library/react';
 import TemplateNotFound from '../TemplateNotFound';
 import TemplateTagsSection from '../TemplateTagsSection';
 import TemplateWorkflowsList from '../TemplateWorkflowsList';
+import type { TemplateWorkflow } from '@/types/template';
 
 // ── TemplateNotFound ─────────────────────────────────────────────────────────
 describe('TemplateNotFound', () => {
@@ -55,9 +56,17 @@ describe('TemplateTagsSection', () => {
 
 // ── TemplateWorkflowsList ────────────────────────────────────────────────────
 describe('TemplateWorkflowsList', () => {
-  const workflows = [
-    { id: 'wf-1', name: 'Email Notify', description: 'Send email on trigger' },
-    { id: 'wf-2', name: 'Data Sync', description: 'Sync data between services' },
+  const workflows: TemplateWorkflow[] = [
+    {
+      name: 'Email Notify',
+      description: 'Send email on trigger',
+      nodes: [{ id: 'n1', type: 'email-send' }],
+    },
+    {
+      name: 'Data Sync',
+      description: 'Sync data between services',
+      nodes: [{ id: 'n1', type: 'http-request' }],
+    },
   ];
 
   it('renders all workflow names', () => {

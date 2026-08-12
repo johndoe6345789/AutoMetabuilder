@@ -48,8 +48,8 @@ const mockDispatch = jest.fn()
 const actions = editorSlice.actions
 
 function setupMocks() {
-  ;(useDispatch as jest.Mock).mockReturnValue(mockDispatch)
-  ;(useSelector as jest.Mock).mockImplementation((selector: any) => {
+  ;(useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch)
+  ;(useSelector as unknown as jest.Mock).mockImplementation((selector: any) => {
     const storeState = {
       editor: {
         zoom: 1,

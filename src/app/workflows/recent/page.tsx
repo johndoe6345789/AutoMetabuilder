@@ -54,11 +54,9 @@ export default function RecentWorkflowsPage() {
           <CardContent>
             <Box sx={{ textAlign: 'center', py: 4 }}>
               <AccessTime
-                sx={{
-                  fontSize: 64,
-                  color: 'text.disabled',
-                  mb: 2,
-                }}
+                size={64}
+                color="var(--mat-sys-outline)"
+                style={{ marginBottom: 16 }}
               />
               <Typography
                 variant="h6"

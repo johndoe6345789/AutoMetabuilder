@@ -9,9 +9,25 @@ import mockAchievements from '../achievements.json';
 
 export type AchievementTab = 'all' | 'unlocked' | 'locked';
 
-export type Achievement = (typeof mockAchievements)[0] & {
+/**
+ * Declared rather than derived from achievements.json. `typeof json[0] &
+ * { unlockedAt?: string }` looks equivalent, but TypeScript infers the array as
+ * a union of "has unlockedAt" and "has unlockedAt?: undefined" element shapes,
+ * and intersecting the latter narrows the property to never - so locked
+ * achievements stopped being assignable to their own type.
+ */
+export interface Achievement {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  points: number;
+  unlocked: boolean;
+  progress: number;
+  maxProgress: number;
+  category: string;
   unlockedAt?: string;
-};
+}
 
 export function useAchievements() {
   const [selectedTab, setSelectedTab] =

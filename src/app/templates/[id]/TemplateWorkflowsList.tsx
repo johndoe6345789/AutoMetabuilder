@@ -7,15 +7,15 @@
 import React from 'react';
 import { Box, Typography } from '@metabuilder/m3';
 import styles from '@scss/atoms/template-detail.module.scss';
-
-interface WorkflowEntry {
-  id: string;
-  name: string;
-  description: string;
-}
+import type { TemplateWorkflow } from '@/types/template';
 
 interface TemplateWorkflowsListProps {
-  workflows: WorkflowEntry[];
+  /**
+   * The workflows bundled with a template. Keyed by name: TemplateWorkflow
+   * carries no id, the names are unique within a template, and inventing an
+   * index key here would reorder badly if the list ever became sortable.
+   */
+  workflows: TemplateWorkflow[];
 }
 
 export default function TemplateWorkflowsList({
@@ -29,7 +29,7 @@ export default function TemplateWorkflowsList({
       <Box className={styles.workflowsList}>
         {workflows.map((workflow) => (
           <Box
-            key={workflow.id}
+            key={workflow.name}
             className={styles.workflowItem}
           >
             <Typography variant="h6">

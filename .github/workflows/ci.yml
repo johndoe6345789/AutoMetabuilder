@@ -1,50 +1,183 @@
-name: CI
+name: ci
+
+# Replaces the previous ci.yml, which built a Poetry package and ran pytest
+# against backend/ - a directory deleted in 6f3de27 ("Consolidate to one app:
+# replace backend/frontend with workflowui"). That workflow has failed on every
+# push since, which is why nothing caught workflow-lib shipping a broken
+# TypeScript import: the var plugin package was excluded from the commit by an
+# unanchored "var/" line in .gitignore, and no job here compiles this repo.
+#
+# Two independent jobs:
+#   workflow-lib - the @metabuilder/workflow package. Self-contained: no
+#                  runtime dependencies, so it needs nothing but its own
+#                  devDependencies. This is the job that guards the failure
+#                  above, and it is what metabuilder's image build runs.
+#   workflowui   - the Next.js app at the repo root. Cannot build from a bare
+#                  checkout: every @metabuilder/* dependency is a file: path
+#                  pointing at a sibling repo, so those are cloned in first.
 
 on:
   push:
-    branches: ["master"]
+    branches: [master]
   pull_request:
-    branches: ["master"]
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
-  build-test:
+  workflow-lib:
+    name: workflow-lib (typecheck + build)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    defaults:
+      run:
+        working-directory: workflow-lib
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Node
+        uses: actions/setup-node@v7
         with:
-          python-version: "3.11"
+          node-version: '22'
 
-      - name: Install Poetry
-        run: python -m pip install --upgrade pip poetry
+      - name: Cache npm downloads
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: npm-wf-${{ runner.os }}-${{ hashFiles('workflow-lib/package.json') }}
+          restore-keys: npm-wf-${{ runner.os }}-
+
+      # No package-lock.json is committed, so npm ci is not an option.
+      # --legacy-peer-deps: the devDependency set carries several Next.js/
+      # Sentry/Storybook packages whose peer ranges conflict; they are not
+      # used by the build, but npm refuses to resolve the tree without it.
+      - name: Install dependencies
+        id: install
+        run: |
+          for attempt in 1 2 3; do
+            npm install --legacy-peer-deps && exit 0
+            echo "npm install attempt $attempt failed; retrying in 15s"
+            sleep 15
+          done
+          exit 1
+
+      # The gate. tsc compiles executor/ts/**  and plugins/ts/** from a clean
+      # checkout, so any source file that exists only on a developer's disk -
+      # ignored, unstaged, or never added - fails here with TS2307 rather than
+      # in a downstream consumer's Docker build.
+      - name: Typecheck
+        id: typecheck
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npx tsc --noEmit
+
+      - name: Build
+        id: build
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run build
+
+      # Workflow definitions are data, and nothing else parses them in CI.
+      - name: Validate example workflow JSON
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: |
+          node -e '
+            const fs = require("fs"), path = require("path");
+            const walk = d => fs.readdirSync(d, { withFileTypes: true }).flatMap(e => {
+              const p = path.join(d, e.name);
+              if (e.isDirectory()) return e.name === "node_modules" ? [] : walk(p);
+              return p.endsWith(".json") ? [p] : [];
+            });
+            const files = fs.existsSync("examples") ? walk("examples") : [];
+            let bad = 0;
+            for (const f of files) {
+              try { JSON.parse(fs.readFileSync(f, "utf8")); }
+              catch (err) { console.error(`${f}: ${err.message}`); bad++; }
+            }
+            console.log(`Checked ${files.length} JSON file(s), ${bad} invalid.`);
+            process.exit(bad === 0 ? 0 : 1);
+          '
+
+  workflowui:
+    name: workflowui (lint, typecheck, test, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      # Sibling repos supplying the @metabuilder/* file: dependencies. They are
+      # cloned next to the checkout, because package.json addresses them as
+      # ../<name> - the same layout a developer has on disk, so one arrangement
+      # serves both. Tracking branch heads means someone else's push can redden
+      # this repo; pin to SHAs (as metabuilder's .github/workspace.json does) if
+      # that becomes a problem.
+      SIBLING_REPOS: redux components hooks types translations
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # Interpolation stays out of run: - ${{ }} is substituted into the script
+      # before the shell sees it, so anything expandable belongs in env.
+      - name: Clone sibling packages
+        env:
+          OWNER: ${{ github.repository_owner }}
+          GH_TOKEN: ${{ secrets.WORKSPACE_TOKEN || github.token }}
+        run: |
+          set -euo pipefail
+          siblings="$(cd "$GITHUB_WORKSPACE/.." && pwd)"
+          echo "Cloning into $siblings"
+          for repo in $SIBLING_REPOS; do
+            git clone --depth 1 \
+              "https://x-access-token:${GH_TOKEN}@github.com/${OWNER}/${repo}.git" \
+              "$siblings/$repo"
+            # A clone that lands empty resolves as an empty package rather than
+            # failing, so assert it has contents.
+            test -n "$(ls -A "$siblings/$repo")" || { echo "$repo cloned empty"; exit 1; }
+          done
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Cache npm downloads
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: npm-ui-${{ runner.os }}-${{ hashFiles('package.json') }}
+          restore-keys: npm-ui-${{ runner.os }}-
 
       - name: Install dependencies
+        id: install
         run: |
-          poetry config virtualenvs.create false
-          poetry install --with dev
+          for attempt in 1 2 3; do
+            npm install --legacy-peer-deps && exit 0
+            echo "npm install attempt $attempt failed; retrying in 15s"
+            sleep 15
+          done
+          exit 1
 
-      - name: Install Playwright browsers
-        run: poetry run playwright install --with-deps chromium
+      # Every step below runs even when an earlier one fails, so a single run
+      # reports every problem rather than only the first.
+      - name: Lint
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run lint
 
-      - name: Build package
-        run: poetry build
-
-      - name: Validate workflow JSON files
-        run: poetry run validate-workflows
-
-      - name: Static analysis
-        run: poetry run python -m compileall backend
-
-      - name: Lint (errors only)
-        run: |
-          python -m pip install pylint
-          poetry run pylint --errors-only backend/autometabuilder
+      - name: Typecheck
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run type-check
 
       - name: Unit tests
-        run: PYTHONPATH=backend poetry run pytest backend/tests/test_main.py backend/tests/test_metadata.py backend/tests/test_roadmap.py
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm test
 
-      - name: UI tests
-        run: PYTHONPATH=backend poetry run pytest backend/tests/ui
+      - name: Build
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run build

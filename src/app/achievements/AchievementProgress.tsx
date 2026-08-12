@@ -37,7 +37,7 @@ export default function AchievementProgress({
       <LinearProgress
         variant="determinate"
         value={(progress / maxProgress) * 100}
-        sx={{ height: 6, borderRadius: 3 }}
+        style={{ height: 6, borderRadius: 3 }}
       />
     </Box>
   );

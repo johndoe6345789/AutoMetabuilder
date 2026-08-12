@@ -48,22 +48,26 @@
         "./src/styles/*"
       ],
       "@scss/*": [
-        "../../libraries/scss/*"
+        "../scss/*"
       ],
       "@icons/*": [
-        "../../libraries/icons/*"
+        "../icons/*"
       ],
       "@/m3": [
-        "../../libraries/components/m3/index.ts"
+        "../components/m3/index.ts"
       ],
       "@metabuilder/components/*": [
-        "../../libraries/components/*"
+        "../components/*"
       ],
       "@metabuilder/hooks": [
-        "../../libraries/hooks/index.ts"
+        "../hooks/index.ts"
       ],
       "@metabuilder/hooks/workflow-editor": [
-        "../../libraries/hooks/workflow-editor/index.ts"
+        "../hooks/workflow-editor/index.ts"
+      ],
+      "*": [
+        "./node_modules/@types/*",
+        "./node_modules/*"
       ]
     },
     "incremental": true,
@@ -81,7 +85,6 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "../**/*"
+    "node_modules"
   ]
 }

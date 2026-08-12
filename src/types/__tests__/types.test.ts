@@ -25,12 +25,12 @@ import type {
 } from '../workflow';
 
 import type {
-  Documentation,
-  DocumentationSection,
+  DocumentationIndex,
+  DocSection,
 } from '../documentation';
 
 import type {
-  Template,
+  ProjectTemplate,
 } from '../template';
 
 // Import as values to ensure coverage (some types have const/enum exports)

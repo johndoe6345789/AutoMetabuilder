@@ -43,8 +43,8 @@ const actions = editorSlice.actions
 describe('useEditorSelection', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useDispatch as jest.Mock).mockReturnValue(mockDispatch)
-    ;(useSelector as jest.Mock).mockImplementation((selector: any) => {
+    ;(useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch)
+    ;(useSelector as unknown as jest.Mock).mockImplementation((selector: any) => {
       const storeState = {
         editor: {
           selectedNodes: new Set<string>(),
@@ -60,7 +60,7 @@ describe('useEditorSelection', () => {
 
   it('should return selectedNodes from state', () => {
     const selectedNodes = new Set(['node-1'])
-    ;(useSelector as jest.Mock).mockImplementation((selector: any) => {
+    ;(useSelector as unknown as jest.Mock).mockImplementation((selector: any) => {
       const storeState = {
         editor: {
           selectedNodes,

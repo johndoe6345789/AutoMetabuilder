@@ -41,7 +41,7 @@ export default function AchievementPointsCard({
         <LinearProgress
           variant="determinate"
           value={(totalPoints / totalPossiblePoints) * 100}
-          sx={{ height: 8, borderRadius: 4 }}
+          style={{ height: 8, borderRadius: 4 }}
         />
         <Typography
           variant="caption"

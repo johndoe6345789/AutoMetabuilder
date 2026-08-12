@@ -19,7 +19,7 @@ interface FavoriteWorkflowItemProps {
     id: string;
     name: string;
     description?: string;
-    status: string;
+    status?: string;
     version: string;
     updatedAt: number;
     nodes?: unknown[];
@@ -45,7 +45,7 @@ export default function FavoriteWorkflowItem({
         >
           <FavoriteWorkflowInfo
             name={workflow.name}
-            status={workflow.status}
+            status={workflow.status ?? 'draft'}
             description={workflow.description}
             version={workflow.version}
             nodeCount={workflow.nodes?.length || 0}

@@ -70,7 +70,6 @@ export default function WorkflowEditorClient() {
         onBack={toolbar.onBack}
         onSave={toolbar.onSave}
         onRun={toolbar.onRun}
-        languageHealth={nodeTypesApi.languageHealth}
       />
       <div className={styles.content}>
         <EditorCanvasArea
