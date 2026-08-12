@@ -117,7 +117,10 @@ jobs:
       # serves both. Tracking branch heads means someone else's push can redden
       # this repo; pin to SHAs (as metabuilder's .github/workspace.json does) if
       # that becomes a problem.
-      SIBLING_REPOS: redux components hooks types translations
+      # icons and scss are reached by tsconfig path alias (@icons/*, @scss/*)
+      # rather than by package name, and interfaces is a file: dependency, so
+      # none of the three turn up when grepping for @metabuilder/* imports.
+      SIBLING_REPOS: redux components hooks types translations icons scss interfaces
 
     steps:
       - name: Checkout
