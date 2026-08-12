@@ -18,9 +18,9 @@ const {
   toggleNodeSelection,
   clearSelection,
   setSelection,
-  resetZoom,
-  resetPan,
-  setPan,
+  resetZoom: _resetZoom,
+  resetPan: _resetPan,
+  setPan: _setPan,
 } = editorSlice.actions;
 
 export function useEditorSelection() {

@@ -44,7 +44,7 @@ jest.mock('../WorkspaceEmptyState', () => ({
 
 jest.mock('../CreateWorkspaceForm', () => ({
   __esModule: true,
-  default: ({ name, onSubmit, onCancel }: any) => (
+  default: ({ _name, onSubmit, onCancel }: any) => (
     <div data-testid="create-form">
       <button onClick={onSubmit} data-testid="submit-form">Submit</button>
       <button onClick={onCancel} data-testid="cancel-form">Cancel</button>

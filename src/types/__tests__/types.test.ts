@@ -24,15 +24,6 @@ import type {
   NodeTemplate,
 } from '../workflow';
 
-import type {
-  DocumentationIndex,
-  DocSection,
-} from '../documentation';
-
-import type {
-  ProjectTemplate,
-} from '../template';
-
 // Import as values to ensure coverage (some types have const/enum exports)
 import * as projectTypes from '../project';
 import * as workflowTypes from '../workflow';

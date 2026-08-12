@@ -8,7 +8,7 @@ jest.mock('../hooks/useWorkflowCard', () => ({
 
 jest.mock('../WorkflowCardHeader', () => ({
   __esModule: true,
-  default: ({ name, workflowId, itemId, onOpen, onDelete }: any) => (
+  default: ({ name, _workflowId, itemId, onOpen, onDelete }: any) => (
     <div data-testid="workflow-card-header">
       <span data-testid="card-name">{name}</span>
       <button data-testid="open-btn" onClick={() => onOpen && onOpen()}>Open</button>

@@ -13,7 +13,7 @@ interface ToolbarProps {
   onValidate?: () => Promise<boolean>;
 }
 
-export const Toolbar: React.FC<ToolbarProps> = ({ workflowId, onValidate }) => {
+export const Toolbar: React.FC<ToolbarProps> = ({ workflowId, onValidate: _onValidate }) => {
   const [showValidation, setShowValidation] = useState(false);
 
   return (

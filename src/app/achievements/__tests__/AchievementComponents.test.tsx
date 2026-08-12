@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { renderHook, act } from '@testing-library/react';
 
 import type { Achievement } from '../hooks/useAchievements';

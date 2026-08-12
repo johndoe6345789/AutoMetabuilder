@@ -6,7 +6,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 
 // Mock next/dynamic to avoid SSR issues
-jest.mock('next/dynamic', () => (fn: any) => {
+jest.mock('next/dynamic', () => (_fn: any) => {
   const Component = () => <div data-testid="database-settings-mock">Database Settings</div>;
   Component.displayName = 'DynamicDatabaseSettings';
   return Component;

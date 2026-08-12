@@ -62,7 +62,6 @@ import {
   workspaceDB,
   projectDB,
   projectCanvasItemDB,
-  WorkflowDB,
   db,
 } from '../schema'
 
@@ -434,7 +433,7 @@ describe('projectCanvasItemDB', () => {
   })
 
   it('getByWorkflow returns item for project+workflow', async () => {
-    const result = await projectCanvasItemDB.getByWorkflow('proj-1', 'wf-1')
+    const _result = await projectCanvasItemDB.getByWorkflow('proj-1', 'wf-1')
     expect(asMockTable(db.projectCanvasItems).first).toHaveBeenCalled()
   })
 

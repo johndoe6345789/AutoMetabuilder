@@ -3,7 +3,7 @@
  * Automatically arrange workflow cards on the canvas
  */
 
-import { ProjectCanvasItem, CanvasPosition } from '../types/project';
+import { ProjectCanvasItem } from '../types/project';
 
 export type LayoutAlgorithm = 'grid' | 'horizontal-flow' | 'vertical-flow' | 'force-directed';
 
@@ -29,7 +29,7 @@ export function gridLayout(
   let row = 0;
   let col = 0;
 
-  items.forEach((item, index) => {
+  items.forEach((item, _index) => {
     const x = col * (itemWidth + spacing);
     const y = row * (itemHeight + spacing);
 
@@ -70,7 +70,7 @@ export function horizontalFlowLayout(
   items: ProjectCanvasItem[],
   options: LayoutOptions = {}
 ): Partial<ProjectCanvasItem>[] {
-  const { itemWidth = 300, itemHeight = 200, spacing = 40 } = options;
+  const { itemWidth = 300, itemHeight: _itemHeight = 200, spacing = 40 } = options;
 
   return items.map((item, index) => ({
     id: item.id,
@@ -85,7 +85,7 @@ export function verticalFlowLayout(
   items: ProjectCanvasItem[],
   options: LayoutOptions = {}
 ): Partial<ProjectCanvasItem>[] {
-  const { itemWidth = 300, itemHeight = 200, spacing = 40 } = options;
+  const { itemWidth: _itemWidth = 300, itemHeight = 200, spacing = 40 } = options;
 
   return items.map((item, index) => ({
     id: item.id,

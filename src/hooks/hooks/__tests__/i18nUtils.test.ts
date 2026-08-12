@@ -100,9 +100,9 @@ describe('interpolate', () => {
 });
 
 describe('detectLocale', () => {
-  const originalWindow = global.window;
-  const originalLocalStorage = global.localStorage;
-  const originalNavigator = global.navigator;
+  const _originalWindow = global.window;
+  const _originalLocalStorage = global.localStorage;
+  const _originalNavigator = global.navigator;
 
   afterEach(() => {
     jest.restoreAllMocks();

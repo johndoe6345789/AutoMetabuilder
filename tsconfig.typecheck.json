@@ -1,0 +1,72 @@
+{
+  "_comment": [
+    "Type-checking config. tsconfig.json cannot carry the '*' wildcard:",
+    "Next feeds tsconfig paths into webpack and SWC, so mapping every bare",
+    "specifier also remaps 'react', bypassing Next's per-layer resolution.",
+    "Client components then receive the react-server build and every hook",
+    "throws 'Cannot read properties of null' at prerender. The same wildcard",
+    "made SWC rewrite @metabuilder/m3 before jest could substitute its mock,",
+    "silently rendering real components in 34 tests.",
+    "",
+    "tsc needs it because the sibling repos this app aliases live outside the",
+    "project and their upward node_modules walk never reaches ours - without",
+    "it, 677 'Cannot find module react' errors from files we do not own.",
+    "",
+    "paths is repeated in full: TypeScript replaces the key wholesale on",
+    "extends rather than merging it."
+  ],
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@store/*": [
+        "./src/store/*"
+      ],
+      "@services/*": [
+        "./src/services/*"
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@types/*": [
+        "./src/types/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
+      "@db/*": [
+        "./src/db/*"
+      ],
+      "@styles/*": [
+        "./src/styles/*"
+      ],
+      "@scss/*": [
+        "../scss/*"
+      ],
+      "@icons/*": [
+        "../icons/*"
+      ],
+      "@/m3": [
+        "../components/m3/index.ts"
+      ],
+      "@metabuilder/components/*": [
+        "../components/*"
+      ],
+      "@metabuilder/hooks": [
+        "../hooks/index.ts"
+      ],
+      "@metabuilder/hooks/workflow-editor": [
+        "../hooks/workflow-editor/index.ts"
+      ],
+      "*": [
+        "./node_modules/@types/*",
+        "./node_modules/*"
+      ]
+    }
+  }
+}

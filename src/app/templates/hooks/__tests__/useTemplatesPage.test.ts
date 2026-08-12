@@ -126,7 +126,7 @@ describe('useTemplatesPage', () => {
   })
 
   it('should not pass searchQuery when empty', () => {
-    const { result } = renderHook(() => useTemplatesPage())
+    const { result: _result } = renderHook(() => useTemplatesPage())
 
     // searchQuery is empty, should not include it in filters
     expect(templateService.searchTemplates).toHaveBeenCalledWith(

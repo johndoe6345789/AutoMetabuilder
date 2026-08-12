@@ -3,8 +3,7 @@
  */
 
 import React from 'react';
-import { render, screen, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react';
 import { I18nProvider, useI18n } from '../I18nContext';
 

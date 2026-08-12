@@ -2,7 +2,7 @@
  * Tests for useRecentWorkflows hook
  */
 
-import { renderHook, act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 
 const mockListWorkflows = jest.fn();
 const mockWorkflows = [

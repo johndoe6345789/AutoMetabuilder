@@ -24,17 +24,32 @@ const customJestConfig = {
     '^@/(\\.\\./)+(hooks/.*)$': '<rootDir>/__mocks__/componentsMock.tsx',
 
     // Sibling repos still import each other by paths from the pre-split
-    // monorepo: hooks/ reaches for '../redux/service-adapters' and several
-    // files for '../redux/redux-slices', but those directories are named
     // adapters/ and slices/ in the redux repo. Webpack never trips on this
     // because the barrels it pulls in differ; jest evaluates them eagerly.
     // Mapped here rather than edited in the other repos.
-    '^(\\.\\./)+redux/service-adapters$': '<rootDir>/../redux/adapters/src/index.ts',
-    '^(\\.\\./)+redux/redux-slices$': '<rootDir>/../redux/slices/src/index.ts',
+
+    // next/jest hands tsconfig `paths` to SWC, which rewrites bare specifiers
+    // at transform time - so by the time jest resolves them, `@metabuilder/m3`
+    // has already become a node_modules path and the mappings below for the
+    // bare names never match. These catch the rewritten form. The tsconfig
+    // wildcard cannot simply be dropped: without it tsc cannot resolve the
+    // bare imports inside the sibling sources this app aliases (677 errors).
+    // SWC resolves the mapping through the node_modules symlink and emits the
+    // sibling repo's real path, so these match that rather than the package name.
+    '^.*/components/m3$': '<rootDir>/__mocks__/m3Mock.tsx',
+    '^.*/components/index$': '<rootDir>/__mocks__/componentsMock.tsx',
 
     // postcss pulls nanoid, whose "browser" condition is ESM-only; jsdom picks
     // that build and jest cannot parse it. nanoid 3 ships a CJS twin.
     '^nanoid$': '<rootDir>/node_modules/nanoid/index.browser.cjs',
+
+    // The @metabuilder/redux-* packages do not share a name with their
+    // directory (redux-persist lives in redux/persist, service-adapters in
+    // redux/adapters), and SWC emits the sibling path built from the package
+    // name, so the request arrives here pointing at a directory that does not
+    // exist. One rule covers the whole redux- prefix.
+    '^(\\.\\./)+redux/redux-(.*)$': '<rootDir>/../redux/$2',
+    '^(\\.\\./)+redux/service-adapters$': '<rootDir>/../redux/adapters',
 
     // tsconfig maps these at the app level; jest needs its own copy.
     '^@icons/(.*)$': '<rootDir>/../icons/$1',

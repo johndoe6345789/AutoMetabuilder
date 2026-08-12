@@ -189,7 +189,7 @@ describe('deleteNode', () => {
   });
 
   it('calls setSelectedNodeId(null) after deletion', () => {
-    const workflow = makeWorkflow();
+    const _workflow = makeWorkflow();
     const setWorkflow = jest.fn();
     const setSelectedNodeId = jest.fn();
 

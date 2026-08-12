@@ -32,7 +32,6 @@ jest.mock('../TemplateRelatedSection', () => ({
 
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import TemplateRelatedSection from '../TemplateRelatedSection';
 import TemplateMainContent from '../TemplateMainContent';
 import type { ProjectTemplate } from '@/types/template';
 
@@ -73,8 +72,8 @@ describe('TemplateRelatedSection', () => {
     // We need to test the original component - but since we mocked it above
     // we use the jest-actual import trick
     const { default: RealComponent } = jest.requireActual('../TemplateRelatedSection');
-    const { render: rtlRender, screen: rtlScreen } = jest.requireActual('@testing-library/react');
-    const { React: r } = { React: jest.requireActual('react') };
+    const { render: rtlRender, screen: _rtlScreen } = jest.requireActual('@testing-library/react');
+    const { React: _r } = { React: jest.requireActual('react') };
     // Render via standard render with requireActual
     const { container } = rtlRender(
       React.createElement(RealComponent, {

@@ -20,7 +20,7 @@ jest.mock('../CanvasZoomControls', () => ({
 
 jest.mock('../CanvasGridControls', () => ({
   __esModule: true,
-  default: ({ showGrid, gridSnap, snapSize, onToggleShowGrid, onToggleGridSnap, onSnapSizeChange }: any) => (
+  default: ({ _showGrid, _gridSnap, snapSize, onToggleShowGrid, onToggleGridSnap, onSnapSizeChange }: any) => (
     <div data-testid="canvas-grid-controls">
       <button data-testid="toggle-grid" onClick={onToggleShowGrid}>Grid</button>
       <button data-testid="toggle-snap" onClick={onToggleGridSnap}>Snap</button>

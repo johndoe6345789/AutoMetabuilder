@@ -20,7 +20,7 @@ interface ValidationResult {
 
 export const ValidationModal: React.FC<
   ValidationModalProps
-> = ({ workflowId, onClose }) => {
+> = ({ workflowId: _workflowId, onClose }) => {
   const { validate } = useWorkflow();
   const [validation, setValidation] =
     useState<ValidationResult | null>(null);

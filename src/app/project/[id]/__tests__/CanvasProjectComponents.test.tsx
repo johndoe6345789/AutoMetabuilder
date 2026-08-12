@@ -73,7 +73,7 @@ describe('WorkflowCardActions', () => {
 
   it('calls onCardClick with workflowId when edit button clicked', () => {
     const onCardClick = jest.fn();
-    const { container } = render(
+    const { container: _container } = render(
       <WorkflowCardActions
         workflowId="wf-42"
         onCardClick={onCardClick}

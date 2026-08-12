@@ -154,7 +154,7 @@ describe('useDatabaseSettings', () => {
   })
 
   it('onApplySuccess should call fetchConfig and fetchAdapters', async () => {
-    const { result } = renderHook(() => useDatabaseSettings())
+    const { result: _result } = renderHook(() => useDatabaseSettings())
 
     // Get the onApplySuccess passed to useDatabaseActions
     const actionsCall = (useDatabaseActions as jest.Mock).mock.calls[0][0]

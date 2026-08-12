@@ -34,6 +34,16 @@ function isStoredWorkflow(value: unknown): value is StoredWorkflow {
   return typeof record.id === 'string' && typeof record.name === 'string';
 }
 
+/**
+ * Navigating to a freshly created workflow needs its id and nothing else, so
+ * this deliberately does not require the full StoredWorkflow shape - createWorkflow
+ * returns only what the backend echoes back.
+ */
+function hasWorkflowId(value: unknown): value is { id: string } {
+  return typeof value === 'object' && value !== null
+    && typeof (value as Record<string, unknown>).id === 'string';
+}
+
 export function useWorkflowState() {
   const router = useRouter();
   const params = useParams();
@@ -77,7 +87,7 @@ export function useWorkflowState() {
       await updateWorkflow(workflowId, payload);
     } else {
       const created = await createWorkflow(payload);
-      if (isStoredWorkflow(created)) router.push(`/editor/${created.id}`);
+      if (hasWorkflowId(created)) router.push(`/editor/${created.id}`);
     }
   };
 

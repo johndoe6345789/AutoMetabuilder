@@ -63,7 +63,7 @@ describe('DBAL Proxy Route', () => {
       })
       const request = makeRequest()
       const context = makeContext()
-      const response = await GET(request as any, context)
+      const _response = await GET(request as any, context)
       expect(global.fetch).toHaveBeenCalled()
     })
 
@@ -95,7 +95,7 @@ describe('DBAL Proxy Route', () => {
         json: () => Promise.resolve({ id: 'new-id' }),
       })
       const request = makeRequest('http://localhost/api/dbal/t/c/e', 'POST', '{"name":"test"}')
-      const response = await POST(request as any, makeContext())
+      const _response = await POST(request as any, makeContext())
       expect(global.fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({ method: 'POST' })
@@ -117,7 +117,7 @@ describe('DBAL Proxy Route', () => {
         status: 200,
         json: () => Promise.resolve({ updated: true }),
       })
-      const response = await PUT(makeRequest('', 'PUT', '{"name":"updated"}') as any, makeContext())
+      const _response = await PUT(makeRequest('', 'PUT', '{"name":"updated"}') as any, makeContext())
       expect(global.fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({ method: 'PUT' })
@@ -132,7 +132,7 @@ describe('DBAL Proxy Route', () => {
         status: 200,
         json: () => Promise.resolve({ patched: true }),
       })
-      const response = await PATCH(makeRequest('', 'PATCH', '{"field":"value"}') as any, makeContext())
+      const _response = await PATCH(makeRequest('', 'PATCH', '{"field":"value"}') as any, makeContext())
       expect(global.fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({ method: 'PATCH' })
@@ -147,7 +147,7 @@ describe('DBAL Proxy Route', () => {
         status: 204,
         json: () => Promise.resolve({}),
       })
-      const response = await DELETE(makeRequest('', 'DELETE') as any, makeContext())
+      const _response = await DELETE(makeRequest('', 'DELETE') as any, makeContext())
       expect(global.fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({ method: 'DELETE' })

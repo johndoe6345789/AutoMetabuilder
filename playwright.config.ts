@@ -1,6 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import { readFileSync, readdirSync, existsSync } from 'fs';
-import { join, resolve } from 'path';
 
 /**
  * Playwright E2E configuration for workflowui

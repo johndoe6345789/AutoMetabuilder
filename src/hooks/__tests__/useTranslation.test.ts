@@ -78,7 +78,7 @@ describe('useTranslation', () => {
     const { result } = renderHook(() => useTranslation());
     // setLocale also calls window.location.reload() — swallow that navigation
     // JSDOM fires an error for actual navigation; suppress it
-    const origAssign = window.location.assign;
+    const _origAssign = window.location.assign;
     try {
       act(() => {
         // Call directly; if it throws due to jsdom navigation, catch it

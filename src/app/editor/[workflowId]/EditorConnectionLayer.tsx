@@ -11,7 +11,6 @@ import {
   Position as EdgePosition,
 } from '@/lib/flow';
 import {
-  type NodeType,
   ConnectionLine,
 } from '@metabuilder/components/workflow-editor';
 import type { WorkflowNode, Connection as WorkflowConnection } from '@metabuilder/hooks/workflow-editor';

@@ -64,10 +64,6 @@
       ],
       "@metabuilder/hooks/workflow-editor": [
         "../hooks/workflow-editor/index.ts"
-      ],
-      "*": [
-        "./node_modules/@types/*",
-        "./node_modules/*"
       ]
     },
     "incremental": true,

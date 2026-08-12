@@ -25,11 +25,6 @@ jest.mock('../useCanvasKeyboard', () => ({
 
 import { renderHook, act } from '@testing-library/react';
 import { useCanvasKeyboardActions } from '../useCanvasKeyboardActions';
-import {
-  deleteCanvasItems,
-  duplicateCanvasItems,
-  setSelection,
-} from '@metabuilder/redux-slices';
 
 describe('useCanvasKeyboardActions', () => {
   beforeEach(() => {

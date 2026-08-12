@@ -15,7 +15,7 @@ import {
 export const WorkflowCard: React.FC<WorkflowCardProps> = ({
   item,
   workflow,
-  isSelected,
+  isSelected: _isSelected,
   onSelect,
   onUpdatePosition,
   onUpdateSize,

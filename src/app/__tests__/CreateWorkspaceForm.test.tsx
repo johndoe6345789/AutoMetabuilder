@@ -9,7 +9,7 @@ import CreateWorkspaceForm from '../CreateWorkspaceForm';
 
 // WorkspacePreviewPanel is tested separately; mock it to isolate the form
 jest.mock('../WorkspacePreviewPanel', () => {
-  return function MockPreviewPanel({ name, color, onColorChange }: any) {
+  return function MockPreviewPanel({ name, _color, onColorChange }: any) {
     return (
       <div data-testid="preview-panel">
         <span>{name}</span>

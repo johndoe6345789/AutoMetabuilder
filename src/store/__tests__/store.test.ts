@@ -2,7 +2,7 @@
  * Tests for Redux store configuration
  */
 
-function makeSlice(name: string) {
+function _makeSlice(name: string) {
   return { reducer: (s = {}) => s, actions: {}, name }
 }
 
@@ -41,7 +41,7 @@ jest.mock('@metabuilder/redux-persist', () => ({
 
 // Import after mocks
 import store, { store as namedStore, persistor } from '../store'
-import type { RootState, AppDispatch } from '../store'
+import type { } from '../store'
 
 describe('Redux Store', () => {
   it('should export a store instance', () => {

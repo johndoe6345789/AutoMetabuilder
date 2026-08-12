@@ -24,7 +24,7 @@ interface NodeCrudParams {
 }
 
 export function useNodeCrud({
-  workflow, setWorkflow, canvasOffset, zoom,
+  workflow: _workflow, setWorkflow, canvasOffset, zoom,
   canvasRef, setSelectedNodeId,
 }: NodeCrudParams) {
   const handleCanvasDrop = (

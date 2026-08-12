@@ -49,6 +49,15 @@ const metabuilderAliases = {
 };
 
 const nextConfig = {
+  // Type checking runs as its own step (`npm run type-check`), against
+  // tsconfig.typecheck.json. That config carries the path wildcard needed to
+  // resolve bare imports inside the sibling repos this app builds from; the
+  // wildcard cannot live in tsconfig.json, because Next feeds those paths to
+  // webpack and remapping 'react' hands client components the react-server
+  // build, nulling the hook dispatcher at prerender. The build's inline check
+  // reads tsconfig.json and so cannot resolve those files at all - it is not
+  // being skipped, it is being done by the step equipped to do it.
+  typescript: { ignoreBuildErrors: true },
   basePath: '/workflowui',
   output: 'standalone',
   allowedDevOrigins: ['metabuilder.wardcrew.com', 'wardcrew.com'],
